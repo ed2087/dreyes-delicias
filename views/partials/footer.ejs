@@ -1,0 +1,51 @@
+﻿<!-- Site footer -->
+<footer class="site-footer" role="contentinfo">
+  <div class="site-footer-inner">
+    <img src="https://res.cloudinary.com/dwlib8nke/image/upload/v1781222666/logo_web_pnyt9m.png" alt="D'Reyes Delicias" width="80" height="80" style="object-fit:contain;">
+
+    <div class="site-footer-links">
+      <a href="/menu"><%= lang === 'es' ? 'Menú' : 'Menu' %></a>
+      <a href="/services"><%= lang === 'es' ? 'Servicios' : 'Services' %></a>
+      <a href="/gallery"><%= lang === 'es' ? 'Galería' : 'Gallery' %></a>
+      <a href="/location"><%= lang === 'es' ? 'Ubicación' : 'Location' %></a>
+      <a href="/contact"><%= lang === 'es' ? 'Contacto' : 'Contact' %></a>
+    </div>
+
+    <div class="site-footer-social">
+      <a href="https://www.facebook.com/dreyesdelicias" target="_blank" rel="noopener noreferrer" aria-label="Facebook">Facebook</a>
+      <a href="https://www.instagram.com/dreyesdelicias1" target="_blank" rel="noopener noreferrer" aria-label="Instagram">Instagram</a>
+      <a href="https://www.tiktok.com/@dreyesdelicias" target="_blank" rel="noopener noreferrer" aria-label="TikTok">TikTok</a>
+    </div>
+
+    <p class="site-footer-copy">
+      © <%= new Date().getFullYear() %> D'Reyes Delicias. <%= t.footer.rights %>.
+      <br><%= t.footer.developed %> <a href="https://www.codedevhub.com/" target="_blank" rel="noopener noreferrer">CodeDevHub</a>
+    </p>
+  </div>
+</footer>
+
+<!-- Toast container -->
+<div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+<!-- Modals -->
+<%- include('modal-confirm') %>
+<%- include('modal-alert') %>
+
+<!-- Global JS -->
+<script src="/js/global.js"></script>
+<script src="/js/partials/nav.js"></script>
+
+<!-- Page JS -->
+<% if (typeof pageJS !== 'undefined' && pageJS) { %>
+<script src="/js/<%= pageJS %>.js"></script>
+<% } %>
+
+<!-- Partial JS -->
+<% if (typeof partialJS !== 'undefined' && partialJS) { %>
+  <% partialJS.forEach(function(js) { %>
+<script src="/js/partials/<%= js %>.js"></script>
+  <% }); %>
+<% } %>
+
+</body>
+</html>

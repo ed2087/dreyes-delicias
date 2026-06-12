@@ -1,0 +1,100 @@
+/* ============================================
+   MOBILE BOTTOM NAV — App-style navigation
+   ============================================ */
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--bottom-nav-h);
+  background: rgba(10, 10, 10, 0.92);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  z-index: 950;
+  display: flex;
+  align-items: stretch;
+  padding: 0 4px;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.bottom-nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px 4px;
+  text-decoration: none;
+  position: relative;
+  transition: transform var(--t-fast);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bottom-nav-item:active {
+  transform: scale(0.92);
+}
+
+.bottom-nav-icon {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  transition: all var(--t-normal);
+  filter: grayscale(1) opacity(0.45);
+  position: relative;
+}
+
+.bottom-nav-item.active .bottom-nav-icon {
+  filter: none;
+  color: var(--gold);
+}
+
+.bottom-nav-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: rgba(255,255,255,0.35);
+  transition: color var(--t-fast);
+}
+
+.bottom-nav-item.active .bottom-nav-label {
+  color: var(--gold);
+}
+
+/* Active indicator pill */
+.bottom-nav-item.active::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  width: 32px;
+  height: 3px;
+  background: var(--gold);
+  border-radius: 0 0 3px 3px;
+  top: 0;
+  box-shadow: 0 0 12px var(--gold);
+}
+
+/* Social CTA row above nav */
+.bottom-social-bar {
+  display: none;
+}
+
+/* Hide on desktop */
+@media (min-width: 768px) {
+  .bottom-nav {
+    display: none;
+  }
+}
+
+/* Safe area for notched phones */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .bottom-nav {
+    padding-bottom: env(safe-area-inset-bottom);
+    height: calc(var(--bottom-nav-h) + env(safe-area-inset-bottom));
+  }
+}

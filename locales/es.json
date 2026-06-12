@@ -1,0 +1,92 @@
+{
+  "lang": "es",
+  "nav": {
+    "home": "Inicio",
+    "menu": "Menú",
+    "services": "Servicios",
+    "gallery": "Galería",
+    "contact": "Contacto",
+    "location": "Ubicación"
+  },
+  "hero": {
+    "tagline": "Taquizas & Banquetes",
+    "subtitle": "Para Todo Tipo de Eventos",
+    "cta_menu": "Ver Menú",
+    "cta_contact": "Contáctanos"
+  },
+  "sections": {
+    "services": "Nuestros Servicios",
+    "gallery": "Galería",
+    "gallery_cta": "Ver Galería Completa",
+    "menu": "Platillos Destacados",
+    "menu_cta": "Ver Menú Completo",
+    "location": "Encuéntranos",
+    "contact": "Contáctanos",
+    "allies": "Colaboradores"
+  },
+  "menu": {
+    "title": "Nuestro Menú",
+    "categories": {
+      "all": "Todos",
+      "tacos": "Tacos",
+      "burritos": "Burritos",
+      "quesadillas": "Quesadillas",
+      "hamburguesas": "Hamburguesas",
+      "antojitos": "Antojitos",
+      "bebidas": "Bebidas",
+      "otros": "Otros"
+    }
+  },
+  "gallery": {
+    "title": "Galería",
+    "albums": {
+      "all": "Todo",
+      "food": "Comida",
+      "truck": "Food Truck",
+      "events": "Eventos"
+    }
+  },
+  "services": {
+    "title": "Servicios"
+  },
+  "contact": {
+    "title": "Contáctanos",
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "phone": "Teléfono",
+    "subject": "Asunto",
+    "message": "Mensaje",
+    "send": "Enviar mensaje",
+    "whatsapp": "Escríbenos por WhatsApp",
+    "success": "¡Mensaje enviado! Te contactaremos pronto.",
+    "error": "Hubo un error al enviar el mensaje. Intenta de nuevo."
+  },
+  "location": {
+    "title": "Nuestra Ubicación",
+    "address": "Dirección",
+    "hours": "Horarios",
+    "open": "Abierto ahora",
+    "closed": "Cerrado",
+    "days": {
+      "monday":    "Lunes",
+      "tuesday":   "Martes",
+      "wednesday": "Miércoles",
+      "thursday":  "Jueves",
+      "friday":    "Viernes",
+      "saturday":  "Sábado",
+      "sunday":    "Domingo"
+    }
+  },
+  "footer": {
+    "rights": "Todos los derechos reservados",
+    "developed": "Desarrollado por",
+    "follow": "Síguenos"
+  },
+  "error": {
+    "404_title": "Página no encontrada",
+    "404_message": "La página que buscas no existe.",
+    "500_title": "Error del servidor",
+    "500_message": "Algo salió mal. Por favor intenta de nuevo.",
+    "go_home": "Ir al inicio"
+  }
+}

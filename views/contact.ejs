@@ -1,0 +1,124 @@
+<%- include('partials/head') %>
+<%- include('partials/nav') %>
+
+<main class="contact-page">
+  <div class="contact-hero">
+    <div class="container">
+      <h1><%= t.contact.title %></h1>
+      <p><%= lang === 'es' ? 'Estamos aquí para ayudarte' : 'We\'re here to help' %></p>
+    </div>
+  </div>
+
+  <%- include('partials/breadcrumbs') %>
+
+  <div class="contact-inner">
+
+    <!-- Info cards -->
+    <div class="contact-info-grid">
+      <a href="tel:+19802714205" class="contact-info-card">
+        <div class="contact-info-icon">📞</div>
+        <div class="contact-info-label"><%= lang === 'es' ? 'Teléfono' : 'Phone' %></div>
+        <div class="contact-info-value">(980) 271-4205</div>
+      </a>
+      <a href="https://wa.me/19802714205" target="_blank" rel="noopener noreferrer" class="contact-info-card">
+        <div class="contact-info-icon">💬</div>
+        <div class="contact-info-label">WhatsApp</div>
+        <div class="contact-info-value">(980) 271-4205</div>
+      </a>
+      <a href="mailto:dreyesdelicias@gmail.com" class="contact-info-card">
+        <div class="contact-info-icon">✉️</div>
+        <div class="contact-info-label">Email</div>
+        <div class="contact-info-value" style="font-size:12px;">dreyesdelicias@gmail.com</div>
+      </a>
+      <a href="/location" class="contact-info-card">
+        <div class="contact-info-icon">📍</div>
+        <div class="contact-info-label"><%= t.location.address %></div>
+        <div class="contact-info-value" style="font-size:12px;">Monroe, NC</div>
+      </a>
+    </div>
+
+    <!-- Form -->
+    <div class="contact-form-card">
+      <h2 class="contact-form-title"><%= t.contact.title %></h2>
+      <form class="contact-form" id="contactForm" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="contactName"><%= t.contact.name %> *</label>
+            <input type="text"  id="contactName"  class="form-input"  name="name"  placeholder="<%= lang === 'es' ? 'Tu nombre' : 'Your name' %>"  required autocomplete="name">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="contactEmail"><%= t.contact.email %> *</label>
+            <input type="email" id="contactEmail" class="form-input"  name="email" placeholder="<%= lang === 'es' ? 'tu@correo.com' : 'you@email.com' %>" required autocomplete="email">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="contactPhone"><%= t.contact.phone %></label>
+            <input type="tel"  id="contactPhone" class="form-input"  name="phone" placeholder="(980) 000-0000" autocomplete="tel">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="contactSubject"><%= t.contact.subject %></label>
+            <input type="text" id="contactSubject" class="form-input" name="subject" placeholder="<%= lang === 'es' ? '¿En qué podemos ayudarte?' : 'How can we help?' %>">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="contactMessage"><%= t.contact.message %> *</label>
+          <textarea id="contactMessage" class="form-textarea" name="message" placeholder="<%= lang === 'es' ? 'Escribe tu mensaje aquí...' : 'Write your message here...' %>" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg w-full" id="contactSubmitBtn">
+          <%= t.contact.send %>
+        </button>
+      </form>
+    </div>
+
+    <!-- Hours -->
+    <% if (location && location.hours) {
+       var cDays = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
+       var activeCDays = cDays.filter(function(k) { return !location.hours[k] || location.hours[k].active; });
+    %>
+    <div class="contact-hours-block">
+      <div class="contact-hours-head">
+        <span class="contact-hours-icon">🕐</span>
+        <span class="contact-hours-title"><%= lang === 'es' ? 'Horario' : 'Hours' %></span>
+        <% if (location.isOpen) { %><span class="contact-open-badge"><%= lang === 'es' ? 'Abierto ahora' : 'Open now' %></span><% } %>
+      </div>
+      <div class="contact-hours-grid">
+        <% cDays.forEach(function(dayKey) {
+          var dayData = location.hours[dayKey];
+          if (!dayData || !dayData.active) return;
+        %>
+        <div class="contact-hours-row">
+          <span class="chr-day"><%= t.location.days[dayKey] %></span>
+          <span class="chr-time"><%= dayData.open %> – <%= dayData.close %></span>
+        </div>
+        <% }) %>
+      </div>
+      <% var cNote = lang === 'es' ? location.note_es : location.note_en; %>
+      <% if (cNote) { %><p class="contact-hours-note"><%= cNote %></p><% } %>
+    </div>
+    <% } %>
+
+    <!-- Social CTAs -->
+    <div class="contact-social">
+      <p class="contact-social-title"><%= lang === 'es' ? 'Síguenos' : 'Follow us' %></p>
+      <div class="social-links-row">
+        <a href="https://www.facebook.com/dreyesdelicias" target="_blank" rel="noopener noreferrer" class="social-link-btn">
+          <span>f</span> Facebook
+        </a>
+        <a href="https://www.instagram.com/dreyesdelicias1" target="_blank" rel="noopener noreferrer" class="social-link-btn">
+          <span>📷</span> Instagram
+        </a>
+        <a href="https://www.tiktok.com/@dreyesdelicias" target="_blank" rel="noopener noreferrer" class="social-link-btn">
+          <span>♪</span> TikTok
+        </a>
+        <a href="https://wa.me/19802714205" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp">
+          WhatsApp
+        </a>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<%- include('partials/nav-mobile') %>
+<%- include('partials/footer') %>

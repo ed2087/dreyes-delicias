@@ -1,0 +1,242 @@
+<%
+const serviceName      = service['name_' + lang] || service.name_es;
+const serviceShortDesc = service['shortDesc_' + lang] || service.shortDesc_es || '';
+const serviceDesc      = service['description_' + lang] || service.description_es || '';
+
+// Build image list: gallery first, then cover image as fallback
+const allImages = [];
+if (service.gallery && service.gallery.length > 0) {
+  service.gallery.forEach(function(g) { if (g && g.url) allImages.push(g.url); });
+}
+if (service.image && service.image.url && allImages.length === 0) {
+  allImages.push(service.image.url);
+}
+
+// Simple formatter: newlines + **bold** + _italic_ + linkify (no bullet/price parsing)
+function formatSimple(text) {
+  if (!text) return '';
+  function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function fmt(s) {
+    s = esc(s);
+    s = s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    s = s.replace(/_(.+?)_/g, '<em>$1</em>');
+    s = s.replace(/([a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,})/g,
+      '<a href="mailto:$1" class="desc-link">$1</a>');
+    s = s.replace(/(\(?\d{3}\)?[\s.\-]?\d{3}[\s.\-]?\d{4})/g,
+      '<a href="tel:$1" class="desc-link">$1</a>');
+    return s;
+  }
+  return text.split('\n').map(function(line) {
+    var t = line.trim();
+    return t ? '<p class="desc-para">' + fmt(t) + '</p>' : '';
+  }).filter(Boolean).join('');
+}
+
+// Full legacy formatter (bullet lists, pricing rows, section headings)
+function formatDesc(text) {
+  if (!text) return '';
+  function esc(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+  function linkify(s) {
+    s = s.replace(/([a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,})/g,
+      '<a href="mailto:$1" class="desc-link">$1</a>');
+    s = s.replace(/(\(?\d{3}\)?[\s.\-]?\d{3}[\s.\-]?\d{4})/g,
+      '<a href="tel:$1" class="desc-link">$1</a>');
+    s = s.replace(/(https?:\/\/[^\s<>"]+)/g,
+      '<a href="$1" class="desc-link" target="_blank" rel="noopener">$1</a>');
+    return s;
+  }
+  const lines = text.split('\n');
+  let out = '', inList = false;
+  for (let i = 0; i < lines.length; i++) {
+    const t = lines[i].trim();
+    if (!t) {
+      if (inList) { out += '</ul>'; inList = false; }
+      continue;
+    }
+    // Bullet point
+    if (/^[•\-\*]/.test(t)) {
+      if (!inList) { out += '<ul class="desc-list">'; inList = true; }
+      out += '<li>' + linkify(esc(t.replace(/^[•\-\*]\s*/, ''))) + '</li>';
+      continue;
+    }
+    if (inList) { out += '</ul>'; inList = false; }
+    // Pricing row: "XX people/personas — $X,XXX"
+    const pm = t.match(/^(\d+\s+(?:people|personas))\s*[—–\-]+\s*(\$[\d,]+)/i);
+    if (pm) {
+      out += '<div class="desc-price-row"><span class="desc-price-label">' +
+             esc(pm[1]) + '</span><span class="desc-price-val">' + esc(pm[2]) + '</span></div>';
+      continue;
+    }
+    // Section heading: short line ending with colon
+    if (t.endsWith(':') && t.length < 80) {
+      out += '<p class="desc-heading">' + esc(t) + '</p>';
+      continue;
+    }
+    out += '<p class="desc-para">' + linkify(esc(t)) + '</p>';
+  }
+  if (inList) out += '</ul>';
+  return out;
+}
+%>
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+<%- include('./partials/head', { seo, breadcrumbs, pageCSS: 'service-detail', partialCSS: ['breadcrumbs'] }) %>
+<body>
+
+  <%- include('./partials/nav') %>
+  <%- include('./partials/nav-mobile') %>
+
+  <!-- Hero carousel -->
+  <section class="sd-hero">
+    <% if (allImages.length > 0) { %>
+      <div class="sd-track" id="sdTrack">
+        <% allImages.forEach(function(url, i) { %>
+          <div class="sd-slide<%= i === 0 ? ' active' : '' %>">
+            <img src="<%= url %>" alt="<%= serviceName %>" loading="<%= i === 0 ? 'eager' : 'lazy' %>">
+          </div>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <div class="sd-no-image">🎪</div>
+    <% } %>
+
+    <div class="sd-overlay"></div>
+
+    <div class="sd-caption">
+      <span class="sd-badge"><%= lang === 'es' ? 'Servicio' : 'Service' %></span>
+      <h1 class="sd-title"><%= serviceName %></h1>
+    </div>
+
+    <% if (allImages.length > 1) { %>
+      <button class="sd-arrow sd-prev" id="sdPrev" aria-label="Anterior">&#8249;</button>
+      <button class="sd-arrow sd-next" id="sdNext" aria-label="Siguiente">&#8250;</button>
+      <div class="sd-dots" id="sdDots">
+        <% allImages.forEach(function(_, i) { %>
+          <button class="sd-dot<%= i === 0 ? ' active' : '' %>" data-idx="<%= i %>"></button>
+        <% }) %>
+      </div>
+    <% } %>
+  </section>
+
+  <!-- Breadcrumbs -->
+  <div class="sd-bc-wrap">
+    <div class="sd-container">
+      <%- include('./partials/breadcrumbs', { breadcrumbs }) %>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <section class="sd-content">
+    <div class="sd-container">
+
+      <% if (serviceShortDesc) { %>
+        <p class="sd-short"><%= serviceShortDesc %></p>
+      <% } %>
+
+      <%
+        var hasStructured = (service.menuItems && service.menuItems.length > 0) ||
+                            (service.pricingRows && service.pricingRows.length > 0);
+      %>
+
+      <% if (serviceDesc) { %>
+        <div class="sd-body">
+          <%- hasStructured ? formatSimple(serviceDesc) : formatDesc(serviceDesc) %>
+        </div>
+      <% } %>
+
+      <% var menuTitle = service['menuTitle_' + lang] || service.menuTitle_es || ''; %>
+      <% if (service.menuItems && service.menuItems.length > 0) { %>
+        <div class="sd-menu-block">
+          <% if (menuTitle) { %><p class="desc-heading"><%= menuTitle %></p><% } %>
+          <ul class="desc-list">
+            <% service.menuItems.forEach(function(item) { %>
+              <% if (item.name) { %>
+                <li><strong><%= item.name %></strong><% if (item.detail) { %> — <%= item.detail %><% } %></li>
+              <% } %>
+            <% }) %>
+          </ul>
+        </div>
+      <% } %>
+
+      <% var pricingTitle = service['pricingTitle_' + lang] || service.pricingTitle_es || ''; %>
+      <% if (service.pricingRows && service.pricingRows.length > 0) { %>
+        <div class="sd-pricing-block">
+          <% if (pricingTitle) { %><p class="desc-heading"><%= pricingTitle %></p><% } %>
+          <% service.pricingRows.forEach(function(row) { %>
+            <% if (row.label) { %>
+              <div class="desc-price-row">
+                <span class="desc-price-label"><%= row.label %></span>
+                <span class="desc-price-val"><%= row.price %></span>
+              </div>
+            <% } %>
+          <% }) %>
+        </div>
+      <% } %>
+
+      <% var closingNote = service['closingNote_' + lang] || service.closingNote_es || ''; %>
+      <% if (closingNote) { %>
+        <div class="sd-closing">
+          <%- formatSimple(closingNote) %>
+        </div>
+      <% } %>
+
+      <div class="sd-ctas">
+        <a href="https://wa.me/19802714205?text=<%= encodeURIComponent((lang === 'es' ? 'Hola, estoy interesado en el servicio: ' : 'Hi, I am interested in your service: ') + serviceName) %>"
+           class="btn btn-whatsapp btn-lg" target="_blank" rel="noopener noreferrer">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/>
+          </svg>
+          <%= lang === 'es' ? 'Contactar por WhatsApp' : 'Contact via WhatsApp' %>
+        </a>
+        <a href="/contact" class="btn btn-secondary btn-lg">
+          <%= lang === 'es' ? 'Enviar mensaje' : 'Send a message' %>
+        </a>
+        <a href="/services" class="btn btn-ghost btn-lg">
+          ← <%= lang === 'es' ? 'Ver todos' : 'All services' %>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Other services -->
+  <% if (locals.others && others.length > 0) { %>
+    <section class="sd-others">
+      <div class="sd-container">
+        <h2 class="sd-section-title">
+          <%= lang === 'es' ? 'Otros servicios' : 'Other services' %>
+        </h2>
+        <div class="sd-others-grid">
+          <% others.forEach(function(other) { %>
+            <%
+              const otherName  = other['name_' + lang] || other.name_es;
+              const otherShort = other['shortDesc_' + lang] || other.shortDesc_es || '';
+              const otherImg   = (other.gallery && other.gallery.length > 0)
+                                   ? other.gallery[0].url
+                                   : (other.image && other.image.url ? other.image.url : null);
+            %>
+            <a href="/services/<%= other.slug %>" class="sd-other-card">
+              <div class="sd-other-img">
+                <% if (otherImg) { %>
+                  <img src="<%= otherImg %>" alt="<%= otherName %>" loading="lazy">
+                <% } else { %>
+                  <div class="sd-other-placeholder">🎪</div>
+                <% } %>
+              </div>
+              <div class="sd-other-body">
+                <div class="sd-other-name"><%= otherName %></div>
+                <% if (otherShort) { %><div class="sd-other-short"><%= otherShort %></div><% } %>
+              </div>
+            </a>
+          <% }) %>
+        </div>
+      </div>
+    </section>
+  <% } %>
+
+  <%- include('./partials/footer', { pageJS: 'service-detail', partialJS: [] }) %>
+
+</body>
+</html>

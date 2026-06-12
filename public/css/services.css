@@ -1,0 +1,114 @@
+/* ============================================
+   SERVICES PAGE
+   ============================================ */
+
+.services-page {
+  padding-top: var(--nav-h);
+  min-height: 100vh;
+  background: var(--bg-primary);
+}
+
+.services-hero {
+  background: var(--bg-secondary);
+  padding: 48px 0 40px;
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+}
+
+.services-hero h1 {
+  font-family: var(--font-display);
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px var(--page-px) calc(var(--bottom-nav-h) + 40px);
+}
+
+.service-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  transition: all var(--t-normal);
+}
+
+.service-card:hover {
+  border-color: var(--gold-border);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card);
+}
+
+.service-card-img-wrap {
+  height: 220px;
+  overflow: hidden;
+  background: var(--bg-elevated);
+  position: relative;
+}
+
+.service-card-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--t-slow);
+}
+
+.service-card:hover .service-card-img-wrap img {
+  transform: scale(1.06);
+}
+
+.service-card-content {
+  padding: 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.service-card-title {
+  font-size: 20px;
+  font-weight: 700;
+  font-family: var(--font-display);
+  color: var(--text-primary);
+}
+
+.service-card-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  flex: 1;
+}
+
+.service-card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--gold);
+  margin-top: 8px;
+  transition: gap var(--t-fast);
+}
+
+.service-card:hover .service-card-cta {
+  gap: 10px;
+}
+
+@media (min-width: 640px) {
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 768px) {
+  .services-grid {
+    padding-top: 60px;
+    padding-bottom: 80px;
+  }
+}

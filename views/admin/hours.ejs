@@ -1,0 +1,148 @@
+<%
+const timeOpts = [];
+for (var h = 10; h <= 23; h++) {
+  [0, 30].forEach(function(m) {
+    var h12 = h > 12 ? h - 12 : h;
+    var ampm = h < 12 ? 'AM' : 'PM';
+    timeOpts.push(h12 + ':' + (m === 0 ? '00' : '30') + ' ' + ampm);
+  });
+}
+['12:00 AM','12:30 AM','1:00 AM','1:30 AM','2:00 AM'].forEach(function(t){ timeOpts.push(t); });
+
+const daysConfig = [
+  { key: 'monday',    label: 'Lunes'     },
+  { key: 'tuesday',   label: 'Martes'    },
+  { key: 'wednesday', label: 'Miércoles' },
+  { key: 'thursday',  label: 'Jueves'    },
+  { key: 'friday',    label: 'Viernes'   },
+  { key: 'saturday',  label: 'Sábado'    },
+  { key: 'sunday',    label: 'Domingo'   }
+];
+%>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Horario — D'Reyes Delicias CMS</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="/css/admin/admin-global.css">
+  <style>
+    .hours-card {
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .day-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      transition: background 0.15s, opacity 0.2s;
+    }
+    .day-row:last-child { border-bottom: none; }
+    .day-row.day-inactive { opacity: 0.4; }
+    .day-row:hover { background: rgba(255,255,255,0.02); }
+
+    .day-toggle-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 0 0 140px;
+      cursor: pointer;
+    }
+    .day-toggle-wrap input[type=checkbox] {
+      width: 17px; height: 17px;
+      accent-color: var(--admin-gold);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .day-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--admin-text);
+      user-select: none;
+    }
+
+    .day-times {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+    }
+    .day-times select {
+      flex: 1;
+      min-width: 0;
+      padding: 8px 10px;
+      background: var(--admin-bg);
+      border: 1px solid var(--admin-border);
+      border-radius: 8px;
+      color: var(--admin-text);
+      font-size: 13px;
+      cursor: pointer;
+      appearance: auto;
+    }
+    .day-times select:disabled { cursor: not-allowed; color: rgba(255,255,255,0.3); }
+    .day-dash { color: rgba(255,255,255,0.3); font-size: 16px; flex-shrink: 0; }
+
+    .hint-text { font-size: 12px; color: rgba(255,255,255,0.35); margin-bottom: 20px; }
+
+    @media (max-width: 540px) {
+      .day-row { flex-wrap: wrap; gap: 10px; }
+      .day-toggle-wrap { flex: 0 0 100%; }
+      .day-times { flex: 0 0 100%; }
+    }
+  </style>
+</head>
+<body>
+<div class="admin-wrapper">
+
+  <%- include('partials/sidebar', { currentPage: 'hours', unreadCount: 0 }) %>
+
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button class="admin-menu-toggle" id="adminMenuToggle"><span></span><span></span><span></span></button>
+        <span class="admin-topbar-title">Horario</span>
+      </div>
+    </div>
+
+    <div class="admin-content" style="max-width:600px;">
+      <p class="hint-text">Activa los días que trabajan y elige el horario. Solo los días activos aparecen en el sitio.</p>
+
+      <form id="hoursForm">
+        <div class="hours-card">
+          <% daysConfig.forEach(function(d) {
+            var dayData = (location && location.hours && location.hours[d.key]) || { open: '4:00 PM', close: '10:00 PM', active: false };
+          %>
+          <div class="day-row<%= !dayData.active ? ' day-inactive' : '' %>" id="dayRow-<%= d.key %>">
+            <label class="day-toggle-wrap">
+              <input type="checkbox" data-day-toggle="<%= d.key %>" <%= dayData.active ? 'checked' : '' %>>
+              <span class="day-name"><%= d.label %></span>
+            </label>
+            <div class="day-times">
+              <select name="hours[<%= d.key %>][open]" data-day="<%= d.key %>" <%= !dayData.active ? 'disabled' : '' %>>
+                <% timeOpts.forEach(function(t) { %><option value="<%= t %>"<%= dayData.open === t ? ' selected' : '' %>><%= t %></option><% }) %>
+              </select>
+              <span class="day-dash">–</span>
+              <select name="hours[<%= d.key %>][close]" data-day="<%= d.key %>" <%= !dayData.active ? 'disabled' : '' %>>
+                <% timeOpts.forEach(function(t) { %><option value="<%= t %>"<%= dayData.close === t ? ' selected' : '' %>><%= t %></option><% }) %>
+              </select>
+            </div>
+          </div>
+          <% }) %>
+        </div>
+
+        <button type="submit" class="admin-btn admin-btn-primary" id="saveHoursBtn">Guardar horario</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="admin-toast-container" id="adminToastContainer"></div>
+<script src="/js/admin/admin-global.js"></script>
+<script src="/js/admin/admin-hours.js"></script>
+</body>
+</html>

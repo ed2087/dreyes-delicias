@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= isEdit ? 'Editar' : 'Nuevo' %> Colaborador — D'Reyes Delicias CMS</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="/css/admin/admin-global.css">
+</head>
+<body>
+<div class="admin-wrapper">
+
+  <%- include('partials/sidebar', { currentPage: 'allies', unreadCount: 0 }) %>
+
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button class="admin-menu-toggle" id="adminMenuToggle"><span></span><span></span><span></span></button>
+        <span class="admin-topbar-title"><%= isEdit ? 'Editar colaborador' : 'Nuevo colaborador' %></span>
+      </div>
+      <a href="/admin/allies" class="admin-btn" style="text-decoration:none;">← Volver</a>
+    </div>
+
+    <div class="admin-content" style="max-width:640px;">
+      <form id="allyForm" enctype="multipart/form-data">
+        <% if (isEdit) { %><input type="hidden" name="_id" value="<%= ally._id %>"><% } %>
+
+        <!-- Image -->
+        <div class="admin-form-group">
+          <label class="admin-form-label">Logo / Imagen</label>
+          <div id="imagePreviewWrap" style="margin-bottom:12px;<%= (isEdit && ally.image && ally.image.url) ? '' : 'display:none;' %>">
+            <img id="imagePreview"
+              src="<%= (isEdit && ally.image && ally.image.url) ? ally.image.url : '' %>"
+              alt="Vista previa"
+              style="max-height:160px;max-width:100%;object-fit:contain;background:#1a1a1a;border-radius:8px;padding:8px;display:block;">
+          </div>
+          <input type="file" class="admin-form-input" name="image" id="imageInput" accept="image/*">
+          <p class="admin-form-hint">PNG, JPG, WebP — máx. 10 MB. Deja vacío para mantener la imagen actual.</p>
+        </div>
+
+        <!-- Name -->
+        <div class="admin-form-group">
+          <label class="admin-form-label">Nombre del negocio <span style="color:var(--admin-danger)">*</span></label>
+          <input type="text" class="admin-form-input" name="name" id="nameInput" required
+            value="<%= isEdit ? ally.name : '' %>" placeholder="Ej: Mi Negocio">
+        </div>
+
+        <!-- Description -->
+        <div class="admin-form-group">
+          <label class="admin-form-label">Descripción corta</label>
+          <textarea class="admin-form-textarea" name="description" id="descInput" rows="3"
+            placeholder="Breve descripción del negocio (1-2 oraciones)"><%= isEdit ? ally.description : '' %></textarea>
+        </div>
+
+        <!-- Link -->
+        <div class="admin-form-group">
+          <label class="admin-form-label">URL del negocio</label>
+          <input type="url" class="admin-form-input" name="link" id="linkInput"
+            value="<%= isEdit ? ally.link : '' %>" placeholder="https://minegocio.com">
+        </div>
+
+        <!-- CTA Text -->
+        <div class="admin-form-group">
+          <label class="admin-form-label">Texto del botón CTA</label>
+          <input type="text" class="admin-form-input" name="ctaText" id="ctaInput"
+            value="<%= isEdit ? ally.ctaText : 'Visit Website' %>" placeholder="Visit Website">
+        </div>
+
+        <!-- Active -->
+        <div class="admin-form-group">
+          <label class="admin-form-label">Estado</label>
+          <label class="admin-toggle">
+            <input type="checkbox" id="activeToggle" name="active" value="true"
+              <%= (!isEdit || ally.active) ? 'checked' : '' %>>
+            <span class="admin-toggle-label" id="activeLabel">
+              <%= (!isEdit || ally.active) ? '✅ Activo — visible en el sitio' : '⏸️ Inactivo — oculto' %>
+            </span>
+          </label>
+        </div>
+
+        <div style="display:flex;gap:12px;margin-top:8px;">
+          <button type="submit" class="admin-btn admin-btn-primary" id="saveBtn">
+            <%= isEdit ? 'Guardar cambios' : 'Crear colaborador' %>
+          </button>
+          <a href="/admin/allies" class="admin-btn" style="text-decoration:none;">Cancelar</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="admin-toast-container" id="adminToastContainer"></div>
+<script src="/js/admin/admin-global.js"></script>
+<script src="/js/admin/admin-ally-form.js"></script>
+</body>
+</html>

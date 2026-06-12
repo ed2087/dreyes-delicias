@@ -1,0 +1,63 @@
+﻿<!-- Admin Sidebar -->
+<aside class="admin-sidebar" id="adminSidebar">
+
+  <div class="admin-sidebar-logo">
+    <img src="https://res.cloudinary.com/dwlib8nke/image/upload/v1781222666/logo_web_pnyt9m.png" alt="D'Reyes Delicias" width="36" height="36">
+    <div class="admin-sidebar-brand">
+      D'Reyes Delicias
+      <small>CMS Admin</small>
+    </div>
+  </div>
+
+  <nav class="admin-nav" aria-label="Admin navigation">
+    <div class="admin-nav-section">Principal</div>
+    <a href="/admin"          class="admin-nav-item <%= currentPage === 'dashboard' ? 'active' : '' %>">
+      <span class="admin-nav-icon">📊</span> Dashboard
+    </a>
+
+    <div class="admin-nav-section">Contenido</div>
+    <a href="/admin/menu"     class="admin-nav-item <%= currentPage === 'menu' ? 'active' : '' %>">
+      <span class="admin-nav-icon">🌮</span> Menú
+    </a>
+    <a href="/admin/gallery"  class="admin-nav-item <%= currentPage === 'gallery' ? 'active' : '' %>">
+      <span class="admin-nav-icon">📸</span> Galería
+    </a>
+    <a href="/admin/services" class="admin-nav-item <%= currentPage === 'services' ? 'active' : '' %>">
+      <span class="admin-nav-icon">🎉</span> Servicios
+    </a>
+
+    <div class="admin-nav-section">Gestión</div>
+    <a href="/admin/location" class="admin-nav-item <%= currentPage === 'location' ? 'active' : '' %>">
+      <span class="admin-nav-icon">📍</span> Ubicación
+    </a>
+    <a href="/admin/hours" class="admin-nav-item <%= currentPage === 'hours' ? 'active' : '' %>">
+      <span class="admin-nav-icon">🕐</span> Horario
+    </a>
+    <a href="/admin/messages" class="admin-nav-item <%= currentPage === 'messages' ? 'active' : '' %>">
+      <span class="admin-nav-icon">✉️</span> Mensajes
+      <% if (typeof unreadCount !== 'undefined' && unreadCount > 0) { %>
+      <span class="admin-nav-badge"><%= unreadCount %></span>
+      <% } %>
+    </a>
+
+    <div class="admin-nav-section">Info</div>
+    <a href="/admin/allies"   class="admin-nav-item <%= currentPage === 'allies' ? 'active' : '' %>">
+      <span class="admin-nav-icon">🤝</span> Colaboradores
+    </a>
+  </nav>
+
+  <div class="admin-sidebar-footer">
+    <a href="/" target="_blank" class="admin-nav-item" style="margin-bottom:6px;">
+      <span class="admin-nav-icon">🌐</span> Ver sitio
+    </a>
+    <form action="/admin/logout" method="POST">
+      <button type="submit" class="admin-nav-item w-full" style="width:100%;text-align:left;color:rgba(255,255,255,0.4);">
+        <span class="admin-nav-icon">🚪</span> Cerrar sesión
+      </button>
+    </form>
+  </div>
+
+</aside>
+
+<!-- Overlay -->
+<div class="admin-sidebar-overlay" id="adminOverlay"></div>

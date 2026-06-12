@@ -1,0 +1,72 @@
+<%- include('partials/head') %>
+<%- include('partials/nav') %>
+
+<main class="location-page">
+  <div style="background:var(--bg-secondary);padding:48px 0 40px;border-bottom:1px solid var(--border);text-align:center;">
+    <div class="container">
+      <h1 style="font-family:var(--font-display);"><%= t.location.title %></h1>
+    </div>
+  </div>
+
+  <%- include('partials/breadcrumbs') %>
+
+  <div class="location-page-inner">
+
+    <% if (location && location.embedUrl) { %>
+    <div class="location-map-full">
+      <iframe src="<%= location.embedUrl %>" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" title="D'Reyes Delicias Location"></iframe>
+    </div>
+    <% } else { %>
+    <div class="location-map-full">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3268.5!2d-80.55!3d34.985!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2s437+Morgan+Mill+Rd+Monroe+NC!5e0!3m2!1sen!2sus!4v1" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" title="D'Reyes Delicias Location"></iframe>
+    </div>
+    <% } %>
+
+    <div class="location-details-card">
+      <div class="location-info-row">
+        <div class="location-info-icon">📍</div>
+        <div class="location-info-text">
+          <strong><%= t.location.address %></strong>
+          <p><%= location ? location.address : '437 Morgan Mill Rd, Monroe, NC 28110' %></p>
+          <% if (location && location.googleMapsUrl) { %>
+          <a href="<%= location.googleMapsUrl %>" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm" style="padding:6px 0;margin-top:4px;">
+            <%= lang === 'es' ? 'Abrir en Google Maps →' : 'Open in Google Maps →' %>
+          </a>
+          <% } %>
+        </div>
+      </div>
+
+      <div>
+        <strong style="font-size:13px;letter-spacing:0.5px;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:14px;"><%= t.location.hours %></strong>
+        <div class="location-hours-grid">
+          <% var locationDays = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
+             locationDays.forEach(function(dayKey) {
+               var dayData = location && location.hours && location.hours[dayKey];
+               if (!dayData || !dayData.active) return;
+          %>
+          <div class="hours-day-card">
+            <div class="hours-day-name"><%= t.location.days[dayKey] %></div>
+            <div class="hours-day-time"><%= dayData.open %> – <%= dayData.close %></div>
+          </div>
+          <% }) %>
+        </div>
+        <% if (location && ((lang === 'es' ? location.note_es : location.note_en))) { %>
+        <p style="margin-top:12px;font-size:13px;color:var(--gold);font-style:italic;"><%= lang === 'es' ? location.note_es : location.note_en %></p>
+        <% } %>
+      </div>
+
+      <div class="location-actions">
+        <a href="https://wa.me/19802714205" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp">
+          <%= t.contact.whatsapp %>
+        </a>
+        <a href="tel:+19802714205" class="btn btn-secondary">
+          <%= lang === 'es' ? 'Llamar' : 'Call' %> (980) 271-4205
+        </a>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<%- include('partials/nav-mobile') %>
+<%- include('partials/footer') %>

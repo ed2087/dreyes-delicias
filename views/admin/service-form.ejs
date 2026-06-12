@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= isEdit ? 'Editar servicio' : 'Nuevo servicio' %> — CMS</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="/css/admin/admin-global.css">
+  <style>
+    .form-cols { display:grid; grid-template-columns:1fr; gap:0; }
+    @media(min-width:768px){ .form-cols{ grid-template-columns:1fr 1fr; gap:24px; } }
+    .img-preview { width:100%; aspect-ratio:4/3; background:var(--admin-elevated); border-radius:10px; overflow:hidden; display:flex; align-items:center; justify-content:center; font-size:48px; margin-bottom:12px; border:1px solid var(--admin-border); }
+    .img-preview img { width:100%; height:100%; object-fit:cover; }
+    .gallery-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(90px,1fr)); gap:10px; margin-bottom:14px; }
+    .gal-item { position:relative; aspect-ratio:1; border-radius:8px; overflow:hidden; background:var(--admin-elevated); border:1px solid var(--admin-border); }
+    .gal-item img { width:100%; height:100%; object-fit:cover; display:block; }
+    .gal-del { position:absolute; top:4px; right:4px; width:22px; height:22px; border-radius:50%; background:rgba(220,50,50,0.85); border:none; color:#fff; font-size:15px; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center; padding:0; }
+    .gallery-section { border-top:1px solid var(--admin-border); padding-top:24px; margin-top:8px; }
+    .gallery-hint { font-size:12px; color:rgba(255,255,255,0.35); margin-bottom:12px; }
+    .svc-section { border:1px solid rgba(255,255,255,0.12); border-radius:12px; padding:20px; margin-bottom:24px; background:var(--admin-elevated); }
+    .svc-section-title { font-size:11px; font-weight:700; color:var(--admin-gold); text-transform:uppercase; letter-spacing:1px; margin-bottom:16px; }
+    .repeating-row { display:flex; gap:8px; align-items:flex-start; margin-bottom:8px; flex-wrap:wrap; }
+    .repeating-row .admin-form-input { flex:1; min-width:130px; }
+    .repeating-row .admin-form-input.price-input { flex:0 0 120px; min-width:80px; }
+    .row-del { width:36px; height:42px; border-radius:8px; background:rgba(239,68,68,0.10); color:#fca5a5; border:1px solid rgba(239,68,68,0.2); cursor:pointer; font-size:20px; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+    .row-del:hover { background:rgba(239,68,68,0.22); }
+    .fmt-toolbar { display:flex; gap:6px; margin-bottom:6px; }
+    .fmt-btn { padding:3px 10px; background:var(--admin-elevated); border:1px solid rgba(255,255,255,0.12); border-radius:4px; color:rgba(255,255,255,0.82); font-size:13px; cursor:pointer; line-height:1.6; }
+    .fmt-btn:hover { background:rgba(255,255,255,0.08); border-color:rgba(201,162,39,0.4); }
+  </style>
+</head>
+<body>
+<div class="admin-wrapper">
+
+  <%- include('partials/sidebar', { currentPage: 'services', unreadCount: 0 }) %>
+
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button class="admin-menu-toggle" id="adminMenuToggle"><span></span><span></span><span></span></button>
+        <a href="/admin/services" style="color:rgba(255,255,255,0.4);font-size:13px;">← Servicios</a>
+        <span class="admin-topbar-title"><%= isEdit ? 'Editar servicio' : 'Nuevo servicio' %></span>
+      </div>
+    </div>
+
+    <div class="admin-content" style="max-width:800px;">
+      <form id="serviceForm" enctype="multipart/form-data">
+        <% if (isEdit) { %>
+          <input type="hidden" id="serviceId" value="<%= service._id %>">
+        <% } %>
+
+        <div class="form-cols">
+          <!-- Left: cover image -->
+          <div>
+            <div class="admin-form-group">
+              <label class="admin-form-label">Imagen de portada</label>
+              <div class="img-preview" id="imgPreview">
+                <% if (isEdit && service.image && service.image.url) { %>
+                  <img src="<%= service.image.url %>" alt="" id="imgPreviewEl">
+                <% } else { %>
+                  <span id="imgPlaceholder">🎪</span>
+                <% } %>
+              </div>
+              <input type="file" id="imageInput" name="image" accept="image/*" style="display:none;">
+              <button type="button" class="admin-btn admin-btn-secondary w-full" id="selectImageBtn">
+                <%= isEdit ? 'Cambiar portada' : 'Seleccionar portada' %>
+              </button>
+            </div>
+          </div>
+
+          <!-- Right: fields -->
+          <div>
+            <div class="admin-form-group">
+              <label class="admin-form-label">Nombre en Español *</label>
+              <input type="text" class="admin-form-input" id="nameEs" name="name_es" value="<%= isEdit ? service.name_es : '' %>" required placeholder="Ej: Taquizas">
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-form-label">Name in English</label>
+              <input type="text" class="admin-form-input" id="nameEn" name="name_en" value="<%= isEdit ? (service.name_en || '') : '' %>" placeholder="e.g. Taquizas">
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-form-label">Descripción corta (ES)</label>
+              <input type="text" class="admin-form-input" id="shortDescEs" name="shortDesc_es" value="<%= isEdit ? (service.shortDesc_es || '') : '' %>" placeholder="Una línea en la tarjeta" maxlength="120">
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-form-label">Short description (EN)</label>
+              <input type="text" class="admin-form-input" id="shortDescEn" name="shortDesc_en" value="<%= isEdit ? (service.shortDesc_en || '') : '' %>" placeholder="One line on the card" maxlength="120">
+            </div>
+          </div>
+        </div>
+
+        <!-- Block 1: Descripción libre -->
+        <div class="svc-section">
+          <div class="svc-section-title">Descripción general</div>
+          <div class="admin-form-group">
+            <label class="admin-form-label">En Español</label>
+            <div class="fmt-toolbar">
+              <button type="button" class="fmt-btn" data-fmt="bold" data-target="descEs"><b>N</b></button>
+              <button type="button" class="fmt-btn" data-fmt="italic" data-target="descEs"><i>I</i></button>
+            </div>
+            <textarea class="admin-form-textarea" id="descEs" name="description_es" placeholder="Describe brevemente el servicio en español..."><%= isEdit ? (service.description_es || '') : '' %></textarea>
+          </div>
+          <div class="admin-form-group" style="margin-bottom:0;">
+            <label class="admin-form-label">In English</label>
+            <div class="fmt-toolbar">
+              <button type="button" class="fmt-btn" data-fmt="bold" data-target="descEn"><b>B</b></button>
+              <button type="button" class="fmt-btn" data-fmt="italic" data-target="descEn"><i>I</i></button>
+            </div>
+            <textarea class="admin-form-textarea" id="descEn" name="description_en" placeholder="Briefly describe the service in English..."><%= isEdit ? (service.description_en || '') : '' %></textarea>
+          </div>
+        </div>
+
+        <!-- Block 2: Ítems del menú -->
+        <div class="svc-section">
+          <div class="svc-section-title">Ítems del menú</div>
+          <div class="form-cols" style="margin-bottom:16px;">
+            <div class="admin-form-group" style="margin-bottom:0;">
+              <label class="admin-form-label">Título de sección (ES)</label>
+              <input type="text" class="admin-form-input" name="menuTitle_es" value="<%= isEdit ? (service.menuTitle_es || '') : '' %>" placeholder="Ej: Menú de Taquizas disponibles:">
+            </div>
+            <div class="admin-form-group" style="margin-bottom:0;">
+              <label class="admin-form-label">Section title (EN)</label>
+              <input type="text" class="admin-form-input" name="menuTitle_en" value="<%= isEdit ? (service.menuTitle_en || '') : '' %>" placeholder="e.g. Available Taquizas Menu:">
+            </div>
+          </div>
+          <div id="menuItemsContainer">
+            <% if (isEdit && service.menuItems && service.menuItems.length > 0) { %>
+              <% service.menuItems.forEach(function(item) { %>
+                <div class="repeating-row">
+                  <input type="text" class="admin-form-input" name="menuItemName" value="<%= item.name %>" placeholder="Nombre del ítem (Ej: Asada)">
+                  <input type="text" class="admin-form-input" name="menuItemDetail" value="<%= item.detail %>" placeholder="Descripción / guarniciones">
+                  <button type="button" class="row-del" title="Eliminar fila">×</button>
+                </div>
+              <% }) %>
+            <% } %>
+          </div>
+          <button type="button" class="admin-btn admin-btn-secondary" id="addMenuItemBtn" style="margin-top:4px;">+ Agregar ítem</button>
+        </div>
+
+        <!-- Block 3: Precios -->
+        <div class="svc-section">
+          <div class="svc-section-title">Precios</div>
+          <div class="form-cols" style="margin-bottom:16px;">
+            <div class="admin-form-group" style="margin-bottom:0;">
+              <label class="admin-form-label">Título de precios (ES)</label>
+              <input type="text" class="admin-form-input" name="pricingTitle_es" value="<%= isEdit ? (service.pricingTitle_es || '') : '' %>" placeholder="Ej: Precios (3 tipos de carne, 3 horas):">
+            </div>
+            <div class="admin-form-group" style="margin-bottom:0;">
+              <label class="admin-form-label">Pricing title (EN)</label>
+              <input type="text" class="admin-form-input" name="pricingTitle_en" value="<%= isEdit ? (service.pricingTitle_en || '') : '' %>" placeholder="e.g. Prices (3 meat types, 3 hours):">
+            </div>
+          </div>
+          <div id="pricingRowsContainer">
+            <% if (isEdit && service.pricingRows && service.pricingRows.length > 0) { %>
+              <% service.pricingRows.forEach(function(row) { %>
+                <div class="repeating-row">
+                  <input type="text" class="admin-form-input" name="pricingLabel" value="<%= row.label %>" placeholder="Ej: 50 personas">
+                  <input type="text" class="admin-form-input price-input" name="pricingPrice" value="<%= row.price %>" placeholder="Ej: $960">
+                  <button type="button" class="row-del" title="Eliminar fila">×</button>
+                </div>
+              <% }) %>
+            <% } %>
+          </div>
+          <button type="button" class="admin-btn admin-btn-secondary" id="addPricingRowBtn" style="margin-top:4px;">+ Agregar precio</button>
+        </div>
+
+        <!-- Block 4: Nota de cierre -->
+        <div class="svc-section">
+          <div class="svc-section-title">Nota de cierre</div>
+          <div class="admin-form-group">
+            <label class="admin-form-label">En Español</label>
+            <textarea class="admin-form-textarea" name="closingNote_es" style="min-height:72px;" placeholder="Ej: ¡Contáctanos! Tel: (980) 271-4205 | dreyesdelicias@gmail.com"><%= isEdit ? (service.closingNote_es || '') : '' %></textarea>
+          </div>
+          <div class="admin-form-group" style="margin-bottom:0;">
+            <label class="admin-form-label">In English</label>
+            <textarea class="admin-form-textarea" name="closingNote_en" style="min-height:72px;" placeholder="e.g. Contact us! Tel: (980) 271-4205 | dreyesdelicias@gmail.com"><%= isEdit ? (service.closingNote_en || '') : '' %></textarea>
+          </div>
+        </div>
+
+        <div style="margin-bottom:24px;">
+          <label class="admin-toggle">
+            <input type="checkbox" id="featuredToggle" name="featured" value="true" <%= isEdit && service.featured ? 'checked' : '' %>>
+            <span class="admin-toggle-label">⭐ Servicio destacado en inicio</span>
+          </label>
+        </div>
+
+        <!-- Gallery section -->
+        <div class="gallery-section">
+          <label class="admin-form-label">Galería de fotos</label>
+          <p class="gallery-hint">Agrega múltiples fotos — se mostrarán como carrusel en la página del servicio.</p>
+
+          <!-- Existing gallery (edit mode) -->
+          <% if (isEdit && service.gallery && service.gallery.length > 0) { %>
+            <div class="gallery-grid" id="existingGallery">
+              <% service.gallery.forEach(function(photo, idx) { %>
+                <div class="gal-item" id="galItem-<%= idx %>">
+                  <img src="<%= photo.url %>" alt="">
+                  <button type="button" class="gal-del" data-idx="<%= idx %>" title="Eliminar foto">×</button>
+                </div>
+              <% }) %>
+            </div>
+          <% } %>
+
+          <!-- New gallery previews -->
+          <div class="gallery-grid" id="newGalleryPreviews" style="display:none;"></div>
+
+          <input type="file" id="galleryInput" name="gallery" accept="image/*" multiple style="display:none;">
+          <button type="button" class="admin-btn admin-btn-secondary" id="addGalleryBtn">+ Agregar fotos</button>
+        </div>
+
+        <div style="display:flex;gap:12px;margin-top:28px;">
+          <button type="submit" class="admin-btn admin-btn-primary" id="submitBtn">
+            <%= isEdit ? 'Guardar cambios' : 'Agregar servicio' %>
+          </button>
+          <a href="/admin/services" class="admin-btn admin-btn-secondary">Cancelar</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="admin-toast-container" id="adminToastContainer"></div>
+<script src="/js/admin/admin-global.js"></script>
+<script src="/js/admin/admin-service-form.js"></script>
+</body>
+</html>

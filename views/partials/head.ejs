@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+  <!-- Primary SEO -->
+  <title><%= seo.title %> | <%= seo.siteName %></title>
+  <meta name="description" content="<%= seo.description %>">
+  <% if (seo.keywords) { %>
+  <meta name="keywords" content="<%= seo.keywords %>">
+  <% } %>
+  <link rel="canonical" href="<%= seo.canonicalUrl %>">
+
+  <!-- Robots -->
+  <meta name="robots" content="<%= seo.noIndex ? 'noindex' : 'index' %>, <%= seo.noFollow ? 'nofollow' : 'follow' %>">
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="<%= seo.type %>">
+  <meta property="og:url"         content="<%= seo.canonicalUrl %>">
+  <meta property="og:title"       content="<%= seo.title %> | <%= seo.siteName %>">
+  <meta property="og:description" content="<%= seo.description %>">
+  <meta property="og:image"       content="<%= seo.imageUrl %>">
+  <meta property="og:site_name"   content="<%= seo.siteName %>">
+  <meta property="og:locale"      content="<%= lang === 'en' ? 'en_US' : 'es_MX' %>">
+
+  <!-- Twitter -->
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:title"       content="<%= seo.title %> | <%= seo.siteName %>">
+  <meta name="twitter:description" content="<%= seo.description %>">
+  <meta name="twitter:image"       content="<%= seo.imageUrl %>">
+
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FoodEstablishment",
+    "name": "D'Reyes Delicias",
+    "description": "<%= seo.description %>",
+    "url": "<%= seo.canonicalUrl %>",
+    "image": "<%= seo.imageUrl %>",
+    "telephone": "(980) 271-4205",
+    "email": "dreyesdelicias@gmail.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "437 Morgan Mill Rd",
+      "addressLocality": "Monroe",
+      "addressRegion": "NC",
+      "postalCode": "28110",
+      "addressCountry": "US"
+    },
+    "openingHours": ["We-Th 16:00-22:00", "Fr-Sa 16:00-23:00"],
+    "servesCuisine": "Mexican, Latin",
+    "sameAs": [
+      "https://www.facebook.com/dreyesdelicias",
+      "https://www.instagram.com/dreyesdelicias1",
+      "https://www.tiktok.com/@dreyesdelicias"
+    ]
+  }
+  </script>
+
+  <% if (typeof breadcrumbs !== 'undefined' && breadcrumbs && breadcrumbs.length > 1) { %>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      <% breadcrumbs.forEach((crumb, i) => { %>
+      {
+        "@type": "ListItem",
+        "position": <%= i + 1 %>,
+        "name": "<%= crumb.name %>",
+        "item": "<%= process.env.SITE_URL || 'https://dreyesdelicias.com' %><%= crumb.url %>"
+      }<%= i < breadcrumbs.length - 1 ? ',' : '' %>
+      <% }); %>
+    ]
+  }
+  </script>
+  <% } %>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/images/favicon.png">
+  <link rel="apple-touch-icon"      href="/images/apple-touch-icon.png">
+
+  <!-- Theme color (mobile browser chrome) -->
+  <meta name="theme-color" content="#080808">
+
+  <!-- Global CSS -->
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/partials/nav.css">
+  <link rel="stylesheet" href="/css/partials/nav-mobile.css">
+
+  <!-- Page CSS -->
+  <% if (typeof pageCSS !== 'undefined' && pageCSS) { %>
+  <link rel="stylesheet" href="/css/<%= pageCSS %>.css">
+  <% } %>
+
+  <!-- Partial CSS -->
+  <% if (typeof partialCSS !== 'undefined' && partialCSS) { %>
+    <% partialCSS.forEach(function(css) { %>
+  <link rel="stylesheet" href="/css/partials/<%= css %>.css">
+    <% }); %>
+  <% } %>
+</head>
+<body>

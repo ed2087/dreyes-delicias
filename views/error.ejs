@@ -1,0 +1,17 @@
+<%- include('partials/head') %>
+
+<main class="error-page">
+  <div class="error-content">
+    <div class="error-code"><%= statusCode || 404 %></div>
+    <h1 class="error-title">
+      <%= statusCode === 404 ? (typeof t !== 'undefined' ? t.error['404_title'] : 'Page not found') : (typeof t !== 'undefined' ? t.error['500_title'] : 'Server error') %>
+    </h1>
+    <p class="error-message"><%= locals.message || (statusCode === 404 ? 'The page you are looking for does not exist.' : 'Something went wrong.') %></p>
+    <a href="/" class="btn btn-primary btn-lg">
+      <%= typeof t !== 'undefined' ? t.error.go_home : 'Go home' %>
+    </a>
+  </div>
+</main>
+
+</body>
+</html>

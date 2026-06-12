@@ -1,0 +1,38 @@
+<%- include('partials/head') %>
+<%- include('partials/nav') %>
+
+<main class="services-page">
+  <div class="services-hero">
+    <div class="container">
+      <h1><%= t.services.title %></h1>
+    </div>
+  </div>
+
+  <%- include('partials/breadcrumbs') %>
+
+  <div class="services-grid container">
+    <% if (services && services.length > 0) { %>
+      <% services.forEach(function(service) { %>
+      <a href="/services/<%= service.slug %>" class="service-card reveal">
+        <div class="service-card-img-wrap">
+          <% if (service.image && service.image.url) { %>
+          <img src="<%= service.image.url %>" alt="<%= service['name_' + lang] %>" loading="lazy">
+          <% } %>
+        </div>
+        <div class="service-card-content">
+          <h2 class="service-card-title"><%= service['name_' + lang] %></h2>
+          <p class="service-card-desc"><%= service['shortDesc_' + lang] || service['description_' + lang] %></p>
+          <span class="service-card-cta"><%= lang === 'es' ? 'Ver detalles' : 'View details' %> →</span>
+        </div>
+      </a>
+      <% }); %>
+    <% } else { %>
+    <p style="color:var(--text-secondary);padding:60px 0;text-align:center;grid-column:1/-1;">
+      <%= lang === 'es' ? 'Servicios disponibles pronto.' : 'Services coming soon.' %>
+    </p>
+    <% } %>
+  </div>
+</main>
+
+<%- include('partials/nav-mobile') %>
+<%- include('partials/footer') %>

@@ -1,0 +1,78 @@
+/* ============================================
+   ALLIES API
+   Purpose: CRUD for business partners
+   ============================================ */
+
+const express  = require('express');
+const router   = express.Router();
+const { protectAPI } = require('../../middleware/auth');
+const Ally     = require('../../models/Ally');
+const { allyUploader, deleteFile } = require('../../services/cloudinaryService');
+
+router.get('/', protectAPI, async (req, res) => {
+  const allies = await Ally.find().sort({ order: 1 }).catch(() => []);
+  res.json({ success: true, allies });
+});
+
+router.post('/', protectAPI, allyUploader.single('image'), async (req, res) => {
+  try {
+    const { name, description, link, ctaText, active } = req.body;
+    const count = await Ally.countDocuments();
+    const ally  = new Ally({
+      name,
+      description: description || '',
+      link:        link || '',
+      ctaText:     ctaText || 'Visit Website',
+      active:      active !== 'false',
+      order:       count
+    });
+    if (req.file) {
+      ally.image = { url: req.file.path, publicId: req.file.filename };
+    }
+    await ally.save();
+    res.json({ success: true, ally });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+router.put('/:id', protectAPI, allyUploader.single('image'), async (req, res) => {
+  try {
+    const ally = await Ally.findById(req.params.id);
+    if (!ally)       return res.status(404).json({ success: false, message: 'Not found' });
+    if (ally.locked) return res.status(403).json({ success: false, message: 'Este colaborador está bloqueado y no puede modificarse.' });
+
+    const { name, description, link, ctaText, active } = req.body;
+    if (name        !== undefined) ally.name        = name;
+    if (description !== undefined) ally.description = description;
+    if (link        !== undefined) ally.link        = link;
+    if (ctaText     !== undefined) ally.ctaText     = ctaText;
+    if (active      !== undefined) ally.active      = active !== 'false';
+
+    if (req.file) {
+      if (ally.image.publicId) await deleteFile(ally.image.publicId);
+      ally.image = { url: req.file.path, publicId: req.file.filename };
+    }
+
+    await ally.save();
+    res.json({ success: true, ally });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+router.delete('/:id', protectAPI, async (req, res) => {
+  try {
+    const ally = await Ally.findById(req.params.id);
+    if (!ally)       return res.status(404).json({ success: false, message: 'Not found' });
+    if (ally.locked) return res.status(403).json({ success: false, message: 'Este colaborador esta bloqueado y no puede eliminarse.' });
+
+    if (ally.image.publicId) await deleteFile(ally.image.publicId);
+    await ally.deleteOne();
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+module.exports = router;

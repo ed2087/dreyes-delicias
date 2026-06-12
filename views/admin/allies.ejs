@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Colaboradores — D'Reyes Delicias CMS</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="/css/admin/admin-global.css">
+</head>
+<body>
+<div class="admin-wrapper">
+
+  <%- include('partials/sidebar', { currentPage: 'allies', unreadCount: 0 }) %>
+
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button class="admin-menu-toggle" id="adminMenuToggle"><span></span><span></span><span></span></button>
+        <span class="admin-topbar-title">Colaboradores</span>
+      </div>
+      <a href="/admin/allies/new" class="admin-btn admin-btn-primary" style="text-decoration:none;">+ Agregar colaborador</a>
+    </div>
+
+    <div class="admin-content">
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Logo</th>
+              <th>Nombre</th>
+              <th>Descripción</th>
+              <th>Enlace</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (allies && allies.length > 0) { %>
+              <% allies.forEach(function(ally) { %>
+              <tr>
+                <td>
+                  <% if (ally.image && ally.image.url) { %>
+                  <img src="<%= ally.image.url %>" alt="<%= ally.name %>" style="width:48px;height:48px;object-fit:contain;border-radius:8px;background:#1a1a1a;padding:4px;">
+                  <% } else { %>
+                  <div style="width:48px;height:48px;background:#222;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#555;font-size:18px;">🤝</div>
+                  <% } %>
+                </td>
+                <td>
+                  <strong><%= ally.name %></strong>
+                  <% if (ally.locked) { %>
+                  <span style="display:inline-block;margin-left:6px;font-size:10px;background:rgba(201,162,39,0.15);color:#c9a227;border:1px solid rgba(201,162,39,0.3);padding:2px 7px;border-radius:99px;font-weight:700;">🔒 LOCKED</span>
+                  <% } %>
+                </td>
+                <td style="color:rgba(255,255,255,0.55);font-size:13px;max-width:200px;">
+                  <%= ally.description ? ally.description.substring(0, 80) + (ally.description.length > 80 ? '…' : '') : '—' %>
+                </td>
+                <td style="font-size:12px;">
+                  <% if (ally.link) { %>
+                  <a href="<%= ally.link %>" target="_blank" rel="noopener" style="color:var(--admin-accent);text-decoration:none;">
+                    <%= ally.link.replace(/^https?:\/\//, '').split('/')[0] %>
+                  </a>
+                  <% } else { %>—<% } %>
+                </td>
+                <td>
+                  <span style="font-size:11px;padding:3px 10px;border-radius:99px;font-weight:700;background:<%= ally.active ? 'rgba(39,174,96,0.15)' : 'rgba(255,255,255,0.06)' %>;color:<%= ally.active ? '#27ae60' : 'rgba(255,255,255,0.35)' %>;">
+                    <%= ally.active ? 'Activo' : 'Inactivo' %>
+                  </span>
+                </td>
+                <td>
+                  <div style="display:flex;gap:8px;align-items:center;">
+                    <% if (!ally.locked) { %>
+                    <a href="/admin/allies/<%= ally._id %>/edit" class="admin-btn admin-btn-sm" style="text-decoration:none;">Editar</a>
+                    <button class="admin-btn admin-btn-sm admin-btn-danger" data-delete="<%= ally._id %>" data-name="<%= ally.name %>">Eliminar</button>
+                    <% } else { %>
+                    <button class="admin-btn admin-btn-sm" disabled style="opacity:0.3;cursor:not-allowed;" title="Bloqueado — solo modificable por el administrador">🔒 Bloqueado</button>
+                    <% } %>
+                  </div>
+                </td>
+              </tr>
+              <% }); %>
+            <% } else { %>
+            <tr>
+              <td colspan="6" style="text-align:center;padding:48px;color:rgba(255,255,255,0.35);">
+                No hay colaboradores aún. <a href="/admin/allies/new" style="color:var(--admin-accent);">Agregar el primero</a>
+              </td>
+            </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="admin-toast-container" id="adminToastContainer"></div>
+<script src="/js/admin/admin-global.js"></script>
+<script src="/js/admin/admin-allies.js"></script>
+</body>
+</html>

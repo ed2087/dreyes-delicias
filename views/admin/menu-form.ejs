@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= isEdit ? 'Editar platillo' : 'Nuevo platillo' %> — CMS</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="/css/admin/admin-global.css">
+  <style>
+    .form-cols { display:grid; grid-template-columns:1fr; gap:0; }
+    .img-preview { width:100%; aspect-ratio:4/3; background:var(--admin-elevated); border-radius:10px; overflow:hidden; display:flex; align-items:center; justify-content:center; font-size:48px; margin-bottom:12px; border:1px solid var(--admin-border); }
+    .img-preview img { width:100%;height:100%;object-fit:cover; }
+    @media(min-width:768px){ .form-cols{ grid-template-columns:1fr 1fr; gap:24px; } }
+    .gallery-section { border-top:1px solid var(--admin-border); padding-top:24px; margin-top:8px; }
+    .gallery-hint { font-size:12px; color:rgba(255,255,255,0.42); margin-bottom:12px; }
+    .gallery-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(90px,1fr)); gap:10px; margin-bottom:14px; }
+    .gal-item { position:relative; aspect-ratio:1; border-radius:8px; overflow:hidden; background:var(--admin-elevated); border:1px solid var(--admin-border); }
+    .gal-item img { width:100%; height:100%; object-fit:cover; display:block; }
+    .gal-del { position:absolute; top:4px; right:4px; width:22px; height:22px; border-radius:50%; background:rgba(220,50,50,0.85); border:none; color:#fff; font-size:15px; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center; padding:0; }
+    .svc-section { border:1px solid rgba(255,255,255,0.12); border-radius:12px; padding:20px; margin-bottom:24px; background:var(--admin-elevated); }
+    .svc-section-title { font-size:11px; font-weight:700; color:var(--admin-gold); text-transform:uppercase; letter-spacing:1px; margin-bottom:16px; }
+    .check-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(170px,1fr)); gap:8px; }
+    .check-item { display:flex; align-items:center; gap:8px; font-size:13px; color:rgba(255,255,255,0.82); padding:9px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.08); background:var(--admin-bg); cursor:pointer; user-select:none; transition:border-color 0.15s; }
+    .check-item:hover { border-color:rgba(201,162,39,0.3); }
+    .check-item input[type=checkbox] { width:15px; height:15px; accent-color:var(--admin-gold); flex-shrink:0; }
+    .spice-row { display:flex; gap:8px; flex-wrap:wrap; }
+    .spice-opt { flex:1; min-width:80px; padding:9px 6px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); background:var(--admin-bg); color:rgba(255,255,255,0.6); font-size:13px; cursor:pointer; text-align:center; transition:all 0.15s; }
+    .spice-opt.selected { border-color:var(--admin-gold); background:rgba(201,162,39,0.1); color:var(--admin-gold); font-weight:600; }
+  </style>
+</head>
+<body>
+<div class="admin-wrapper">
+
+  <%- include('partials/sidebar', { currentPage: 'menu', unreadCount: 0 }) %>
+
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button class="admin-menu-toggle" id="adminMenuToggle"><span></span><span></span><span></span></button>
+        <a href="/admin/menu" style="color:rgba(255,255,255,0.4);font-size:13px;">← Menú</a>
+        <span class="admin-topbar-title"><%= isEdit ? 'Editar platillo' : 'Nuevo platillo' %></span>
+      </div>
+    </div>
+
+    <div class="admin-content" style="max-width:800px;">
+      <form id="menuItemForm" enctype="multipart/form-data">
+        <% if (isEdit) { %>
+        <input type="hidden" id="itemId" value="<%= item._id %>">
+        <% } %>
+
+        <div class="form-cols">
+          <!-- Left column -->
+          <div>
+            <!-- Image upload -->
+            <div class="admin-form-group">
+              <label class="admin-form-label">Foto del platillo</label>
+              <div class="img-preview" id="imgPreview">
+                <% if (isEdit && item.image && item.image.url) { %>
+                <img src="<%= item.image.url %>" alt="" id="imgPreviewEl">
+                <% } else { %>
+                <span id="imgPlaceholder">🌮</span>
+                <% } %>
+              </div>
+              <input type="file" id="imageInput" name="image" accept="image/*" style="display:none;">
+              <button type="button" class="admin-btn admin-btn-secondary w-full" id="selectImageBtn">Seleccionar imagen</button>
+            </div>
+          </div>
+
+          <!-- Right column -->
+          <div>
+            <div class="admin-form-group">
+              <label class="admin-form-label">Nombre en Español *</label>
+              <input type="text" class="admin-form-input" id="nameEs" name="name_es" value="<%= isEdit ? item.name_es : '' %>" required placeholder="Ej: Tacos al Pastor">
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-form-label">Name in English</label>
+              <input type="text" class="admin-form-input" id="nameEn" name="name_en" value="<%= isEdit ? item.name_en : '' %>" placeholder="e.g. Tacos al Pastor">
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-form-label">Precio (USD) *</label>
+              <input type="number" class="admin-form-input" id="price" name="price" value="<%= isEdit ? item.price : '' %>" step="0.01" min="0" required placeholder="0.00">
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-form-label">Categoría *</label>
+              <input type="text" class="admin-form-input" id="category" name="category"
+                     list="categoryList" autocomplete="off"
+                     value="<%= isEdit ? (item.category || '') : '' %>"
+                     placeholder="Ej: Tacos, Bebidas, Sopas..." required>
+              <datalist id="categoryList">
+                <% (categories || []).forEach(function(c) { %>
+                  <option value="<%= c %>">
+                <% }) %>
+              </datalist>
+            </div>
+          </div>
+        </div>
+
+        <!-- Full width fields -->
+        <div class="admin-form-group">
+          <label class="admin-form-label">Descripción en Español</label>
+          <textarea class="admin-form-textarea" id="descEs" name="description_es" placeholder="Descripción del platillo..."><%= isEdit ? item.description_es : '' %></textarea>
+        </div>
+        <div class="admin-form-group">
+          <label class="admin-form-label">Description in English</label>
+          <textarea class="admin-form-textarea" id="descEn" name="description_en" placeholder="Dish description..."><%= isEdit ? item.description_en : '' %></textarea>
+        </div>
+
+        <!-- Portion + Ingredients -->
+        <div class="svc-section">
+          <div class="svc-section-title">Porción e Ingredientes</div>
+          <div class="form-cols">
+            <div class="admin-form-group" style="margin-bottom:0;">
+              <label class="admin-form-label">Tamaño de porción</label>
+              <input type="text" class="admin-form-input" name="portionInfo"
+                     value="<%= isEdit ? (item.portionInfo || '') : '' %>"
+                     placeholder="Ej: 3 tacos por orden, 2 piezas...">
+            </div>
+            <div class="admin-form-group" style="margin-bottom:0;">
+              <label class="admin-form-label">Nivel de picante</label>
+              <input type="hidden" name="spiceLevel" id="spiceLevelInput" value="<%= isEdit ? (item.spiceLevel || 0) : 0 %>">
+              <div class="spice-row" id="spiceRow">
+                <% [['0','🙂 Sin picante'],['1','🌶️ Poco'],['2','🌶️🌶️ Picante'],['3','🔥 Muy picante']].forEach(function(opt) { %>
+                  <button type="button" class="spice-opt <%= (isEdit ? (item.spiceLevel||0) : 0) == opt[0] ? 'selected' : '' %>"
+                          data-val="<%= opt[0] %>"><%= opt[1] %></button>
+                <% }) %>
+              </div>
+            </div>
+          </div>
+          <div class="admin-form-group" style="margin-top:16px;margin-bottom:0;">
+            <label class="admin-form-label">Ingredientes principales (opcional)</label>
+            <textarea class="admin-form-textarea" name="ingredients" style="min-height:70px;"
+                      placeholder="Ej: carne de puerco, piña, cilantro, cebolla, salsa roja..."><%= isEdit ? (item.ingredients || '') : '' %></textarea>
+          </div>
+        </div>
+
+        <!-- Dietary tags -->
+        <div class="svc-section">
+          <div class="svc-section-title">Etiquetas dietéticas</div>
+          <div class="check-grid">
+            <% var allTags = [
+              ['vegetariano','🌱 Vegetariano'],['vegano','🌿 Vegano'],
+              ['sin-gluten','✓ Sin gluten'],['picante','🌶️ Picante'],
+              ['muy-picante','🔥 Muy picante'],['cerdo','🐷 Contiene cerdo'],
+              ['popular','⭐ Popular'],['nuevo','🆕 Nuevo']
+            ]; %>
+            <% allTags.forEach(function(tag) { %>
+              <label class="check-item">
+                <input type="checkbox" name="dietaryTags" value="<%= tag[0] %>"
+                       <%= isEdit && item.dietaryTags && item.dietaryTags.indexOf(tag[0]) !== -1 ? 'checked' : '' %>>
+                <span><%= tag[1] %></span>
+              </label>
+            <% }) %>
+          </div>
+        </div>
+
+        <!-- Allergens -->
+        <div class="svc-section">
+          <div class="svc-section-title">Alérgenos (Big 9 FDA)</div>
+          <div class="check-grid">
+            <% var allAllergens = [
+              ['gluten','🌾 Gluten / Trigo'],['dairy','🥛 Lácteos'],
+              ['eggs','🥚 Huevo'],['fish','🐟 Pescado'],
+              ['shellfish','🦐 Mariscos'],['peanuts','🥜 Cacahuate'],
+              ['treenuts','🌰 Nueces de árbol'],['soy','🫘 Soya'],
+              ['sesame','🫓 Sésamo']
+            ]; %>
+            <% allAllergens.forEach(function(al) { %>
+              <label class="check-item">
+                <input type="checkbox" name="allergens" value="<%= al[0] %>"
+                       <%= isEdit && item.allergens && item.allergens.indexOf(al[0]) !== -1 ? 'checked' : '' %>>
+                <span><%= al[1] %></span>
+              </label>
+            <% }) %>
+          </div>
+        </div>
+
+        <!-- Gallery -->
+        <div class="gallery-section">
+          <label class="admin-form-label">Fotos adicionales</label>
+          <p class="gallery-hint">Hasta 10 fotos extra — aparecen en la página del platillo.</p>
+
+          <% if (isEdit && item.gallery && item.gallery.length > 0) { %>
+            <div class="gallery-grid" id="existingGallery">
+              <% item.gallery.forEach(function(photo, idx) { %>
+                <div class="gal-item" id="galItem-<%= idx %>">
+                  <img src="<%= photo.url %>" alt="">
+                  <button type="button" class="gal-del" data-idx="<%= idx %>" title="Eliminar">×</button>
+                </div>
+              <% }) %>
+            </div>
+          <% } %>
+
+          <div class="gallery-grid" id="newGalleryPreviews" style="display:none;"></div>
+          <input type="file" id="galleryInput" name="gallery" accept="image/*" multiple style="display:none;">
+          <button type="button" class="admin-btn admin-btn-secondary" id="addGalleryBtn">+ Agregar fotos</button>
+        </div>
+
+        <div style="display:flex;gap:24px;margin:24px 0;">
+          <label class="admin-toggle">
+            <input type="checkbox" id="featuredToggle" name="featured" value="true" <%= isEdit && item.featured ? 'checked' : '' %>>
+            <span class="admin-toggle-label">⭐ Platillo destacado</span>
+          </label>
+          <label class="admin-toggle">
+            <input type="checkbox" id="availableToggle" name="available" value="true" <%= !isEdit || item.available ? 'checked' : '' %>>
+            <span class="admin-toggle-label">✓ Disponible</span>
+          </label>
+        </div>
+
+        <div style="display:flex;gap:12px;">
+          <button type="submit" class="admin-btn admin-btn-primary" id="submitBtn">
+            <%= isEdit ? 'Guardar cambios' : 'Agregar platillo' %>
+          </button>
+          <a href="/admin/menu" class="admin-btn admin-btn-secondary">Cancelar</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="admin-toast-container" id="adminToastContainer"></div>
+<script src="/js/admin/admin-global.js"></script>
+<script src="/js/admin/admin-menu-form.js"></script>
+</body>
+</html>

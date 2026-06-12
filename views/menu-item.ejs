@@ -1,0 +1,210 @@
+<%
+const itemName       = item['name_' + lang] || item.name_es;
+const itemDesc       = item['description_' + lang] || item.description_es || '';
+const categoryLabel  = t.menu && t.menu.categories ? (t.menu.categories[item.category] || item.category) : item.category;
+const priceFormatted = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(item.price || 0);
+
+// Build all images: cover first, then gallery
+const allImages = [];
+if (item.image && item.image.url) allImages.push(item.image.url);
+if (item.gallery && item.gallery.length > 0) {
+  item.gallery.forEach(function(g) { if (g && g.url) allImages.push(g.url); });
+}
+
+// Allergen labels
+const allergenMeta = {
+  gluten:    { icon: '🌾', es: 'Gluten',    en: 'Gluten'    },
+  dairy:     { icon: '🥛', es: 'Lácteos',   en: 'Dairy'     },
+  eggs:      { icon: '🥚', es: 'Huevo',     en: 'Eggs'      },
+  fish:      { icon: '🐟', es: 'Pescado',   en: 'Fish'      },
+  shellfish: { icon: '🦐', es: 'Mariscos',  en: 'Shellfish' },
+  peanuts:   { icon: '🥜', es: 'Cacahuate', en: 'Peanuts'   },
+  treenuts:  { icon: '🌰', es: 'Nueces',    en: 'Tree Nuts' },
+  soy:       { icon: '🫘', es: 'Soya',      en: 'Soy'       },
+  sesame:    { icon: '🫓', es: 'Sésamo',    en: 'Sesame'    }
+};
+
+// Dietary tag labels + colors
+const tagMeta = {
+  'vegetariano': { icon: '🌱', es: 'Vegetariano', en: 'Vegetarian', color: '#22c55e' },
+  'vegano':      { icon: '🌿', es: 'Vegano',       en: 'Vegan',      color: '#16a34a' },
+  'sin-gluten':  { icon: '✓',  es: 'Sin gluten',   en: 'Gluten-free', color: '#3b82f6' },
+  'picante':     { icon: '🌶️', es: 'Picante',      en: 'Spicy',      color: '#f97316' },
+  'muy-picante': { icon: '🔥', es: 'Muy picante',  en: 'Very spicy', color: '#ef4444' },
+  'cerdo':       { icon: '🐷', es: 'Contiene cerdo', en: 'Contains pork', color: '#a855f7' },
+  'popular':     { icon: '⭐', es: 'Popular',       en: 'Popular',    color: '#C9A227' },
+  'nuevo':       { icon: '🆕', es: 'Nuevo',         en: 'New',        color: '#06b6d4' }
+};
+
+const spiceLabels = {
+  es: ['', '🌶️ Poco picante', '🌶️🌶️ Picante', '🔥 Muy picante'],
+  en: ['', '🌶️ Mild',         '🌶️🌶️ Spicy',    '🔥 Very spicy']
+};
+%>
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+<%- include('./partials/head', {
+  seo,
+  breadcrumbs,
+  pageCSS: 'menu-item',
+  partialCSS: ['breadcrumbs']
+}) %>
+<body>
+
+  <%- include('./partials/nav') %>
+  <%- include('./partials/nav-mobile') %>
+
+  <main class="menu-item-hero">
+    <div class="menu-item-container">
+
+      <%- include('./partials/breadcrumbs', { breadcrumbs }) %>
+
+      <div class="menu-item-grid reveal">
+
+        <!-- Carousel -->
+        <div class="mi-carousel" id="miCarousel">
+          <% if (allImages.length > 0) { %>
+            <div class="mi-track">
+              <% allImages.forEach(function(url, i) { %>
+                <div class="mi-slide<%= i === 0 ? ' active' : '' %>" data-idx="<%= i %>">
+                  <img src="<%= url %>" alt="<%= itemName %>" loading="<%= i === 0 ? 'eager' : 'lazy' %>">
+                </div>
+              <% }) %>
+            </div>
+
+            <!-- Zoom button -->
+            <button class="mi-zoom" id="miZoom" aria-label="<%= lang === 'es' ? 'Ver imagen completa' : 'Full image' %>">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+            </button>
+
+            <% if (allImages.length > 1) { %>
+              <button class="mi-arrow mi-prev" id="miPrev">&#8249;</button>
+              <button class="mi-arrow mi-next" id="miNext">&#8250;</button>
+              <div class="mi-dots" id="miDots">
+                <% allImages.forEach(function(_, i) { %>
+                  <button class="mi-dot<%= i === 0 ? ' active' : '' %>" data-idx="<%= i %>"></button>
+                <% }) %>
+              </div>
+            <% } %>
+          <% } else { %>
+            <div class="mi-placeholder">🍽️</div>
+          <% } %>
+        </div>
+
+        <!-- Info -->
+        <div class="menu-item-info">
+
+          <!-- Category + tags row -->
+          <div class="mi-meta-row">
+            <span class="menu-item-category"><%= categoryLabel %></span>
+            <% if (item.dietaryTags && item.dietaryTags.length > 0) { %>
+              <% item.dietaryTags.forEach(function(tag) { %>
+                <% var tm = tagMeta[tag]; if (tm) { %>
+                  <span class="mi-tag" style="--tag-color:<%= tm.color %>"><%= tm.icon %> <%= tm[lang] || tm.es %></span>
+                <% } %>
+              <% }) %>
+            <% } %>
+          </div>
+
+          <h1 class="menu-item-name"><%= itemName %></h1>
+
+          <!-- Price + portion -->
+          <div class="mi-price-row">
+            <div class="menu-item-price"><%= priceFormatted %></div>
+            <% if (item.portionInfo) { %>
+              <span class="mi-portion"><%= item.portionInfo %></span>
+            <% } %>
+          </div>
+
+          <!-- Spice level -->
+          <% if (item.spiceLevel && item.spiceLevel > 0) { %>
+            <div class="mi-spice"><%= spiceLabels[lang][item.spiceLevel] || spiceLabels.es[item.spiceLevel] %></div>
+          <% } %>
+
+          <% if (itemDesc) { %>
+            <p class="menu-item-description"><%= itemDesc %></p>
+          <% } %>
+
+          <!-- Ingredients -->
+          <% if (item.ingredients) { %>
+            <div class="mi-ingredients">
+              <span class="mi-ingredients-label"><%= lang === 'es' ? 'Ingredientes:' : 'Ingredients:' %></span>
+              <%= item.ingredients %>
+            </div>
+          <% } %>
+
+          <!-- Allergens -->
+          <% if (item.allergens && item.allergens.length > 0) { %>
+            <div class="mi-allergens">
+              <div class="mi-allergens-title">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                <%= lang === 'es' ? 'Contiene alérgenos:' : 'Contains allergens:' %>
+              </div>
+              <div class="mi-allergen-chips">
+                <% item.allergens.forEach(function(key) { %>
+                  <% var am = allergenMeta[key]; if (am) { %>
+                    <span class="mi-allergen-chip"><%= am.icon %> <%= am[lang] || am.es %></span>
+                  <% } %>
+                <% }) %>
+              </div>
+            </div>
+          <% } %>
+
+          <!-- Availability -->
+          <div class="menu-item-availability">
+            <span class="availability-dot <%= item.available ? '' : 'unavailable' %>"></span>
+            <span><%= item.available ? (lang === 'es' ? 'Disponible' : 'Available') : (lang === 'es' ? 'No disponible' : 'Unavailable') %></span>
+          </div>
+
+          <div class="menu-item-ctas">
+            <a href="https://wa.me/19802714205?text=<%= encodeURIComponent((lang === 'es' ? 'Hola, quisiera pedir: ' : 'Hi, I would like to order: ') + itemName) %>"
+               class="btn btn-whatsapp btn-lg" target="_blank" rel="noopener noreferrer">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/>
+              </svg>
+              <%= lang === 'es' ? 'Pedir por WhatsApp' : 'Order on WhatsApp' %>
+            </a>
+            <a href="/menu" class="btn btn-secondary btn-lg">
+              ← <%= lang === 'es' ? 'Ver todo el menú' : 'Back to menu' %>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <% if (locals.related && related.length > 0) { %>
+    <section class="menu-item-related">
+      <div class="menu-item-container">
+        <h2 class="section-title">
+          <%= lang === 'es' ? 'También te puede gustar' : 'You might also like' %>
+        </h2>
+        <div class="related-grid">
+          <% related.forEach(function(rel) { %>
+            <%
+              const relName  = rel['name_' + lang] || rel.name_es;
+              const relPrice = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(rel.price || 0);
+            %>
+            <a href="/menu/<%= rel.slug %>" class="related-card">
+              <div class="related-card-img">
+                <% if (rel.image && rel.image.url) { %>
+                  <img src="<%= rel.image.url %>" alt="<%= relName %>" loading="lazy">
+                <% } else { %>
+                  <div class="related-card-img-placeholder">🍽️</div>
+                <% } %>
+              </div>
+              <div class="related-card-body">
+                <div class="related-card-name"><%= relName %></div>
+                <div class="related-card-price"><%= relPrice %></div>
+              </div>
+            </a>
+          <% }) %>
+        </div>
+      </div>
+    </section>
+  <% } %>
+
+  <!-- Pass images to JS -->
+  <script>var MI_IMAGES = <%- JSON.stringify(allImages) %>;</script>
+  <%- include('./partials/footer', { pageJS: 'menu-item', partialJS: [] }) %>

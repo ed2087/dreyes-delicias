@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ubicación — D'Reyes Delicias CMS</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="/css/admin/admin-global.css">
+</head>
+<body>
+<div class="admin-wrapper">
+
+  <%- include('partials/sidebar', { currentPage: 'location', unreadCount: 0 }) %>
+
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button class="admin-menu-toggle" id="adminMenuToggle"><span></span><span></span><span></span></button>
+        <span class="admin-topbar-title">Ubicación en vivo</span>
+      </div>
+    </div>
+
+    <div class="admin-content" style="max-width:680px;">
+      <form id="locationForm">
+
+        <div class="admin-form-group">
+          <label class="admin-form-label">Estado actual</label>
+          <label class="admin-toggle">
+            <input type="checkbox" id="isOpenToggle" name="isOpen" value="true" <%= location && location.isOpen ? 'checked' : '' %>>
+            <span class="admin-toggle-label" id="isOpenLabel"><%= location && location.isOpen ? '🟢 Abierto ahora' : '🔴 Cerrado ahora' %></span>
+          </label>
+        </div>
+
+        <div class="admin-form-group">
+          <label class="admin-form-label">Dirección actual</label>
+          <input type="text" class="admin-form-input" id="address" name="address" value="<%= location ? location.address : '437 Morgan Mill Rd, Monroe, NC 28110' %>" placeholder="Dirección completa">
+        </div>
+
+        <div class="admin-form-group">
+          <label class="admin-form-label">URL de Google Maps</label>
+          <input type="url" class="admin-form-input" id="googleMapsUrl" name="googleMapsUrl" value="<%= location ? location.googleMapsUrl : '' %>" placeholder="https://maps.google.com/...">
+        </div>
+
+        <div class="admin-form-group">
+          <label class="admin-form-label">URL de embebido (iframe src)</label>
+          <textarea class="admin-form-textarea" id="embedUrl" name="embedUrl" placeholder="https://www.google.com/maps/embed?pb=..." style="min-height:80px;"><%= location ? location.embedUrl : '' %></textarea>
+        </div>
+
+        <div class="admin-form-group">
+          <label class="admin-form-label">Nota especial (Español)</label>
+          <input type="text" class="admin-form-input" id="noteEs" name="note_es" value="<%= location ? location.note_es : '' %>" placeholder="Ej: Hoy estamos en evento especial">
+        </div>
+        <div class="admin-form-group">
+          <label class="admin-form-label">Special note (English)</label>
+          <input type="text" class="admin-form-input" id="noteEn" name="note_en" value="<%= location ? location.note_en : '' %>" placeholder="e.g. Today we're at a special event">
+        </div>
+
+        <button type="submit" class="admin-btn admin-btn-primary" id="saveLocationBtn">Guardar cambios</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="admin-toast-container" id="adminToastContainer"></div>
+<script src="/js/admin/admin-global.js"></script>
+<script src="/js/admin/admin-location.js"></script>
+</body>
+</html>

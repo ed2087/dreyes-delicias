@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mensajes — D'Reyes Delicias CMS</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="/css/admin/admin-global.css">
+  <style>
+    .message-card { background:var(--admin-surface); border:1px solid var(--admin-border); border-radius:12px; padding:20px; margin-bottom:12px; transition:border-color 0.2s; }
+    .message-card.unread { border-color:rgba(201,162,39,0.3); }
+    .message-card-header { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:10px; }
+    .message-sender { font-weight:700; font-size:15px; }
+    .message-meta { font-size:12px; color:rgba(255,255,255,0.4); margin-top:2px; }
+    .message-subject { font-size:13px; font-weight:600; color:var(--admin-gold); margin-bottom:8px; }
+    .message-body { font-size:14px; color:rgba(255,255,255,0.65); line-height:1.6; }
+    .message-actions { display:flex; gap:8px; margin-top:12px; }
+    .unread-dot { width:8px; height:8px; border-radius:50%; background:var(--admin-gold); flex-shrink:0; margin-top:4px; }
+  </style>
+</head>
+<body>
+<div class="admin-wrapper">
+
+  <%- include('partials/sidebar', { currentPage: 'messages', unreadCount: messages.filter(function(m){ return !m.read; }).length }) %>
+
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button class="admin-menu-toggle" id="adminMenuToggle"><span></span><span></span><span></span></button>
+        <span class="admin-topbar-title">Mensajes (<%= unreadCount %> sin leer)</span>
+      </div>
+    </div>
+
+    <div class="admin-content">
+      <% if (messages && messages.length > 0) { %>
+        <% messages.forEach(function(msg) { %>
+        <div class="message-card <%= msg.read ? '' : 'unread' %>" data-id="<%= msg._id %>">
+          <div class="message-card-header">
+            <div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <% if (!msg.read) { %><div class="unread-dot"></div><% } %>
+                <span class="message-sender"><%= msg.name %></span>
+              </div>
+              <div class="message-meta">
+                <a href="mailto:<%= msg.email %>" style="color:var(--admin-gold);"><%= msg.email %></a>
+                <% if (msg.phone) { %> · <a href="tel:<%= msg.phone %>" style="color:rgba(255,255,255,0.4);"><%= msg.phone %></a><% } %>
+                · <%= msg.createdAt.toLocaleDateString('es-MX', {year:'numeric',month:'short',day:'numeric'}) %>
+              </div>
+            </div>
+          </div>
+          <% if (msg.subject) { %><div class="message-subject"><%= msg.subject %></div><% } %>
+          <div class="message-body"><%= msg.message %></div>
+          <div class="message-actions">
+            <a href="mailto:<%= msg.email %>" class="admin-btn admin-btn-secondary admin-btn-sm">Responder</a>
+            <% if (msg.phone) { %>
+            <a href="https://wa.me/1<%= msg.phone.replace(/\D/g,'') %>" target="_blank" rel="noopener noreferrer" class="admin-btn admin-btn-secondary admin-btn-sm">WhatsApp</a>
+            <% } %>
+            <% if (!msg.read) { %>
+            <button class="admin-btn admin-btn-secondary admin-btn-sm btn-mark-read" data-id="<%= msg._id %>">Marcar leído</button>
+            <% } %>
+            <button class="admin-btn admin-btn-danger admin-btn-sm btn-delete-msg" data-id="<%= msg._id %>">Eliminar</button>
+          </div>
+        </div>
+        <% }); %>
+      <% } else { %>
+      <p style="color:rgba(255,255,255,0.3);font-size:14px;padding:40px 0;text-align:center;">No hay mensajes aún.</p>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<div class="admin-toast-container" id="adminToastContainer"></div>
+<script src="/js/admin/admin-global.js"></script>
+<script src="/js/admin/admin-messages.js"></script>
+</body>
+</html>

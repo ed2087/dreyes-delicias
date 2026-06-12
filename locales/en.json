@@ -1,0 +1,92 @@
+{
+  "lang": "en",
+  "nav": {
+    "home": "Home",
+    "menu": "Menu",
+    "services": "Services",
+    "gallery": "Gallery",
+    "contact": "Contact",
+    "location": "Location"
+  },
+  "hero": {
+    "tagline": "Taquizas & Banquets",
+    "subtitle": "For All Types of Events",
+    "cta_menu": "View Menu",
+    "cta_contact": "Contact Us"
+  },
+  "sections": {
+    "services": "Our Services",
+    "gallery": "Gallery",
+    "gallery_cta": "View Full Gallery",
+    "menu": "Featured Dishes",
+    "menu_cta": "View Full Menu",
+    "location": "Find Us",
+    "contact": "Contact Us",
+    "allies": "Partners"
+  },
+  "menu": {
+    "title": "Our Menu",
+    "categories": {
+      "all": "All",
+      "tacos": "Tacos",
+      "burritos": "Burritos",
+      "quesadillas": "Quesadillas",
+      "hamburguesas": "Burgers",
+      "antojitos": "Snacks",
+      "bebidas": "Drinks",
+      "otros": "Other"
+    }
+  },
+  "gallery": {
+    "title": "Gallery",
+    "albums": {
+      "all": "All",
+      "food": "Food",
+      "truck": "Food Truck",
+      "events": "Events"
+    }
+  },
+  "services": {
+    "title": "Services"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "subject": "Subject",
+    "message": "Message",
+    "send": "Send message",
+    "whatsapp": "Message us on WhatsApp",
+    "success": "Message sent! We'll reach out soon.",
+    "error": "There was an error sending your message. Please try again."
+  },
+  "location": {
+    "title": "Our Location",
+    "address": "Address",
+    "hours": "Hours",
+    "open": "Open now",
+    "closed": "Closed",
+    "days": {
+      "monday":    "Monday",
+      "tuesday":   "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday":  "Thursday",
+      "friday":    "Friday",
+      "saturday":  "Saturday",
+      "sunday":    "Sunday"
+    }
+  },
+  "footer": {
+    "rights": "All rights reserved",
+    "developed": "Developed by",
+    "follow": "Follow us"
+  },
+  "error": {
+    "404_title": "Page not found",
+    "404_message": "The page you are looking for does not exist.",
+    "500_title": "Server error",
+    "500_message": "Something went wrong. Please try again.",
+    "go_home": "Go home"
+  }
+}

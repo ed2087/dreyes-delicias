@@ -1,0 +1,65 @@
+<%- include('partials/head') %>
+<%- include('partials/nav') %>
+
+<main class="menu-page">
+  <div class="menu-hero">
+    <div class="container">
+      <h1><%= t.menu.title %></h1>
+      <p><%= lang === 'es' ? 'Auténticos sabores latinos' : 'Authentic Latin flavors' %></p>
+    </div>
+  </div>
+
+  <%- include('partials/breadcrumbs') %>
+
+  <!-- Category filter — built from live data -->
+  <%
+    var seenCats = {};
+    var uniqueCats = [];
+    items.forEach(function(item) {
+      if (item.category && !seenCats[item.category]) {
+        seenCats[item.category] = true;
+        uniqueCats.push(item.category);
+      }
+    });
+  %>
+  <% if (uniqueCats.length > 1) { %>
+  <div class="category-filter">
+    <div class="category-filter-inner">
+      <button class="cat-pill active" data-category="all"><%= t.menu.categories.all %></button>
+      <% uniqueCats.forEach(function(cat) { %>
+        <button class="cat-pill" data-category="<%= cat %>">
+          <%= (t.menu.categories && t.menu.categories[cat]) ? t.menu.categories[cat] : cat %>
+        </button>
+      <% }) %>
+    </div>
+  </div>
+  <% } %>
+
+  <!-- Menu grid -->
+  <div class="menu-grid" id="menuGrid">
+    <% if (items && items.length > 0) { %>
+      <% items.forEach(function(item) { %>
+      <a href="/menu/<%= item.slug %>" class="menu-item-card" data-category="<%= item.category %>">
+        <% if (item.image && item.image.url) { %>
+        <img src="<%= item.image.url %>" alt="<%= item['name_' + lang] %>" class="menu-item-img" loading="lazy">
+        <% } else { %>
+        <div class="menu-item-img" style="display:flex;align-items:center;justify-content:center;font-size:40px;">🌮</div>
+        <% } %>
+        <div class="menu-item-info">
+          <div class="menu-item-name"><%= item['name_' + lang] %></div>
+          <div class="menu-item-price">$<%= item.price.toFixed(2) %></div>
+        </div>
+      </a>
+      <% }); %>
+    <% } else { %>
+    <div class="menu-empty">
+      <p style="font-size:48px;margin-bottom:12px;">🌮</p>
+      <p><%= lang === 'es' ? 'El menú estará disponible pronto.' : 'Menu coming soon.' %></p>
+    </div>
+    <% } %>
+  </div>
+
+</main>
+
+<%- include('partials/nav-mobile') %>
+<%- include('partials/footer') %>

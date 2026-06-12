@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Galería — D'Reyes Delicias CMS</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="/css/admin/admin-global.css">
+  <style>
+    .gallery-admin-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:20px; }
+    .gallery-admin-item { background:var(--admin-elevated); border:1px solid var(--admin-border); border-radius:10px; overflow:hidden; position:relative; }
+    .gallery-admin-item img { width:100%; aspect-ratio:1; object-fit:cover; display:block; }
+    .gallery-admin-item-info { padding:10px 12px; }
+    .gallery-admin-item-album { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--admin-gold); }
+    .gallery-admin-item-actions { display:flex; gap:6px; margin-top:8px; }
+    .featured-badge { position:absolute; top:8px; left:8px; background:var(--admin-gold); color:#000; font-size:10px; font-weight:700; padding:3px 8px; border-radius:99px; }
+    .upload-preview-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:12px; }
+    .upload-preview-item { aspect-ratio:1; border-radius:6px; overflow:hidden; background:var(--admin-elevated); position:relative; }
+    .upload-preview-item img { width:100%;height:100%;object-fit:cover; }
+    .upload-preview-remove { position:absolute; top:4px; right:4px; width:20px; height:20px; background:rgba(239,68,68,0.8); border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:12px; color:#fff; }
+    @media(min-width:640px){ .gallery-admin-grid{ grid-template-columns:repeat(3,1fr); } }
+    @media(min-width:900px){ .gallery-admin-grid{ grid-template-columns:repeat(4,1fr); } }
+  </style>
+</head>
+<body>
+<div class="admin-wrapper">
+
+  <%- include('partials/sidebar', { currentPage: 'gallery', unreadCount: 0 }) %>
+
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button class="admin-menu-toggle" id="adminMenuToggle" aria-label="Toggle sidebar">
+          <span></span><span></span><span></span>
+        </button>
+        <span class="admin-topbar-title">Galería</span>
+      </div>
+    </div>
+
+    <div class="admin-content">
+
+      <!-- Upload zone -->
+      <div class="admin-section-header">
+        <h2 class="admin-section-title">Subir fotos</h2>
+      </div>
+
+      <div class="upload-zone" id="uploadZone">
+        <div class="upload-zone-icon">📸</div>
+        <div class="upload-zone-text">Arrastra fotos aquí o haz clic para seleccionar</div>
+        <div class="upload-zone-hint">JPG, PNG, WEBP — máx. 10MB por foto — hasta 20 a la vez</div>
+        <input type="file" id="uploadInput" accept="image/*" multiple style="display:none;">
+      </div>
+
+      <div class="upload-preview-grid" id="uploadPreviewGrid"></div>
+
+      <div id="uploadControls" style="display:none;margin-top:16px;">
+        <div class="admin-form-group">
+          <label class="admin-form-label">Álbum</label>
+          <select class="admin-form-select" id="uploadAlbum">
+            <option value="food">🍽️ Comida</option>
+            <option value="truck">🚚 Food Truck</option>
+            <option value="events">🎉 Eventos</option>
+          </select>
+        </div>
+        <div style="display:flex;gap:10px;">
+          <button class="admin-btn admin-btn-primary" id="uploadSubmitBtn">Subir fotos</button>
+          <button class="admin-btn admin-btn-secondary" id="uploadCancelBtn">Cancelar</button>
+        </div>
+      </div>
+
+      <!-- Gallery grid -->
+      <div class="admin-section-header" style="margin-top:40px;">
+        <h2 class="admin-section-title">Fotos (<%= photos.length %>)</h2>
+        <div style="display:flex;gap:8px;">
+          <button class="admin-btn admin-btn-secondary admin-btn-sm" data-filter="all">Todas</button>
+          <button class="admin-btn admin-btn-secondary admin-btn-sm" data-filter="food">Comida</button>
+          <button class="admin-btn admin-btn-secondary admin-btn-sm" data-filter="truck">Truck</button>
+          <button class="admin-btn admin-btn-secondary admin-btn-sm" data-filter="events">Eventos</button>
+        </div>
+      </div>
+
+      <% if (photos && photos.length > 0) { %>
+      <div class="gallery-admin-grid" id="galleryAdminGrid">
+        <% photos.forEach(function(photo) { %>
+        <div class="gallery-admin-item" data-id="<%= photo._id %>" data-album="<%= photo.album %>">
+          <img src="<%= photo.url %>" alt="<%= photo.album %>" loading="lazy">
+          <% if (photo.featured) { %>
+          <span class="featured-badge">⭐ Destacada</span>
+          <% } %>
+          <div class="gallery-admin-item-info">
+            <div class="gallery-admin-item-album"><%= photo.album %></div>
+            <div class="gallery-admin-item-actions">
+              <button class="admin-btn admin-btn-secondary admin-btn-sm btn-toggle-featured" data-id="<%= photo._id %>" data-featured="<%= photo.featured %>">
+                <%= photo.featured ? '★ Quitar' : '☆ Destacar' %>
+              </button>
+              <select class="admin-form-select" style="font-size:11px;padding:4px 8px;min-height:28px;" data-id="<%= photo._id %>" id="album-<%= photo._id %>">
+                <option value="food"   <%= photo.album === 'food'   ? 'selected' : '' %>>Comida</option>
+                <option value="truck"  <%= photo.album === 'truck'  ? 'selected' : '' %>>Truck</option>
+                <option value="events" <%= photo.album === 'events' ? 'selected' : '' %>>Eventos</option>
+              </select>
+              <button class="admin-btn admin-btn-danger admin-btn-sm btn-delete-photo" data-id="<%= photo._id %>">🗑</button>
+            </div>
+          </div>
+        </div>
+        <% }); %>
+      </div>
+      <% } else { %>
+      <p style="color:rgba(255,255,255,0.3);font-size:14px;padding:32px 0;">No hay fotos aún. Sube tu primera foto arriba.</p>
+      <% } %>
+
+    </div>
+  </div>
+</div>
+
+<div class="admin-toast-container" id="adminToastContainer"></div>
+<script src="/js/admin/admin-global.js"></script>
+<script src="/js/admin/admin-gallery.js"></script>
+</body>
+</html>

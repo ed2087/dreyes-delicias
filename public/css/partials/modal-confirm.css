@@ -1,0 +1,36 @@
+/* ============================================
+   MODAL CONFIRM PARTIAL
+   ============================================ */
+
+.confirm-modal-content {
+  text-align: center;
+  padding: 8px 0;
+}
+
+.confirm-icon {
+  font-size: 42px;
+  margin-bottom: 12px;
+}
+
+.confirm-message {
+  color: var(--text-secondary);
+  font-size: 15px;
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+
+.confirm-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.confirm-buttons .btn {
+  min-width: 120px;
+}
+
+@media (min-width: 768px) {
+  .confirm-buttons {
+    gap: 16px;
+  }
+}
