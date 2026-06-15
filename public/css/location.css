@@ -76,6 +76,11 @@
   gap: 12px;
 }
 
+.location-action-btn {
+  width: 100%;
+  justify-content: center;
+}
+
 @media (min-width: 768px) {
   .location-page-inner {
     padding-top: 60px;
@@ -86,5 +91,9 @@
 
   .location-actions {
     flex-direction: row;
+  }
+
+  .location-action-btn {
+    flex: 1;
   }
 }
