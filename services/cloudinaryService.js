@@ -24,7 +24,8 @@ function buildUploader(folder) {
     params: {
       folder: `dreyes-delicias/${folder}`,
       allowed_formats: ['jpg', 'jpeg', 'png', 'webp', 'avif', 'gif'],
-      transformation: [{ quality: 'auto', fetch_format: 'auto' }]
+      format: 'webp',
+      transformation: [{ quality: 'auto' }]
     }
   });
 
@@ -57,7 +58,8 @@ const menuMultiUploader = multer({
     params: {
       folder: 'dreyes-delicias/menu',
       allowed_formats: ['jpg', 'jpeg', 'png', 'webp', 'avif', 'gif'],
-      transformation: [{ quality: 'auto', fetch_format: 'auto' }]
+      format: 'webp',
+      transformation: [{ quality: 'auto' }]
     }
   }),
   limits: { fileSize: 10 * 1024 * 1024 }
@@ -70,7 +72,8 @@ const serviceMultiUploader = multer({
     params: {
       folder: 'dreyes-delicias/services',
       allowed_formats: ['jpg', 'jpeg', 'png', 'webp', 'avif', 'gif'],
-      transformation: [{ quality: 'auto', fetch_format: 'auto' }]
+      format: 'webp',
+      transformation: [{ quality: 'auto' }]
     }
   }),
   limits: { fileSize: 10 * 1024 * 1024 }
