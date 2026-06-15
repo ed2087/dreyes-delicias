@@ -66,7 +66,7 @@
   font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: rgba(255, 255, 255, 0.55);
   margin-bottom: 4px;
 }
 
@@ -114,7 +114,7 @@
 .contact-social-title {
   font-size: 18px;
   font-weight: 700;
-  color: var(--text-secondary);
+  color: var(--text-primary);
 }
 
 .social-links-row {
@@ -251,3 +251,125 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ── Placeholder contrast override ───────────────────────────────────────────── */
+.contact-form .form-input::placeholder,
+.contact-form .form-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* ── Honeypot ─────────────────────────────────────────────────────────────────── */
+.form-honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+  tabindex: -1;
+}
+
+/* ── Submit button disabled state ─────────────────────────────────────────────── */
+#contactSubmitBtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ── Slide-to-verify ──────────────────────────────────────────────────────────── */
+.slide-verify {
+  position: relative;
+  height: 52px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  user-select: none;
+  touch-action: none;
+}
+
+.slide-verify-fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  background: rgba(201, 162, 39, 0.2);
+  pointer-events: none;
+  transition: background 0.3s;
+}
+
+.slide-verify.verified .slide-verify-fill {
+  width: 100% !important;
+  background: rgba(34, 197, 94, 0.18);
+}
+
+.slide-verify-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  letter-spacing: 0.3px;
+}
+
+.slide-default-label,
+.slide-verified-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.slide-default-label {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.slide-verified-label {
+  color: #4ade80;
+  display: none;
+}
+
+.slide-verify.verified .slide-default-label { display: none; }
+.slide-verify.verified .slide-verified-label { display: flex; }
+
+.slide-verify-thumb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 52px;
+  height: 52px;
+  background: var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  z-index: 2;
+  flex-shrink: 0;
+}
+
+.slide-verify.dragging .slide-verify-thumb { cursor: grabbing; }
+.slide-verify.verified .slide-verify-thumb {
+  background: #22c55e;
+  cursor: default;
+}
+
+.slide-thumb-arrow {
+  color: #000;
+  display: flex;
+  align-items: center;
+  transition: opacity 0.2s;
+}
+
+.slide-thumb-check {
+  position: absolute;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.25s 0.15s;
+}
+
+.slide-verify.verified .slide-thumb-arrow { opacity: 0; }
+.slide-verify.verified .slide-thumb-check { opacity: 1; }

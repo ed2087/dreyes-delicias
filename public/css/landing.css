@@ -842,6 +842,18 @@
 }
 
 /* ── Landing hours chips ─────────────────────────────────────────────────────── */
+.location-ctas {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.location-cta-btn {
+  flex: 1;
+  min-width: 160px;
+  justify-content: center;
+}
+
 .landing-hours-grid {
   display: flex;
   flex-wrap: wrap;

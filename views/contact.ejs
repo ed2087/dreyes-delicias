@@ -40,7 +40,7 @@
     <!-- Form -->
     <div class="contact-form-card">
       <h2 class="contact-form-title"><%= t.contact.title %></h2>
-      <form class="contact-form" id="contactForm" novalidate>
+      <form class="contact-form" id="contactForm" novalidate style="position:relative;">
         <div class="form-row">
           <div class="form-group">
             <label class="form-label" for="contactName"><%= t.contact.name %> *</label>
@@ -65,6 +65,32 @@
           <label class="form-label" for="contactMessage"><%= t.contact.message %> *</label>
           <textarea id="contactMessage" class="form-textarea" name="message" placeholder="<%= lang === 'es' ? 'Escribe tu mensaje aquí...' : 'Write your message here...' %>" required></textarea>
         </div>
+        <!-- Honeypot: bots fill this, humans ignore it -->
+        <input type="text" name="website" class="form-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+        <!-- Slide to verify -->
+        <div class="slide-verify" id="slideVerify">
+          <div class="slide-verify-fill" id="slideFill"></div>
+          <div class="slide-verify-text">
+            <span class="slide-default-label">
+              <%= lang === 'es' ? 'Desliza para enviar' : 'Slide to send' %>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </span>
+            <span class="slide-verified-label">
+              <%= lang === 'es' ? 'Verificado' : 'Verified' %>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+          </div>
+          <div class="slide-verify-thumb" id="slideThumb">
+            <span class="slide-thumb-arrow">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </span>
+            <span class="slide-thumb-check">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+          </div>
+        </div>
+
         <button type="submit" class="btn btn-primary btn-lg w-full" id="contactSubmitBtn">
           <%= t.contact.send %>
         </button>

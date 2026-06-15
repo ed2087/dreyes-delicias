@@ -8,7 +8,12 @@ const { sendContactNotification } = require('../services/emailService');
 
 exports.submitContact = async (req, res) => {
   try {
-    const { name, email, phone, subject, message } = req.body;
+    const { name, email, phone, subject, message, website } = req.body;
+
+    // Honeypot: bots fill the hidden `website` field, humans don't
+    if (website) {
+      return res.json({ success: true, message: 'Message received' });
+    }
 
     if (!name || !email || !message) {
       return res.status(400).json({ success: false, message: 'Name, email and message are required' });
