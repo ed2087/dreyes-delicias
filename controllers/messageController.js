@@ -21,13 +21,20 @@ exports.getMessages = async (req, res) => {
 
 exports.markRead = async (req, res) => {
   try {
-    const message = await Message.findByIdAndUpdate(
-      req.params.id,
-      { read: true },
-      { new: true }
-    );
-    if (!message) return res.status(404).json({ success: false, message: 'Not found' });
-    res.json({ success: true, message });
+    const msg = await Message.findById(req.params.id);
+    if (!msg) return res.status(404).json({ success: false, message: 'Not found' });
+    msg.read = req.body.hasOwnProperty('read') ? !!req.body.read : !msg.read;
+    await msg.save();
+    res.json({ success: true, message: msg });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
+exports.markAllRead = async (req, res) => {
+  try {
+    await Message.updateMany({ read: false }, { read: true });
+    res.json({ success: true });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Server error' });
   }

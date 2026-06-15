@@ -742,7 +742,7 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.4);
   border: none;
   cursor: pointer;
   padding: 0;

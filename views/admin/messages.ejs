@@ -7,67 +7,464 @@
   <meta name="robots" content="noindex, nofollow">
   <link rel="stylesheet" href="/css/admin/admin-global.css">
   <style>
-    .message-card { background:var(--admin-surface); border:1px solid var(--admin-border); border-radius:12px; padding:20px; margin-bottom:12px; transition:border-color 0.2s; }
-    .message-card.unread { border-color:rgba(201,162,39,0.3); }
-    .message-card-header { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:10px; }
-    .message-sender { font-weight:700; font-size:15px; }
-    .message-meta { font-size:12px; color:rgba(255,255,255,0.4); margin-top:2px; }
-    .message-subject { font-size:13px; font-weight:600; color:var(--admin-gold); margin-bottom:8px; }
-    .message-body { font-size:14px; color:rgba(255,255,255,0.65); line-height:1.6; }
-    .message-actions { display:flex; gap:8px; margin-top:12px; }
-    .unread-dot { width:8px; height:8px; border-radius:50%; background:var(--admin-gold); flex-shrink:0; margin-top:4px; }
+    /* ── Messages page ──────────────────────────────────────────────────────── */
+
+    .msg-topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .msg-unread-badge {
+      background: var(--admin-gold);
+      color: #000;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 99px;
+      line-height: 1.5;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* Filter tabs */
+    .msg-tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--admin-border);
+    }
+
+    .msg-tab {
+      padding: 10px 18px;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: rgba(255,255,255,0.4);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: -1px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .msg-tab:hover { color: rgba(255,255,255,0.7); }
+
+    .msg-tab.active {
+      color: #fff;
+      border-bottom-color: var(--admin-gold);
+    }
+
+    .msg-tab-count {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 1px 7px;
+      border-radius: 99px;
+      background: rgba(255,255,255,0.07);
+      color: rgba(255,255,255,0.4);
+    }
+
+    .msg-tab.active .msg-tab-count {
+      background: rgba(201,162,39,0.15);
+      color: var(--admin-gold);
+    }
+
+    /* Message list */
+    .msg-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* Card */
+    .msg-card {
+      background: var(--admin-surface);
+      border: 1px solid var(--admin-border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color 0.2s, opacity 0.2s;
+    }
+
+    .msg-card.is-unread {
+      border-left: 3px solid var(--admin-gold);
+      border-color: rgba(201,162,39,0.3);
+    }
+
+    .msg-card.is-read {
+      opacity: 0.72;
+    }
+
+    .msg-card.is-read:hover {
+      opacity: 1;
+    }
+
+    .msg-card-inner {
+      display: flex;
+      gap: 16px;
+      padding: 18px 20px;
+    }
+
+    /* Avatar */
+    .msg-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      font-weight: 800;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .msg-avatar-unread {
+      background: rgba(201,162,39,0.12);
+      color: var(--admin-gold);
+      border: 1.5px solid rgba(201,162,39,0.25);
+    }
+
+    .msg-avatar-read {
+      background: rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.28);
+      border: 1.5px solid rgba(255,255,255,0.07);
+    }
+
+    /* Content area */
+    .msg-content { flex: 1; min-width: 0; }
+
+    /* Header row */
+    .msg-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 5px;
+    }
+
+    .msg-header-left {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      min-width: 0;
+    }
+
+    .msg-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--admin-gold);
+      flex-shrink: 0;
+    }
+
+    .msg-name {
+      font-weight: 700;
+      font-size: 15px;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .msg-date {
+      font-size: 12px;
+      color: rgba(255,255,255,0.3);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* Contact row */
+    .msg-contact {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 16px;
+      margin-bottom: 8px;
+    }
+
+    .msg-email,
+    .msg-phone {
+      font-size: 13px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: color 0.15s;
+    }
+
+    .msg-email { color: rgba(255,255,255,0.5); }
+    .msg-email:hover { color: var(--admin-gold); }
+    .msg-phone { color: rgba(255,255,255,0.35); }
+    .msg-phone:hover { color: rgba(255,255,255,0.75); }
+
+    /* Subject */
+    .msg-subject {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--admin-gold);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Body */
+    .msg-body { margin-bottom: 14px; }
+
+    .msg-body-text {
+      font-size: 14px;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.65;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+    }
+
+    .msg-body.expanded .msg-body-text {
+      display: block;
+    }
+
+    .msg-expand-btn {
+      background: none;
+      border: none;
+      color: rgba(201,162,39,0.65);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 4px 0 0;
+      transition: color 0.15s;
+      display: inline-block;
+    }
+
+    .msg-expand-btn:hover { color: var(--admin-gold); }
+
+    /* Actions */
+    .msg-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .msg-actions-left {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .btn-wa {
+      background: rgba(37,211,102,0.1) !important;
+      border-color: rgba(37,211,102,0.2) !important;
+      color: #25d366 !important;
+    }
+
+    .btn-wa:hover {
+      background: rgba(37,211,102,0.18) !important;
+      border-color: rgba(37,211,102,0.35) !important;
+    }
+
+    .btn-toggle-read {
+      color: rgba(255,255,255,0.4) !important;
+    }
+
+    .btn-toggle-read:hover {
+      color: rgba(255,255,255,0.75) !important;
+    }
+
+    /* Empty state */
+    .msg-empty {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .msg-empty-icon { font-size: 44px; margin-bottom: 14px; }
+
+    .msg-empty-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 6px;
+    }
+
+    .msg-empty-sub {
+      font-size: 13px;
+      color: rgba(255,255,255,0.2);
+    }
+
+    .msg-filter-empty { display: none; }
+
+    @media (max-width: 600px) {
+      .msg-card-inner { flex-direction: column; gap: 10px; }
+      .msg-avatar { width: 34px; height: 34px; font-size: 14px; }
+      .msg-date { font-size: 11px; }
+      .msg-tab { padding: 10px 12px; font-size: 13px; }
+    }
   </style>
 </head>
 <body>
 <div class="admin-wrapper">
 
-  <%- include('partials/sidebar', { currentPage: 'messages', unreadCount: messages.filter(function(m){ return !m.read; }).length }) %>
+  <%- include('partials/sidebar', { currentPage: 'messages', unreadCount: unreadCount }) %>
 
   <div class="admin-main">
     <div class="admin-topbar">
-      <div style="display:flex;align-items:center;gap:12px;">
+      <div style="display:flex;align-items:center;gap:10px;">
         <button class="admin-menu-toggle" id="adminMenuToggle"><span></span><span></span><span></span></button>
-        <span class="admin-topbar-title">Mensajes (<%= unreadCount %> sin leer)</span>
+        <span class="admin-topbar-title">Mensajes</span>
+        <% if (unreadCount > 0) { %>
+        <span class="msg-unread-badge" id="topbarUnreadBadge"><%= unreadCount %> sin leer</span>
+        <% } else { %>
+        <span class="msg-unread-badge" id="topbarUnreadBadge" style="display:none;"></span>
+        <% } %>
+      </div>
+      <div class="msg-topbar-right">
+        <% if (unreadCount > 0) { %>
+        <button class="admin-btn admin-btn-secondary admin-btn-sm" id="btnMarkAllRead">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:.7;"><polyline points="20 6 9 17 4 12"/></svg>
+          Marcar todos leídos
+        </button>
+        <% } %>
       </div>
     </div>
 
     <div class="admin-content">
+
+      <% var totalCount = messages.length; var readCount = totalCount - unreadCount; %>
+
+      <!-- Filter tabs -->
+      <div class="msg-tabs">
+        <button class="msg-tab active" data-filter="all">
+          Todos <span class="msg-tab-count" id="countAll"><%= totalCount %></span>
+        </button>
+        <button class="msg-tab" data-filter="unread">
+          Sin leer <span class="msg-tab-count" id="countUnread"><%= unreadCount %></span>
+        </button>
+        <button class="msg-tab" data-filter="read">
+          Leídos <span class="msg-tab-count" id="countRead"><%= readCount %></span>
+        </button>
+      </div>
+
       <% if (messages && messages.length > 0) { %>
+
+      <!-- Message list -->
+      <div class="msg-list" id="msgList">
         <% messages.forEach(function(msg) { %>
-        <div class="message-card <%= msg.read ? '' : 'unread' %>" data-id="<%= msg._id %>">
-          <div class="message-card-header">
-            <div>
-              <div style="display:flex;align-items:center;gap:8px;">
-                <% if (!msg.read) { %><div class="unread-dot"></div><% } %>
-                <span class="message-sender"><%= msg.name %></span>
-              </div>
-              <div class="message-meta">
-                <a href="mailto:<%= msg.email %>" style="color:var(--admin-gold);"><%= msg.email %></a>
-                <% if (msg.phone) { %> · <a href="tel:<%= msg.phone %>" style="color:rgba(255,255,255,0.4);"><%= msg.phone %></a><% } %>
-                · <%= msg.createdAt.toLocaleDateString('es-MX', {year:'numeric',month:'short',day:'numeric'}) %>
-              </div>
+        <div class="msg-card <%= msg.read ? 'is-read' : 'is-unread' %>"
+             data-id="<%= msg._id %>"
+             data-state="<%= msg.read ? 'read' : 'unread' %>">
+          <div class="msg-card-inner">
+
+            <!-- Avatar -->
+            <div class="msg-avatar <%= msg.read ? 'msg-avatar-read' : 'msg-avatar-unread' %>">
+              <%= msg.name.charAt(0).toUpperCase() %>
             </div>
-          </div>
-          <% if (msg.subject) { %><div class="message-subject"><%= msg.subject %></div><% } %>
-          <div class="message-body"><%= msg.message %></div>
-          <div class="message-actions">
-            <a href="mailto:<%= msg.email %>" class="admin-btn admin-btn-secondary admin-btn-sm">Responder</a>
-            <% if (msg.phone) { %>
-            <a href="https://wa.me/1<%= msg.phone.replace(/\D/g,'') %>" target="_blank" rel="noopener noreferrer" class="admin-btn admin-btn-secondary admin-btn-sm">WhatsApp</a>
-            <% } %>
-            <% if (!msg.read) { %>
-            <button class="admin-btn admin-btn-secondary admin-btn-sm btn-mark-read" data-id="<%= msg._id %>">Marcar leído</button>
-            <% } %>
-            <button class="admin-btn admin-btn-danger admin-btn-sm btn-delete-msg" data-id="<%= msg._id %>">Eliminar</button>
-          </div>
-        </div>
+
+            <!-- Content -->
+            <div class="msg-content">
+
+              <!-- Header -->
+              <div class="msg-header">
+                <div class="msg-header-left">
+                  <% if (!msg.read) { %><div class="msg-dot"></div><% } %>
+                  <span class="msg-name"><%= msg.name %></span>
+                </div>
+                <span class="msg-date">
+                  <%= msg.createdAt.toLocaleDateString('es-MX', { year:'numeric', month:'short', day:'numeric' }) %>
+                </span>
+              </div>
+
+              <!-- Contact -->
+              <div class="msg-contact">
+                <a href="mailto:<%= msg.email %>" class="msg-email">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                  <%= msg.email %>
+                </a>
+                <% if (msg.phone) { %>
+                <a href="tel:<%= msg.phone %>" class="msg-phone">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 3.07 9.8a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 2 0h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L6.91 7.91a16 16 0 0 0 6.29 6.29l1.28-1.28a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  <%= msg.phone %>
+                </a>
+                <% } %>
+              </div>
+
+              <!-- Subject -->
+              <% if (msg.subject) { %>
+              <div class="msg-subject">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0;opacity:.7;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                <%= msg.subject %>
+              </div>
+              <% } %>
+
+              <!-- Body -->
+              <div class="msg-body" id="body-<%= msg._id %>">
+                <div class="msg-body-text"><%= msg.message %></div>
+                <% if (msg.message.length > 200) { %>
+                <button class="msg-expand-btn" data-target="body-<%= msg._id %>">Leer más ↓</button>
+                <% } %>
+              </div>
+
+              <!-- Actions -->
+              <div class="msg-actions">
+                <div class="msg-actions-left">
+                  <a href="mailto:<%= msg.email %>?subject=Re: <%= encodeURIComponent(msg.subject || 'Tu mensaje') %>" class="admin-btn admin-btn-secondary admin-btn-sm">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                    Responder
+                  </a>
+                  <% if (msg.phone) { %>
+                  <a href="https://wa.me/1<%= msg.phone.replace(/\D/g,'') %>" target="_blank" rel="noopener noreferrer" class="admin-btn admin-btn-sm btn-wa">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+                    WhatsApp
+                  </a>
+                  <% } %>
+                  <button class="admin-btn admin-btn-secondary admin-btn-sm btn-toggle-read"
+                          data-id="<%= msg._id %>"
+                          data-read="<%= msg.read %>">
+                    <% if (msg.read) { %>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/></svg>
+                    Sin leer
+                    <% } else { %>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                    Leído
+                    <% } %>
+                  </button>
+                </div>
+                <div>
+                  <button class="admin-btn admin-btn-danger admin-btn-sm btn-delete-message"
+                          data-id="<%= msg._id %>"
+                          data-name="<%= msg.name %>">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                    Eliminar
+                  </button>
+                </div>
+              </div>
+
+            </div><!-- /msg-content -->
+          </div><!-- /msg-card-inner -->
+        </div><!-- /msg-card -->
         <% }); %>
+      </div><!-- /msg-list -->
+
+      <!-- Filter empty state -->
+      <div class="msg-empty msg-filter-empty" id="msgFilterEmpty">
+        <div class="msg-empty-icon">📭</div>
+        <p class="msg-empty-title">No hay mensajes en esta categoría</p>
+      </div>
+
       <% } else { %>
-      <p style="color:rgba(255,255,255,0.3);font-size:14px;padding:40px 0;text-align:center;">No hay mensajes aún.</p>
+      <div class="msg-empty">
+        <div class="msg-empty-icon">✉️</div>
+        <p class="msg-empty-title">No hay mensajes todavía</p>
+        <p class="msg-empty-sub">Los mensajes del formulario de contacto aparecerán aquí</p>
+      </div>
       <% } %>
-    </div>
-  </div>
-</div>
+
+    </div><!-- /admin-content -->
+  </div><!-- /admin-main -->
+</div><!-- /admin-wrapper -->
 
 <div class="admin-toast-container" id="adminToastContainer"></div>
 <script src="/js/admin/admin-global.js"></script>

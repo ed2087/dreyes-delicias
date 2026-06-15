@@ -127,10 +127,14 @@ router.get('/hours', async (req, res) => {
 
 // ── Messages ──────────────────────────────────────────────────────────────────
 router.get('/messages', async (req, res) => {
-  const messages = await Message.find().sort({ createdAt: -1 }).catch(() => []);
+  const [messages, unreadCount] = await Promise.all([
+    Message.find().sort({ createdAt: -1 }).catch(() => []),
+    Message.countDocuments({ read: false }).catch(() => 0)
+  ]);
   res.render('admin/messages', {
     pageCSS: null, pageJS: 'admin/admin-messages', partialCSS: [], partialJS: ['modal-confirm'],
-    messages
+    messages,
+    unreadCount
   });
 });
 
