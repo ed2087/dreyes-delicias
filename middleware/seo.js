@@ -52,6 +52,14 @@ const defaults = {
     description_en: 'Find us in Monroe, NC. Check our current location and hours.',
     canonicalPath: '/location'
   },
+  negocios: {
+    title_es: 'Negocios que Promovemos',
+    title_en: 'Businesses We Promote',
+    description_es: 'Descubre los negocios locales que D\'Reyes Delicias recomienda y promueve en la comunidad de Monroe, NC.',
+    description_en: 'Discover the local businesses that D\'Reyes Delicias recommends and promotes in the Monroe, NC community.',
+    keywords: 'negocios monroe nc, directorio local monroe, negocios latinos monroe nc',
+    canonicalPath: '/negocios'
+  },
   error: {
     title_es: 'Error',
     title_en: 'Error',

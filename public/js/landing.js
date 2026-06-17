@@ -60,3 +60,77 @@
 
   startTimer();
 })();
+
+/* ── Menu Slider ────────────────────────────────────────────────────────────── */
+(function initMenuSlider() {
+  var track   = document.getElementById('menuCardsScroll');
+  var wrapper = document.getElementById('mcsWrapper');
+  var prevBtn = document.getElementById('mcsArrowPrev');
+  var nextBtn = document.getElementById('mcsArrowNext');
+  var bar     = document.getElementById('mcsProgressBar');
+
+  if (!track) return;
+
+  var cards = Array.from(track.querySelectorAll('.menu-card-preview'));
+  if (cards.length === 0) return;
+
+  function cardStep() {
+    var gap = parseInt(window.getComputedStyle(track).columnGap) || 16;
+    return (cards[0] ? cards[0].offsetWidth : 260) + gap;
+  }
+
+  function updateUI() {
+    var max = track.scrollWidth - track.clientWidth;
+    var pct = max > 0 ? (track.scrollLeft / max) * 100 : 100;
+
+    if (bar) bar.style.width = pct + '%';
+
+    var atStart = track.scrollLeft <= 2;
+    var atEnd   = max <= 0 || track.scrollLeft >= max - 2;
+
+    if (prevBtn) prevBtn.disabled = atStart;
+    if (nextBtn) nextBtn.disabled = atEnd;
+  }
+
+  if (prevBtn) {
+    prevBtn.addEventListener('click', function() {
+      track.scrollTo({ left: track.scrollLeft - cardStep(), behavior: 'smooth' });
+    });
+  }
+  if (nextBtn) {
+    nextBtn.addEventListener('click', function() {
+      track.scrollTo({ left: track.scrollLeft + cardStep(), behavior: 'smooth' });
+    });
+  }
+
+  track.addEventListener('scroll', updateUI, { passive: true });
+  window.addEventListener('resize', updateUI);
+
+  /* Mouse drag ──────────────────────────────────────────────────────────────── */
+  var dragStartX  = 0;
+  var dragOriginL = 0;
+  var dragging    = false;
+
+  track.addEventListener('mousedown', function(e) {
+    dragging    = true;
+    dragStartX  = e.pageX;
+    dragOriginL = track.scrollLeft;
+  });
+
+  document.addEventListener('mousemove', function(e) {
+    if (!dragging) return;
+    track.scrollLeft = dragOriginL - (e.pageX - dragStartX);
+  });
+
+  document.addEventListener('mouseup', function() {
+    if (!dragging) return;
+    dragging = false;
+    var step = cardStep();
+    if (step > 0) {
+      var nearest = Math.round(track.scrollLeft / step) * step;
+      track.scrollTo({ left: nearest, behavior: 'smooth' });
+    }
+  });
+
+  updateUI();
+})();

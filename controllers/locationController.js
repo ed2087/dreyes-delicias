@@ -3,7 +3,29 @@
    Purpose: Get and update live truck location
    ============================================ */
 
+const https    = require('https');
 const Location = require('../models/Location');
+
+function geocodeAddress(address) {
+  return new Promise((resolve) => {
+    const url = 'https://nominatim.openstreetmap.org/search?q=' +
+      encodeURIComponent(address) + '&format=json&limit=1';
+    https.get(url, { headers: { 'User-Agent': 'DReyesDelicias/1.0 contact@dreyesdelicias.com' } }, (res) => {
+      let raw = '';
+      res.on('data', chunk => raw += chunk);
+      res.on('end', () => {
+        try {
+          const results = JSON.parse(raw);
+          if (results.length > 0) {
+            resolve({ lat: parseFloat(results[0].lat), lng: parseFloat(results[0].lon) });
+          } else {
+            resolve(null);
+          }
+        } catch { resolve(null); }
+      });
+    }).on('error', () => resolve(null));
+  });
+}
 
 exports.getLocation = async (req, res) => {
   try {
@@ -22,7 +44,14 @@ exports.updateLocation = async (req, res) => {
     let location = await Location.findOne();
     if (!location) location = new Location();
 
-    if (address        !== undefined) location.address        = address;
+    if (address !== undefined) {
+      const addrChanged = address !== location.address;
+      if (addrChanged) location.address = address;
+      if (addrChanged || !location.lat || !location.lng) {
+        const coords = await geocodeAddress(location.address);
+        if (coords) { location.lat = coords.lat; location.lng = coords.lng; }
+      }
+    }
     if (googleMapsUrl  !== undefined) location.googleMapsUrl  = googleMapsUrl;
     if (embedUrl       !== undefined) location.embedUrl       = embedUrl;
     if (isOpen         !== undefined) location.isOpen         = isOpen === 'true' || isOpen === true;

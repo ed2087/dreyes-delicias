@@ -7,6 +7,8 @@ const mongoose = require('mongoose');
 
 const locationSchema = new mongoose.Schema({
   address: { type: String, default: '437 Morgan Mill Rd, Monroe, NC 28110' },
+  lat: { type: Number, default: null },
+  lng: { type: Number, default: null },
   googleMapsUrl: { type: String, default: '' },
   embedUrl: { type: String, default: '' },
   isOpen: { type: Boolean, default: false },

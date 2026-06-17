@@ -26,9 +26,10 @@
         <table class="admin-table">
           <thead>
             <tr>
+              <th style="width:36px;"></th>
               <th>Logo</th>
               <th>Nombre</th>
-              <th>Descripción</th>
+              <th>Categoría</th>
               <th>Enlace</th>
               <th>Estado</th>
               <th>Acciones</th>
@@ -37,7 +38,14 @@
           <tbody>
             <% if (allies && allies.length > 0) { %>
               <% allies.forEach(function(ally) { %>
-              <tr>
+              <tr data-id="<%= ally._id %>" data-locked="<%= ally.locked ? 'true' : 'false' %>">
+                <td class="ally-drag-cell">
+                  <% if (!ally.locked) { %>
+                  <span class="ally-drag-handle" title="Arrastrar para reordenar">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="5" r="1.5"/><circle cx="15" cy="5" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="19" r="1.5"/><circle cx="15" cy="19" r="1.5"/></svg>
+                  </span>
+                  <% } %>
+                </td>
                 <td>
                   <% if (ally.image && ally.image.url) { %>
                   <img src="<%= ally.image.url %>" alt="<%= ally.name %>" style="width:48px;height:48px;object-fit:contain;border-radius:8px;background:#1a1a1a;padding:4px;">
@@ -50,9 +58,12 @@
                   <% if (ally.locked) { %>
                   <span style="display:inline-block;margin-left:6px;font-size:10px;background:rgba(201,162,39,0.15);color:#c9a227;border:1px solid rgba(201,162,39,0.3);padding:2px 7px;border-radius:99px;font-weight:700;">🔒 LOCKED</span>
                   <% } %>
+                  <% if (ally.featured) { %>
+                  <span style="display:inline-block;margin-left:6px;font-size:10px;background:rgba(201,162,39,0.15);color:#c9a227;border:1px solid rgba(201,162,39,0.3);padding:2px 7px;border-radius:99px;font-weight:700;">⭐ Destacado</span>
+                  <% } %>
                 </td>
-                <td style="color:rgba(255,255,255,0.55);font-size:13px;max-width:200px;">
-                  <%= ally.description ? ally.description.substring(0, 80) + (ally.description.length > 80 ? '…' : '') : '—' %>
+                <td style="color:rgba(255,255,255,0.55);font-size:13px;">
+                  <%= ally.category || '—' %>
                 </td>
                 <td style="font-size:12px;">
                   <% if (ally.link) { %>

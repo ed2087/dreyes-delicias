@@ -18,6 +18,7 @@
   let autoplayTimer = null;
   let startX = 0;
   let isDragging = false;
+  let didDrag = false;
 
   // Build dots
   function buildDots() {
@@ -69,6 +70,7 @@
       card.style.zIndex    = String(10 - absOffset);
       card.style.opacity   = absOffset > 2 ? '0' : String(1 - absOffset * 0.18);
       card.style.pointerEvents = absOffset > 2 ? 'none' : '';
+      card.style.cursor = absOffset === 0 ? 'zoom-in' : (absOffset <= 2 ? 'pointer' : 'default');
     });
 
     updateDots();
@@ -82,13 +84,64 @@
   function next() { goTo(currentIndex + 1); }
   function prev() { goTo(currentIndex - 1); }
 
-  // Click side cards to navigate
+  // ── Lightbox ────────────────────────────────────────────────────────────────
+  const lb      = document.getElementById('sliderLightbox');
+  const lbImg   = lb ? lb.querySelector('.slb-img') : null;
+  const lbCap   = lb ? lb.querySelector('.slb-caption') : null;
+  const lbClose = lb ? lb.querySelector('.slb-close') : null;
+  const lbPrev  = lb ? lb.querySelector('.slb-prev') : null;
+  const lbNext  = lb ? lb.querySelector('.slb-next') : null;
+
+  function syncLightboxImage() {
+    const card = cards[currentIndex];
+    const img = card ? card.querySelector('img') : null;
+    const cap = card ? card.querySelector('.slider-card-caption') : null;
+    if (lbImg && img) lbImg.src = img.src;
+    if (lbCap) lbCap.textContent = cap ? cap.textContent.trim() : '';
+  }
+
+  function openLightbox() {
+    if (!lb) return;
+    syncLightboxImage();
+    lb.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    stopAutoplay();
+  }
+
+  function closeLightbox() {
+    if (!lb) return;
+    lb.classList.remove('open');
+    document.body.style.overflow = '';
+    startAutoplay();
+  }
+
+  if (lbClose) lbClose.addEventListener('click', closeLightbox);
+
+  if (lb) {
+    lb.addEventListener('click', (e) => {
+      if (e.target === lb) closeLightbox();
+    });
+  }
+
+  if (lbPrev) lbPrev.addEventListener('click', () => { prev(); syncLightboxImage(); });
+  if (lbNext) lbNext.addEventListener('click', () => { next(); syncLightboxImage(); });
+
+  document.addEventListener('keydown', (e) => {
+    if (!lb || !lb.classList.contains('open')) return;
+    if (e.key === 'Escape')     closeLightbox();
+    if (e.key === 'ArrowLeft')  { prev(); syncLightboxImage(); }
+    if (e.key === 'ArrowRight') { next(); syncLightboxImage(); }
+  });
+
+  // Click side cards to navigate; click center to open lightbox
   stage.addEventListener('click', (e) => {
+    if (didDrag) { didDrag = false; return; }
     const card = e.target.closest('.slider-card');
     if (!card) return;
     const offset = parseInt(card.dataset.pos || '0');
-    if (offset > 0) next();
-    else if (offset < 0) prev();
+    if (offset === 0) openLightbox();
+    else if (offset > 0) next();
+    else prev();
   });
 
   // Arrow buttons
@@ -122,6 +175,7 @@
   document.addEventListener('mouseup', (e) => {
     if (!isDragging) return;
     const deltaX = e.clientX - startX;
+    didDrag = Math.abs(deltaX) > 10;
     if (Math.abs(deltaX) > 60) {
       deltaX < 0 ? next() : prev();
     }
@@ -129,8 +183,9 @@
     startAutoplay();
   });
 
-  // Keyboard
+  // Keyboard (carousel only — lightbox has its own handler above)
   document.addEventListener('keydown', (e) => {
+    if (lb && lb.classList.contains('open')) return;
     if (e.key === 'ArrowLeft')  prev();
     if (e.key === 'ArrowRight') next();
   });

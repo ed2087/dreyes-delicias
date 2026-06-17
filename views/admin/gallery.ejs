@@ -58,6 +58,16 @@
           <label class="admin-form-label">Álbum</label>
           <select class="admin-form-select" id="uploadAlbum">
             <option value="food">🍽️ Comida</option>
+            <option value="tacos">🌮 Tacos</option>
+            <option value="burritos">🌯 Burritos</option>
+            <option value="quesadillas">🧀 Quesadillas</option>
+            <option value="bebidas">🥤 Bebidas</option>
+            <option value="postres">🍮 Postres</option>
+            <option value="taquizas">🎪 Taquizas</option>
+            <option value="antojitos">🫔 Antojitos</option>
+            <option value="cocina">👨‍🍳 Cocina</option>
+            <option value="clientes">😊 Clientes</option>
+            <option value="setup">🎨 Montaje</option>
             <option value="truck">🚚 Food Truck</option>
             <option value="events">🎉 Eventos</option>
           </select>
@@ -74,6 +84,16 @@
         <div style="display:flex;gap:8px;">
           <button class="admin-btn admin-btn-secondary admin-btn-sm" data-filter="all">Todas</button>
           <button class="admin-btn admin-btn-secondary admin-btn-sm" data-filter="food">Comida</button>
+          <button class="admin-btn admin-btn-secondary admin-btn-sm" data-filter="tacos">Tacos</button>
+          <button class="admin-btn admin-btn-secondary admin-btn-sm" data-filter="burritos">Burritos</button>
+          <button class="admin-btn admin-btn-secondary admin-btn-sm" data-filter="quesadillas">Quesadillas</button>
+          <button class="admin-btn admin-btn-secondary admin-btn-sm" data-filter="bebidas">Bebidas</button>
+          <button class="admin-btn admin-btn-secondary admin-btn-sm" data-filter="postres">Postres</button>
+          <button class="admin-btn admin-btn-secondary admin-btn-sm" data-filter="taquizas">Taquizas</button>
+          <button class="admin-btn admin-btn-secondary admin-btn-sm" data-filter="antojitos">Antojitos</button>
+          <button class="admin-btn admin-btn-secondary admin-btn-sm" data-filter="cocina">Cocina</button>
+          <button class="admin-btn admin-btn-secondary admin-btn-sm" data-filter="clientes">Clientes</button>
+          <button class="admin-btn admin-btn-secondary admin-btn-sm" data-filter="setup">Montaje</button>
           <button class="admin-btn admin-btn-secondary admin-btn-sm" data-filter="truck">Truck</button>
           <button class="admin-btn admin-btn-secondary admin-btn-sm" data-filter="events">Eventos</button>
         </div>
@@ -94,9 +114,19 @@
                 <%= photo.featured ? '★ Quitar' : '☆ Destacar' %>
               </button>
               <select class="admin-form-select" style="font-size:11px;padding:4px 8px;min-height:28px;" data-id="<%= photo._id %>" id="album-<%= photo._id %>">
-                <option value="food"   <%= photo.album === 'food'   ? 'selected' : '' %>>Comida</option>
-                <option value="truck"  <%= photo.album === 'truck'  ? 'selected' : '' %>>Truck</option>
-                <option value="events" <%= photo.album === 'events' ? 'selected' : '' %>>Eventos</option>
+                <option value="food"        <%= photo.album === 'food'        ? 'selected' : '' %>>Comida</option>
+                <option value="tacos"       <%= photo.album === 'tacos'       ? 'selected' : '' %>>Tacos</option>
+                <option value="burritos"    <%= photo.album === 'burritos'    ? 'selected' : '' %>>Burritos</option>
+                <option value="quesadillas" <%= photo.album === 'quesadillas' ? 'selected' : '' %>>Quesadillas</option>
+                <option value="bebidas"     <%= photo.album === 'bebidas'     ? 'selected' : '' %>>Bebidas</option>
+                <option value="postres"     <%= photo.album === 'postres'     ? 'selected' : '' %>>Postres</option>
+                <option value="taquizas"    <%= photo.album === 'taquizas'    ? 'selected' : '' %>>Taquizas</option>
+                <option value="antojitos"   <%= photo.album === 'antojitos'   ? 'selected' : '' %>>Antojitos</option>
+                <option value="cocina"      <%= photo.album === 'cocina'      ? 'selected' : '' %>>Cocina</option>
+                <option value="clientes"    <%= photo.album === 'clientes'    ? 'selected' : '' %>>Clientes</option>
+                <option value="setup"       <%= photo.album === 'setup'       ? 'selected' : '' %>>Montaje</option>
+                <option value="truck"       <%= photo.album === 'truck'       ? 'selected' : '' %>>Truck</option>
+                <option value="events"      <%= photo.album === 'events'      ? 'selected' : '' %>>Eventos</option>
               </select>
               <button class="admin-btn admin-btn-danger admin-btn-sm btn-delete-photo" data-id="<%= photo._id %>">🗑</button>
             </div>

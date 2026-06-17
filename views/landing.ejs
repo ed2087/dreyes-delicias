@@ -119,44 +119,61 @@
       </div>
     </div>
 
-    <div class="menu-cards-scroll">
-      <% if (typeof featuredDishes !== 'undefined' && featuredDishes && featuredDishes.length > 0) { %>
-        <% featuredDishes.forEach(function(item) { %>
-        <a href="/menu/<%= item.slug %>" class="menu-card-preview">
-          <div class="mcp-img">
-            <% if (item.image && item.image.url) { %>
-            <img src="<%= item.image.url %>" alt="<%= item['name_' + lang] %>" loading="lazy">
-            <% } %>
-            <span class="mcp-category"><%= t.menu.categories[item.category] || item.category %></span>
-            <% if (item.spiceLevel && item.spiceLevel > 0) { %>
-            <div class="mcp-spice" aria-label="Picante <%= item.spiceLevel %>/3">
-              <% for (var d = 1; d <= 3; d++) { %><span class="mcp-dot<%= d <= item.spiceLevel ? '' : ' mcp-dot-off' %>"></span><% } %>
+    <div class="mcs-wrapper" id="mcsWrapper">
+      <button class="mcs-arrow mcs-arrow--prev" id="mcsArrowPrev" aria-label="Anterior" disabled>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15,18 9,12 15,6"/></svg>
+      </button>
+
+      <div class="menu-cards-scroll" id="menuCardsScroll">
+        <% if (typeof featuredDishes !== 'undefined' && featuredDishes && featuredDishes.length > 0) { %>
+          <% featuredDishes.forEach(function(item) { %>
+          <a href="/menu/<%= item.slug %>" class="menu-card-preview">
+            <div class="mcp-img">
+              <% if (item.image && item.image.url) { %>
+              <img src="<%= item.image.url %>" alt="<%= item['name_' + lang] %>" loading="lazy">
+              <% } %>
+              <span class="mcp-category"><%= t.menu.categories[item.category] || item.category %></span>
+              <% if (item.spiceLevel && item.spiceLevel > 0) { %>
+              <div class="mcp-spice" aria-label="Picante <%= item.spiceLevel %>/3">
+                <% for (var d = 1; d <= 3; d++) { %><span class="mcp-dot<%= d <= item.spiceLevel ? '' : ' mcp-dot-off' %>"></span><% } %>
+              </div>
+              <% } %>
+              <div class="mcp-body">
+                <div class="mcp-name"><%= item['name_' + lang] %></div>
+                <div class="mcp-price">$<%= item.price.toFixed(2) %></div>
+              </div>
+              <div class="mcp-arrow">&#8594;</div>
             </div>
-            <% } %>
-            <div class="mcp-body">
-              <div class="mcp-name"><%= item['name_' + lang] %></div>
-              <div class="mcp-price">$<%= item.price.toFixed(2) %></div>
+          </a>
+          <% }); %>
+        <% } else { %>
+          <% var placeholders = ['Tacos al Pastor', 'Burrito de Carne', 'Quesadilla Especial', 'Enchiladas Verdes', 'Sopes de Tinga']; %>
+          <% placeholders.forEach(function(name) { %>
+          <div class="menu-card-preview">
+            <div class="mcp-img" style="background:#1a1007;aspect-ratio:3/4;">
+              <div class="mcp-body">
+                <div class="mcp-name"><%= name %></div>
+                <div class="mcp-price">—</div>
+              </div>
             </div>
-            <div class="mcp-arrow">&#8594;</div>
           </div>
-        </a>
-        <% }); %>
-      <% } else { %>
-        <% var placeholders = ['Tacos al Pastor', 'Burrito de Carne', 'Quesadilla Especial']; %>
-        <% placeholders.forEach(function(name) { %>
-        <div class="menu-card-preview">
-          <div class="mcp-img" style="background:#1a1007;aspect-ratio:3/4;">
-            <div class="mcp-body">
-              <div class="mcp-name"><%= name %></div>
-              <div class="mcp-price">—</div>
-            </div>
-          </div>
-        </div>
-        <% }); %>
-      <% } %>
+          <% }); %>
+        <% } %>
+      </div>
+
+      <button class="mcs-arrow mcs-arrow--next" id="mcsArrowNext" aria-label="Siguiente">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9,18 15,12 9,6"/></svg>
+      </button>
     </div>
 
-    <div class="container" style="margin-top:32px;text-align:center;">
+    <div class="mcs-footer">
+      <div class="mcs-progress-wrap">
+        <div class="mcs-progress-bar" id="mcsProgressBar"></div>
+      </div>
+      <p class="mcs-swipe-hint">← Desliza para ver más →</p>
+    </div>
+
+    <div class="container" style="margin-top:28px;text-align:center;">
       <a href="/menu" class="btn btn-primary"><%= t.sections.menu_cta %></a>
     </div>
   </section>
@@ -171,29 +188,32 @@
 
       <div class="location-inner">
         <div class="location-info">
-          <div class="location-info-row reveal">
-            <div class="location-info-icon">📍</div>
-            <div class="location-info-text">
-              <strong><%= t.location.address %></strong>
-              <p>437 Morgan Mill Rd, Monroe, NC 28110</p>
+          <!-- Address card -->
+          <div class="loc-card reveal">
+            <div class="loc-card-icon">📍</div>
+            <div class="loc-card-body">
+              <strong class="loc-card-label"><%= t.location.address %></strong>
+              <% var lAddr = location ? location.address : '437 Morgan Mill Rd, Monroe, NC 28110'; %>
+              <a href="https://www.google.com/maps/search/?api=1&query=<%= encodeURIComponent(lAddr) %>" target="_blank" rel="noopener noreferrer" class="landing-addr-link"><%= lAddr %></a>
             </div>
           </div>
 
-          <div class="location-info-row reveal reveal-delay-1">
-            <div class="location-info-icon">🕐</div>
-            <div class="location-info-text">
-              <strong><%= t.location.hours %></strong>
-              <div class="landing-hours-grid">
+          <!-- Hours card -->
+          <div class="loc-card reveal reveal-delay-1">
+            <div class="loc-card-icon">🕐</div>
+            <div class="loc-card-body">
+              <strong class="loc-card-label"><%= t.location.hours %></strong>
+              <div class="landing-hours-list">
                 <% var lDays = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
                    lDays.forEach(function(dayKey) {
                      var dData = location && location.hours && location.hours[dayKey];
-                     if (dData && !dData.active) return;
-                     var dOpen  = dData ? dData.open  : (dayKey === 'friday' || dayKey === 'saturday' ? '4:00 PM' : '4:00 PM');
-                     var dClose = dData ? dData.close : (dayKey === 'friday' || dayKey === 'saturday' ? '11:00 PM' : '10:00 PM');
+                     var isActive = dData && dData.active;
+                     var dOpen  = dData ? dData.open  : '4:00 PM';
+                     var dClose = dData ? dData.close : '10:00 PM';
                 %>
-                <div class="landing-hours-chip">
-                  <span class="lhc-day"><%= t.location.days[dayKey].substring(0,3) %></span>
-                  <span class="lhc-time"><%= dOpen %> – <%= dClose %></span>
+                <div class="lhl-row <%= isActive ? '' : 'lhl-row--closed' %>">
+                  <span class="lhl-day"><%= t.location.days[dayKey] %></span>
+                  <span class="lhl-time"><%= isActive ? (dOpen + ' – ' + dClose) : (lang === 'es' ? 'Cerrado' : 'Closed') %></span>
                 </div>
                 <% }) %>
               </div>
@@ -204,7 +224,7 @@
           </div>
 
           <div class="location-ctas reveal reveal-delay-2">
-            <a href="https://wa.me/19802714205" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp location-cta-btn">
+            <a href="https://wa.me/19802714205?text=<%= encodeURIComponent(lang === 'es' ? 'Hola D\'Reyes Delicias 👑 Me gustaría obtener información sobre sus taquizas y banquetes.' : 'Hi D\'Reyes Delicias 👑 I would like to get information about your taquiza and banquet services.') %>" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp location-cta-btn">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
               <%= lang === 'es' ? 'Escríbenos' : 'WhatsApp' %>
             </a>
@@ -216,13 +236,26 @@
         </div>
 
         <div class="location-map">
+          <% var mapLat = (location && location.lat) ? location.lat : 34.9854; %>
+          <% var mapLng = (location && location.lng) ? location.lng : -80.5538; %>
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3268.5!2d-80.55!3d34.985!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2s437+Morgan+Mill+Rd+Monroe+NC!5e0!3m2!1sen!2sus!4v1"
+            src="https://www.google.com/maps?q=<%= mapLat %>,<%= mapLng %>&z=16&output=embed"
             loading="lazy"
             allowfullscreen
             referrerpolicy="no-referrer-when-downgrade"
             title="D'Reyes Delicias Location">
           </iframe>
+          <% if (location && !location.isOpen) { %>
+          <div class="map-closed-overlay">
+            <div class="map-closed-badge">
+              <span class="map-closed-icon">🔴</span>
+              <p class="map-closed-text"><%= lang === 'es' ? 'Cerrado hoy' : 'Closed today' %></p>
+            </div>
+          </div>
+          <% } %>
+          <a href="https://www.google.com/maps/search/?api=1&query=<%= encodeURIComponent(lAddr) %>" target="_blank" rel="noopener noreferrer" class="loc-map-btn">
+            <%= lang === 'es' ? 'Ver en Google Maps' : 'Open in Google Maps' %> ↗
+          </a>
         </div>
       </div>
     </div>
@@ -232,37 +265,86 @@
   <% if (typeof allies !== 'undefined' && allies && allies.length > 0) { %>
   <section class="ally-section" aria-label="Colaboradores destacados">
 
+    <div class="ally-section-head">
+      <span class="section-label"><%= t.sections.allies %></span>
+      <h2><%= t.sections.negocios %></h2>
+      <p><%= t.sections.negocios_sub %></p>
+    </div>
+
+    <div class="ally-stage-wrap">
     <div class="ally-stage" id="allyStage">
-      <% allies.forEach(function(ally, idx) { %>
+      <% allies.forEach(function(ally, idx) {
+           var aLink   = ally.link || '';
+           var aHref   = aLink;
+           var aLabel  = ally.ctaText || '';
+           var aTarget = '_blank';
+           var aRel    = 'noopener noreferrer';
+           if (aLink) {
+             var phoneRe = /^\+?1?\s?\(?\d{3}\)?[\s.\-]?\d{3}[\s.\-]?\d{4}$/;
+             if (/^tel:/.test(aLink) || phoneRe.test(aLink.trim())) {
+               if (!aLink.startsWith('tel:')) aHref = 'tel:' + aLink.replace(/[^\d+]/g, '');
+               if (!aLabel) aLabel = aHref.replace('tel:', '');
+               aTarget = '_self'; aRel = '';
+             } else if (/wa\.me|whatsapp/i.test(aLink)) {
+               if (!aLabel) aLabel = 'WhatsApp';
+             } else if (/instagram\.com/i.test(aLink)) {
+               if (!aLabel) aLabel = 'Instagram';
+             } else if (/facebook\.com/i.test(aLink)) {
+               if (!aLabel) aLabel = 'Facebook';
+             } else if (/tiktok\.com/i.test(aLink)) {
+               if (!aLabel) aLabel = 'TikTok';
+             } else {
+               if (!aLabel) aLabel = lang === 'es' ? 'Visitar sitio' : 'Visit Website';
+             }
+           }
+      %>
       <article class="ally-card <%= idx === 0 ? 'active' : '' %>" data-index="<%= idx %>">
         <div class="ally-card-inner">
 
+          <% var allyProfileHref = ally.slug ? '/negocios/' + ally.slug : null; %>
+          <% if (allyProfileHref) { %>
+          <a href="<%= allyProfileHref %>" class="ally-visual" aria-label="<%= lang === 'es' ? 'Ver perfil de ' + ally.name : 'View ' + ally.name + ' profile' %>">
+          <% } else { %>
           <div class="ally-visual">
+          <% } %>
             <% if (ally.image && ally.image.url) { %>
             <img src="<%= ally.image.url %>" alt="<%= ally.name %>" class="ally-visual-img" loading="<%= idx === 0 ? 'eager' : 'lazy' %>">
             <% } else { %>
             <div class="ally-visual-fallback">🤝</div>
             <% } %>
             <div class="ally-visual-overlay"></div>
-          </div>
+          <% if (allyProfileHref) { %></a><% } else { %></div><% } %>
 
           <div class="ally-panel">
             <p class="ally-kicker"><%= t.sections.allies || 'FEATURED PARTNER' %></p>
+            <% if (allyProfileHref) { %>
+            <a href="<%= allyProfileHref %>" class="ally-name-link"><h2 class="ally-name"><%= ally.name %></h2></a>
+            <% } else { %>
             <h2 class="ally-name"><%= ally.name %></h2>
-            <% if (ally.description) { %>
-            <p class="ally-desc"><%= ally.description %></p>
             <% } %>
-            <% if (ally.link) { %>
-            <a href="<%= ally.link %>" target="_blank" rel="noopener noreferrer" class="ally-cta">
-              <%= ally.ctaText || 'Visit Website' %>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            <% var allyShort = (lang === 'en' && ally.shortDescEn) ? ally.shortDescEn : (ally.shortDesc || ally.description); %>
+            <% if (allyShort) { %>
+            <p class="ally-desc"><%= allyShort %></p>
+            <% } %>
+            <div class="ally-ctas-row">
+            <% if (aLink) { %>
+            <a href="<%= aHref %>" target="<%= aTarget %>" <%- aRel ? 'rel="' + aRel + '"' : '' %> class="ally-cta">
+              <%= aLabel %>
+              <% if (aTarget === '_blank') { %>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              <% } %>
             </a>
             <% } %>
+            <% if (allyProfileHref) { %>
+            <a href="<%= allyProfileHref %>" class="ally-profile-link"><%= lang === 'es' ? 'Ver perfil →' : 'View profile →' %></a>
+            <% } %>
+            </div>
           </div>
 
         </div>
       </article>
       <% }); %>
+    </div>
     </div>
 
     <% if (allies.length > 1) { %>
@@ -273,10 +355,31 @@
     </div>
     <% } %>
 
+    <div class="ally-section-cta">
+      <a href="/negocios" class="btn btn-secondary"><%= t.sections.negocios_cta %></a>
+    </div>
+
   </section>
   <% } %>
 
 </main>
+
+<!-- Gallery lightbox (triggered by landing slider) -->
+<div class="slb-backdrop" id="sliderLightbox" role="dialog" aria-modal="true" aria-label="Photo viewer">
+  <button class="slb-close" aria-label="Close">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+  <button class="slb-arrow slb-prev" aria-label="Previous photo">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15,18 9,12 15,6"/></svg>
+  </button>
+  <div class="slb-content">
+    <img class="slb-img" src="" alt="Gallery photo">
+    <p class="slb-caption"></p>
+  </div>
+  <button class="slb-arrow slb-next" aria-label="Next photo">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9,18 15,12 9,6"/></svg>
+  </button>
+</div>
 
 <%- include('partials/nav-mobile') %>
 <%- include('partials/footer') %>

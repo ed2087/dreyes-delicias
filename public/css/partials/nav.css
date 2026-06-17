@@ -37,23 +37,34 @@
   text-decoration: none;
 }
 
-.nav-logo img {
-  width: 44px;
-  height: 44px;
+.nav-crown-img {
   object-fit: contain;
+  mix-blend-mode: screen;
+  flex-shrink: 0;
 }
 
 .nav-logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+  gap: 2px;
+}
+
+.nlt-name {
   font-family: var(--font-display);
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 700;
   color: #fff;
-  letter-spacing: -0.3px;
+  letter-spacing: -0.2px;
   text-shadow: 0 1px 8px rgba(0,0,0,0.6);
 }
 
-.nav-logo-text span {
-  color: var(--gold);
+.nlt-sub {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: #fff;
 }
 
 /* Desktop links — hidden on mobile */
@@ -186,16 +197,11 @@
 }
 
 .mm-brand-text {
-  font-family: var(--font-display);
-  font-size: 12px;
-  font-weight: 800;
-  color: #fff;
-  line-height: 1.25;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+  gap: 3px;
 }
-
-.mm-brand-text span { color: var(--gold); }
 
 .mm-close {
   width: 42px;
@@ -308,15 +314,6 @@
   .mobile-menu { display: none; }
 }
 
-/* Logo text hidden on all sizes — icon carries the brand */
-.nav-logo-text {
-  display: none;
-}
-
-.nav-logo img {
-  width: 52px;
-  height: 52px;
-}
 
 @media (min-width: 768px) {
   .nav-links {

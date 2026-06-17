@@ -16,14 +16,20 @@ router.get('/', protectAPI, async (req, res) => {
 
 router.post('/', protectAPI, allyUploader.single('image'), async (req, res) => {
   try {
-    const { name, description, link, ctaText, active } = req.body;
+    const { name, description, shortDesc, shortDescEn, fullDesc, fullDescEn, category, link, ctaText, active, featured } = req.body;
     const count = await Ally.countDocuments();
     const ally  = new Ally({
       name,
       description: description || '',
+      shortDesc:   shortDesc || '',
+      shortDescEn: shortDescEn || '',
+      fullDesc:    fullDesc || '',
+      fullDescEn:  fullDescEn || '',
+      category:    category || 'Servicios',
       link:        link || '',
-      ctaText:     ctaText || 'Visit Website',
+      ctaText:     ctaText || '',
       active:      active !== 'false',
+      featured:    featured === 'true' || featured === true,
       order:       count
     });
     if (req.file) {
@@ -36,18 +42,37 @@ router.post('/', protectAPI, allyUploader.single('image'), async (req, res) => {
   }
 });
 
+router.post('/reorder', protectAPI, async (req, res) => {
+  try {
+    const { order } = req.body;
+    if (!Array.isArray(order)) return res.status(400).json({ success: false, message: 'Invalid payload' });
+    await Promise.all(order.map(item =>
+      Ally.updateOne({ _id: item.id, locked: { $ne: true } }, { $set: { order: item.order } })
+    ));
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 router.put('/:id', protectAPI, allyUploader.single('image'), async (req, res) => {
   try {
     const ally = await Ally.findById(req.params.id);
     if (!ally)       return res.status(404).json({ success: false, message: 'Not found' });
     if (ally.locked) return res.status(403).json({ success: false, message: 'Este colaborador está bloqueado y no puede modificarse.' });
 
-    const { name, description, link, ctaText, active } = req.body;
+    const { name, description, shortDesc, shortDescEn, fullDesc, fullDescEn, category, link, ctaText, active, featured } = req.body;
     if (name        !== undefined) ally.name        = name;
     if (description !== undefined) ally.description = description;
+    if (shortDesc   !== undefined) ally.shortDesc   = shortDesc;
+    if (shortDescEn !== undefined) ally.shortDescEn = shortDescEn;
+    if (fullDesc    !== undefined) ally.fullDesc    = fullDesc;
+    if (fullDescEn  !== undefined) ally.fullDescEn  = fullDescEn;
+    if (category    !== undefined) ally.category    = category;
     if (link        !== undefined) ally.link        = link;
     if (ctaText     !== undefined) ally.ctaText     = ctaText;
     if (active      !== undefined) ally.active      = active !== 'false';
+    if (featured    !== undefined) ally.featured    = featured === 'true' || featured === true;
 
     if (req.file) {
       if (ally.image.publicId) await deleteFile(ally.image.publicId);

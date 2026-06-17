@@ -14,8 +14,7 @@
     function updateLabel() {
       const open = isOpenBtn.checked;
       if (isOpenLabel) {
-        isOpenLabel.textContent = open ? 'Abierto' : 'Cerrado';
-        isOpenLabel.className   = open ? 'toggle-label open' : 'toggle-label closed';
+        isOpenLabel.textContent = open ? '🟢 Abierto ahora' : '🔴 Cerrado ahora';
       }
     }
     updateLabel();

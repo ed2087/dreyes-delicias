@@ -79,16 +79,20 @@
   <% } %>
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="/images/favicon.png">
-  <link rel="apple-touch-icon"      href="/images/apple-touch-icon.png">
+  <link rel="icon" href="/images/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
 
   <!-- Theme color (mobile browser chrome) -->
-  <meta name="theme-color" content="#080808">
+  <meta name="theme-color" content="#c9a227">
 
   <!-- Global CSS -->
   <link rel="stylesheet" href="/css/global.css">
   <link rel="stylesheet" href="/css/partials/nav.css">
   <link rel="stylesheet" href="/css/partials/nav-mobile.css">
+  <link rel="stylesheet" href="/css/partials/social-bubble.css">
 
   <!-- Page CSS -->
   <% if (typeof pageCSS !== 'undefined' && pageCSS) { %>

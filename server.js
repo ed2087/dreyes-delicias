@@ -37,7 +37,7 @@ app.use(helmet({
       imgSrc:     ["'self'", "data:", "blob:", "https:"],
       fontSrc:    ["'self'", "data:"],
       connectSrc: ["'self'"],
-      frameSrc:   ["'self'", "https://www.google.com"]
+      frameSrc:   ["'self'", "https://www.google.com", "https://maps.google.com"]
     }
   }
 }));
@@ -89,7 +89,7 @@ app.get('/', async (req, res) => {
     require('./models/MenuItem').find({ featured: true, available: true }).sort({ order: 1 }).limit(6),
     require('./models/Service').find({}).sort({ order: 1 }).limit(3),
     require('./models/Location').findOne(),
-    require('./models/Ally').find({ active: true }).sort({ order: 1 })
+    require('./models/Ally').find({ active: true, $or: [{ featured: true }, { locked: true }] }).sort({ order: 1 })
   ]).catch(() => [[], [], [], null, []]);
 
   res.render('landing', {
@@ -211,12 +211,55 @@ app.get('/services/:slug', async (req, res) => {
   });
 });
 
+app.get('/negocios', async (req, res) => {
+  const Ally = require('./models/Ally');
+  const negocios = await Ally.find({ active: true }).sort({ order: 1 }).catch(() => []);
+  res.render('negocios', {
+    seo: generateSEO('negocios', res.locals.lang),
+    breadcrumbs: generateBreadcrumbs('/negocios', res.locals.lang),
+    pageCSS: 'negocios',
+    pageJS: null,
+    partialCSS: ['breadcrumbs'],
+    partialJS: [],
+    negocios
+  });
+});
+
+app.get('/negocios/:slug', async (req, res) => {
+  const Ally = require('./models/Ally');
+  const negocio = await Ally.findOne({ slug: req.params.slug, active: true }).catch(() => null);
+  if (!negocio) return res.status(404).render('error', {
+    statusCode: 404, seo: generateSEO('error', res.locals.lang),
+    pageCSS: null, pageJS: null, partialCSS: [], partialJS: []
+  });
+  const lang = res.locals.lang;
+  const others = await Ally.find({ _id: { $ne: negocio._id }, active: true }).limit(3).sort({ order: 1 }).catch(() => []);
+  res.render('negocio-detail', {
+    seo: generateSEO('negocios', lang, {
+      title_es: negocio.name, title_en: negocio.name,
+      description_es: negocio.shortDesc || negocio.description,
+      description_en: negocio.shortDescEn || negocio.shortDesc || negocio.description,
+      canonicalPath: `/negocios/${negocio.slug}`
+    }),
+    breadcrumbs: generateBreadcrumbs(`/negocios/${negocio.slug}`, lang, { [negocio.slug]: negocio.name }),
+    pageCSS: 'negocios',
+    pageJS: null,
+    partialCSS: ['breadcrumbs'],
+    partialJS: [],
+    negocio,
+    others
+  });
+});
+
 app.get('/gallery', async (req, res) => {
   const GalleryPhoto = require('./models/GalleryPhoto');
   const album = req.query.album || 'all';
 
   const filter = album === 'all' ? {} : { album };
-  const photos = await GalleryPhoto.find(filter).sort({ order: 1, createdAt: -1 }).catch(() => []);
+  const [photos, usedAlbums] = await Promise.all([
+    GalleryPhoto.find(filter).sort({ order: 1, createdAt: -1 }),
+    GalleryPhoto.distinct('album')
+  ]).catch(() => [[], []]);
 
   res.render('gallery', {
     seo: generateSEO('gallery', res.locals.lang),
@@ -226,7 +269,8 @@ app.get('/gallery', async (req, res) => {
     partialCSS: ['breadcrumbs'],
     partialJS: [],
     photos,
-    activeAlbum: album
+    activeAlbum: album,
+    usedAlbums
   });
 });
 

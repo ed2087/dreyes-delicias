@@ -208,6 +208,12 @@
 }
 
 @media (min-width: 768px) {
+  .album-filter-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    min-width: 0;
+  }
+
   .gallery-masonry {
     columns: 4;
     column-gap: 16px;

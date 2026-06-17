@@ -30,8 +30,18 @@
   if (activeChk && activeLabel) {
     activeChk.addEventListener('change', function() {
       activeLabel.textContent = activeChk.checked
-        ? 'Activo — visible en el sitio'
-        : 'Inactivo — oculto';
+        ? '✅ Activo — visible en el sitio'
+        : '⏸️ Inactivo — oculto';
+    });
+  }
+
+  const featuredChk   = document.getElementById('featuredToggle');
+  const featuredLabel = document.getElementById('featuredLabel');
+  if (featuredChk && featuredLabel) {
+    featuredChk.addEventListener('change', function() {
+      featuredLabel.textContent = featuredChk.checked
+        ? '⭐ Destacado — aparece en el inicio'
+        : '○ Normal — solo en /negocios';
     });
   }
 
@@ -48,6 +58,7 @@
 
     const formData = new FormData(form);
     if (!activeChk.checked) formData.set('active', 'false');
+    if (featuredChk && !featuredChk.checked) formData.set('featured', 'false');
 
     try {
       const data = await fetchAPI(endpoint, {

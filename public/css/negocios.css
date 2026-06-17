@@ -1,0 +1,518 @@
+/* ============================================
+   NEGOCIOS — list + detail pages
+   ============================================ */
+
+/* ── Shared hero ─────────────────────────────────────────────────────────────── */
+.negocios-page {
+  padding-top: var(--nav-h);
+  min-height: 100vh;
+  background: var(--bg-primary);
+}
+
+.negocios-hero {
+  background: var(--bg-secondary);
+  padding: 48px 0 40px;
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+}
+
+.negocios-hero h1 {
+  font-family: var(--font-display);
+  margin-bottom: 8px;
+}
+
+.negocios-hero-sub {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+/* ── Grid (list page) ────────────────────────────────────────────────────────── */
+.negocios-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px var(--page-px) 32px;
+}
+
+@media (min-width: 600px) {
+  .negocios-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 900px) {
+  .negocios-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* ── Negocio card ────────────────────────────────────────────────────────────── */
+.neg-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  transition: all var(--t-normal);
+}
+
+.neg-card:hover {
+  border-color: var(--gold-border);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card);
+}
+
+.neg-card-img {
+  height: 200px;
+  overflow: hidden;
+  background: var(--bg-elevated);
+  position: relative;
+  flex-shrink: 0;
+}
+
+.neg-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--t-slow);
+}
+
+.neg-card:hover .neg-card-img img {
+  transform: scale(1.04);
+}
+
+.neg-card-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+}
+
+.neg-card-cat {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: var(--gold);
+  color: #000;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 99px;
+}
+
+.neg-card-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 6px;
+}
+
+.neg-card-name {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.neg-card-desc {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.neg-card-cta {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--gold);
+  margin-top: 4px;
+}
+
+/* ── Promote CTA ─────────────────────────────────────────────────────────────── */
+.negocios-promote {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px var(--page-px) calc(var(--bottom-nav-h, 64px) + 40px);
+  text-align: center;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.negocios-promote p {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  margin: 0;
+}
+
+.negocios-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--text-secondary);
+  padding: 60px 0;
+}
+
+/* ── Detail image viewer ─────────────────────────────────────────────────────── */
+.nd-img-wrap {
+  width: 100%;
+  background: #0a0a0a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  cursor: zoom-in;
+  min-height: 220px;
+  max-height: 75vh;
+  padding-top: var(--nav-h);
+}
+
+.nd-img {
+  max-width: 100%;
+  max-height: 75vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.nd-img-zoom {
+  position: absolute;
+  bottom: 14px;
+  right: 14px;
+  width: 40px;
+  height: 40px;
+  background: rgba(0,0,0,0.55);
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.18);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.nd-img-wrap:hover .nd-img-zoom { opacity: 1; }
+
+/* Business header below image */
+.nd-biz-header {
+  padding: 24px var(--page-px) 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.nd-cat-inline {
+  position: static;
+  display: inline-block;
+  width: fit-content;
+}
+
+.nd-biz-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 5vw, 2.6rem);
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.1;
+}
+
+/* Lightbox */
+.nd-lb {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(0,0,0,0.96);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.nd-lb.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.nd-lb-img {
+  max-width: 92vw;
+  max-height: 88svh;
+  object-fit: contain;
+  border-radius: 6px;
+  transform: scale(0.93);
+  transition: transform 0.3s ease;
+  display: block;
+}
+
+.nd-lb.open .nd-lb-img { transform: scale(1); }
+
+.nd-lb-close {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  transition: background 0.2s ease;
+  z-index: 10;
+}
+
+.nd-lb-close:hover { background: rgba(255,255,255,0.2); }
+
+/* ── Detail layout ───────────────────────────────────────────────────────────── */
+.nd-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 36px var(--page-px) calc(var(--bottom-nav-h, 64px) + 48px);
+}
+
+@media (min-width: 900px) {
+  .nd-layout { grid-template-columns: 1fr 280px; }
+}
+
+.nd-short {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.nd-body {
+  color: var(--text-primary);
+  line-height: 1.7;
+  margin-bottom: 32px;
+}
+
+.nd-body .desc-para {
+  margin-bottom: 14px;
+  color: var(--text-secondary);
+}
+
+.nd-body .desc-link {
+  color: var(--gold);
+  text-decoration: underline;
+}
+
+.nd-body li {
+  color: var(--text-secondary);
+  margin-left: 1.2rem;
+  margin-bottom: 6px;
+}
+
+.nd-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* ── Aside ───────────────────────────────────────────────────────────────────── */
+.nd-aside-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+.nd-aside-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@media (max-width: 899px) {
+  .nd-aside { border-top: 1px solid var(--border); padding-top: 32px; }
+  .nd-aside-list { flex-direction: row; flex-wrap: wrap; }
+  .nd-aside-card { width: calc(50% - 6px); }
+}
+
+.nd-aside-card {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  text-decoration: none;
+  padding: 10px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  transition: all var(--t-normal);
+}
+
+.nd-aside-card:hover {
+  border-color: var(--gold-border);
+  transform: translateX(3px);
+}
+
+.nd-aside-img {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--bg-elevated);
+}
+
+.nd-aside-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.nd-aside-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+}
+
+.nd-aside-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.nd-aside-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nd-aside-cat {
+  font-size: 0.7rem;
+  color: var(--gold);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ── Landing preview section ─────────────────────────────────────────────────── */
+.negocios-preview {
+  background: var(--bg-secondary);
+  padding: 64px 0;
+  border-top: 1px solid var(--border);
+}
+
+.negocios-preview-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--page-px);
+}
+
+.negocios-preview-head {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.negocios-preview-head h2 {
+  font-family: var(--font-display);
+  margin-bottom: 6px;
+}
+
+.negocios-preview-head p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.negocios-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .negocios-preview-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+.negocios-preview-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  text-decoration: none;
+  transition: all var(--t-normal);
+  display: flex;
+  flex-direction: column;
+}
+
+.negocios-preview-card:hover {
+  border-color: var(--gold-border);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-card);
+}
+
+.negocios-preview-img {
+  height: 120px;
+  overflow: hidden;
+  background: var(--bg-elevated);
+  position: relative;
+}
+
+.negocios-preview-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--t-slow);
+}
+
+.negocios-preview-card:hover .negocios-preview-img img {
+  transform: scale(1.05);
+}
+
+.negocios-preview-img-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+}
+
+.negocios-preview-name {
+  padding: 10px 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+
+.negocios-preview-cta {
+  text-align: center;
+  margin-top: 28px;
+}

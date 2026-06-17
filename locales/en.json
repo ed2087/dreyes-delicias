@@ -5,6 +5,7 @@
     "menu": "Menu",
     "services": "Services",
     "gallery": "Gallery",
+    "negocios": "Businesses",
     "contact": "Contact",
     "location": "Location"
   },
@@ -22,7 +23,21 @@
     "menu_cta": "View Full Menu",
     "location": "Find Us",
     "contact": "Contact Us",
-    "allies": "Partners"
+    "allies": "Partners",
+    "negocios": "Businesses We Promote",
+    "negocios_sub": "Supporting the local community",
+    "negocios_cta": "View all businesses"
+  },
+  "negocios": {
+    "title": "Businesses We Promote",
+    "subtitle": "Discover the local businesses we recommend",
+    "promote_cta": "Want your business featured here?",
+    "promote_link": "Contact Us",
+    "back": "← View all",
+    "cta_call": "Call",
+    "cta_website": "Visit Website",
+    "cta_whatsapp": "WhatsApp",
+    "empty": "More businesses coming soon."
   },
   "menu": {
     "title": "Our Menu",
@@ -42,6 +57,16 @@
     "albums": {
       "all": "All",
       "food": "Food",
+      "tacos": "Tacos",
+      "burritos": "Burritos",
+      "quesadillas": "Quesadillas",
+      "bebidas": "Drinks",
+      "postres": "Desserts",
+      "taquizas": "Catering",
+      "antojitos": "Appetizers",
+      "cocina": "Kitchen",
+      "clientes": "Customers",
+      "setup": "Setup",
       "truck": "Food Truck",
       "events": "Events"
     }

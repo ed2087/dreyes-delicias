@@ -1,12 +1,13 @@
 ﻿<!-- Site footer -->
 <footer class="site-footer" role="contentinfo">
   <div class="site-footer-inner">
-    <img src="https://res.cloudinary.com/dwlib8nke/image/upload/v1781222666/logo_web_pnyt9m.png" alt="D'Reyes Delicias" width="80" height="80" style="object-fit:contain;">
+    <img src="https://res.cloudinary.com/dwlib8nke/image/upload/v1781222666/logo_web_pnyt9m.png" alt="D'Reyes Delicias" width="120" height="120" style="object-fit:contain;">
 
     <div class="site-footer-links">
       <a href="/menu"><%= lang === 'es' ? 'Menú' : 'Menu' %></a>
       <a href="/services"><%= lang === 'es' ? 'Servicios' : 'Services' %></a>
       <a href="/gallery"><%= lang === 'es' ? 'Galería' : 'Gallery' %></a>
+      <a href="/negocios"><%= t.nav.negocios %></a>
       <a href="/location"><%= lang === 'es' ? 'Ubicación' : 'Location' %></a>
       <a href="/contact"><%= lang === 'es' ? 'Contacto' : 'Contact' %></a>
     </div>
@@ -23,6 +24,8 @@
     </p>
   </div>
 </footer>
+
+<%- include('social-bubble') %>
 
 <!-- Toast container -->
 <div class="toast-container" id="toastContainer" aria-live="polite"></div>

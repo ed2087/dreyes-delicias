@@ -45,25 +45,68 @@
             value="<%= isEdit ? ally.name : '' %>" placeholder="Ej: Mi Negocio">
         </div>
 
-        <!-- Description -->
+        <!-- Category -->
         <div class="admin-form-group">
-          <label class="admin-form-label">Descripción corta</label>
-          <textarea class="admin-form-textarea" name="description" id="descInput" rows="3"
-            placeholder="Breve descripción del negocio (1-2 oraciones)"><%= isEdit ? ally.description : '' %></textarea>
+          <label class="admin-form-label">Categoría</label>
+          <input type="text" class="admin-form-input" name="category" id="categoryInput"
+            value="<%= isEdit ? (ally.category || 'Negocios') : 'Negocios' %>" placeholder="Ej: Mecánico, Restaurante, Salón de belleza">
+          <p class="admin-form-hint">Se muestra como etiqueta en la tarjeta.</p>
         </div>
+
+        <!-- Short description -->
+        <div class="admin-form-group">
+          <label class="admin-form-label">Descripción corta <small style="font-weight:400;color:rgba(255,255,255,0.4);">(tarjeta + SEO) 🇲🇽 Español</small></label>
+          <textarea class="admin-form-textarea" name="shortDesc" id="shortDescInput" rows="2"
+            placeholder="1-2 oraciones. Aparece en la tarjeta y en Google."><%= isEdit ? (ally.shortDesc || '') : '' %></textarea>
+        </div>
+
+        <div class="admin-form-group">
+          <label class="admin-form-label">Short description <small style="font-weight:400;color:rgba(255,255,255,0.4);">(card + SEO) 🇺🇸 English</small></label>
+          <textarea class="admin-form-textarea" name="shortDescEn" rows="2"
+            placeholder="1-2 sentences. Shown on the card and in Google when in English."><%= isEdit ? (ally.shortDescEn || '') : '' %></textarea>
+        </div>
+
+        <!-- Full description -->
+        <div class="admin-form-group">
+          <label class="admin-form-label">Descripción completa <small style="font-weight:400;color:rgba(255,255,255,0.4);">(página de detalle) 🇲🇽 Español</small></label>
+          <textarea class="admin-form-textarea" name="fullDesc" id="fullDescInput" rows="6"
+            placeholder="Descripción detallada. Puedes usar saltos de línea, • listas con guiones, etc."><%= isEdit ? (ally.fullDesc || ally.description || '') : '' %></textarea>
+        </div>
+
+        <div class="admin-form-group">
+          <label class="admin-form-label">Full description <small style="font-weight:400;color:rgba(255,255,255,0.4);">(detail page) 🇺🇸 English</small></label>
+          <textarea class="admin-form-textarea" name="fullDescEn" rows="6"
+            placeholder="Detailed description in English. Line breaks and bullet points work fine."><%= isEdit ? (ally.fullDescEn || '') : '' %></textarea>
+        </div>
+
+        <!-- Legacy description (hidden, kept for backward compat) -->
+        <input type="hidden" name="description" value="<%= isEdit ? (ally.shortDesc || ally.description || '') : '' %>">
 
         <!-- Link -->
         <div class="admin-form-group">
-          <label class="admin-form-label">URL del negocio</label>
-          <input type="url" class="admin-form-input" name="link" id="linkInput"
-            value="<%= isEdit ? ally.link : '' %>" placeholder="https://minegocio.com">
+          <label class="admin-form-label">Enlace / Teléfono</label>
+          <input type="text" class="admin-form-input" name="link" id="linkInput"
+            value="<%= isEdit ? ally.link : '' %>" placeholder="https://minegocio.com  o  980-555-1234  o  https://wa.me/198...">
+          <p class="admin-form-hint">URL completa, número de teléfono, o enlace de WhatsApp. El botón se adapta automáticamente.</p>
         </div>
 
-        <!-- CTA Text -->
+        <!-- CTA Text override -->
         <div class="admin-form-group">
-          <label class="admin-form-label">Texto del botón CTA</label>
+          <label class="admin-form-label">Texto del botón <small style="font-weight:400;color:rgba(255,255,255,0.4);">(opcional — se detecta automáticamente)</small></label>
           <input type="text" class="admin-form-input" name="ctaText" id="ctaInput"
-            value="<%= isEdit ? ally.ctaText : 'Visit Website' %>" placeholder="Visit Website">
+            value="<%= isEdit ? (ally.ctaText || '') : '' %>" placeholder="Dejar vacío para detección automática">
+        </div>
+
+        <!-- Featured -->
+        <div class="admin-form-group">
+          <label class="admin-form-label">Destacado en el inicio</label>
+          <label class="admin-toggle">
+            <input type="checkbox" id="featuredToggle" name="featured" value="true"
+              <%= (isEdit && ally.featured) ? 'checked' : '' %>>
+            <span class="admin-toggle-label" id="featuredLabel">
+              <%= (isEdit && ally.featured) ? '⭐ Destacado — aparece en el inicio' : '○ Normal — solo en /negocios' %>
+            </span>
+          </label>
         </div>
 
         <!-- Active -->

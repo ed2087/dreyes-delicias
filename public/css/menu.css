@@ -130,6 +130,12 @@
 }
 
 @media (min-width: 768px) {
+  .category-filter-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    min-width: 0;
+  }
+
   .menu-grid {
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;

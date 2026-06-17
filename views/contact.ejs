@@ -20,7 +20,7 @@
         <div class="contact-info-label"><%= lang === 'es' ? 'Teléfono' : 'Phone' %></div>
         <div class="contact-info-value">(980) 271-4205</div>
       </a>
-      <a href="https://wa.me/19802714205" target="_blank" rel="noopener noreferrer" class="contact-info-card">
+      <a href="https://wa.me/19802714205?text=<%= encodeURIComponent(lang === 'es' ? 'Hola D\'Reyes Delicias 👑 Me gustaría obtener más información.' : 'Hi D\'Reyes Delicias 👑 I would like to get more information.') %>" target="_blank" rel="noopener noreferrer" class="contact-info-card">
         <div class="contact-info-icon">💬</div>
         <div class="contact-info-label">WhatsApp</div>
         <div class="contact-info-value">(980) 271-4205</div>
@@ -137,7 +137,7 @@
         <a href="https://www.tiktok.com/@dreyesdelicias" target="_blank" rel="noopener noreferrer" class="social-link-btn">
           <span>♪</span> TikTok
         </a>
-        <a href="https://wa.me/19802714205" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp">
+        <a href="https://wa.me/19802714205?text=<%= encodeURIComponent(lang === 'es' ? 'Hola D\'Reyes Delicias 👑 Me gustaría obtener más información.' : 'Hi D\'Reyes Delicias 👑 I would like to get more information.') %>" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp">
           WhatsApp
         </a>
       </div>

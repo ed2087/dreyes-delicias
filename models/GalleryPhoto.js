@@ -12,7 +12,7 @@ const galleryPhotoSchema = new mongoose.Schema({
   album: {
     type: String,
     required: true,
-    enum: ['food', 'truck', 'events'],
+    enum: ['food', 'tacos', 'burritos', 'quesadillas', 'bebidas', 'postres', 'taquizas', 'antojitos', 'cocina', 'clientes', 'setup', 'truck', 'events'],
     default: 'food'
   },
   caption_es: { type: String, default: '' },

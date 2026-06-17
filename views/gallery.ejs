@@ -14,9 +14,11 @@
   <div class="album-filter">
     <div class="album-filter-inner">
       <a href="/gallery" class="album-pill <%= activeAlbum === 'all' ? 'active' : '' %>"><%= t.gallery.albums.all %></a>
-      <a href="/gallery?album=food"   class="album-pill <%= activeAlbum === 'food'   ? 'active' : '' %>"><%= t.gallery.albums.food %></a>
-      <a href="/gallery?album=truck"  class="album-pill <%= activeAlbum === 'truck'  ? 'active' : '' %>"><%= t.gallery.albums.truck %></a>
-      <a href="/gallery?album=events" class="album-pill <%= activeAlbum === 'events' ? 'active' : '' %>"><%= t.gallery.albums.events %></a>
+      <% ['food','tacos','burritos','quesadillas','bebidas','postres','taquizas','antojitos','cocina','clientes','setup','truck','events'].forEach(function(key) { %>
+      <% if (usedAlbums && usedAlbums.indexOf(key) !== -1) { %>
+      <a href="/gallery?album=<%= key %>" class="album-pill <%= activeAlbum === key ? 'active' : '' %>"><%= t.gallery.albums[key] %></a>
+      <% } %>
+      <% }); %>
     </div>
   </div>
 

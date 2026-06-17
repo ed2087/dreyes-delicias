@@ -6,11 +6,13 @@
 const LABELS = {
   es: {
     home: 'Inicio', menu: 'Menú', services: 'Servicios',
-    gallery: 'Galería', contact: 'Contacto', location: 'Ubicación'
+    gallery: 'Galería', contact: 'Contacto', location: 'Ubicación',
+    negocios: 'Negocios'
   },
   en: {
     home: 'Home', menu: 'Menu', services: 'Services',
-    gallery: 'Gallery', contact: 'Contact', location: 'Location'
+    gallery: 'Gallery', contact: 'Contact', location: 'Location',
+    negocios: 'Businesses'
   }
 };
 

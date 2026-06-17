@@ -1,0 +1,136 @@
+/* ============================================
+   SOCIAL / ACTION FLOATING BUBBLE
+   ============================================ */
+
+.social-bubble {
+  position: fixed;
+  right: 0;
+  bottom: 50%;
+  transform: translateY(50%);
+  z-index: 850;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  /* keep above mobile bottom nav on small screens */
+}
+
+/* ── Toggle tab ──────────────────────────────── */
+.sb-toggle {
+  width: 46px;
+  height: 46px;
+  border-radius: 50% 0 0 50%;
+  background: var(--gold);
+  color: #1a1007;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: -3px 0 16px rgba(0,0,0,0.35);
+  transition: background 0.2s ease, transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.sb-toggle:hover { background: #b8901f; }
+
+/* icon swap */
+.sb-icon-close { display: none; }
+.social-bubble.open .sb-icon-open  { display: none; }
+.social-bubble.open .sb-icon-close { display: block; }
+
+/* ── Action buttons container ────────────────── */
+.sb-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-end;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(16px);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.social-bubble.open .sb-actions {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateX(0);
+}
+
+/* ── Individual buttons ──────────────────────── */
+.sb-btn {
+  position: relative;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  color: #fff;
+  box-shadow: 0 3px 14px rgba(0,0,0,0.28);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  background: #1a1a1a;
+  /* stagger in */
+  opacity: 0;
+  transform: translateX(12px);
+  transition: opacity 0.2s ease, transform 0.2s ease, box-shadow 0.18s ease;
+}
+
+.social-bubble.open .sb-btn { opacity: 1; transform: translateX(0); }
+
+/* stagger delays */
+.social-bubble.open .sb-btn:nth-child(1) { transition-delay: 0ms; }
+.social-bubble.open .sb-btn:nth-child(2) { transition-delay: 40ms; }
+.social-bubble.open .sb-btn:nth-child(3) { transition-delay: 80ms; }
+.social-bubble.open .sb-btn:nth-child(4) { transition-delay: 120ms; }
+.social-bubble.open .sb-btn:nth-child(5) { transition-delay: 160ms; }
+.social-bubble.open .sb-btn:nth-child(6) { transition-delay: 200ms; }
+
+.sb-btn:hover { transform: translateX(-4px) scale(1.08); box-shadow: 0 6px 20px rgba(0,0,0,0.35); }
+
+/* colours */
+.sb-btn--wa      { background: #25D366; }
+.sb-btn--call    { background: #2e7d32; }
+.sb-btn--google  { background: #fff; }
+.sb-btn--nanarii { background: #fff; }
+.sb-btn--tiktok  { background: #010101; border: 1px solid #333; }
+.sb-btn--share   { background: var(--gold); color: #1a1007; }
+
+/* ── Tooltip label ───────────────────────────── */
+.sb-label {
+  position: absolute;
+  right: 54px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(10,10,10,0.88);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 9px;
+  border-radius: 5px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  backdrop-filter: blur(4px);
+}
+
+.sb-btn:hover .sb-label,
+.sb-btn:focus-visible .sb-label { opacity: 1; }
+
+/* ── Mobile adjustments ──────────────────────── */
+@media (max-width: 767px) {
+  .social-bubble {
+    bottom: calc(var(--bottom-nav-h, 64px) + 16px);
+    transform: none;
+  }
+
+  .sb-btn,
+  .sb-toggle { width: 42px; height: 42px; }
+
+  /* labels always visible on mobile (no hover) */
+  .sb-label { display: none; }
+}
