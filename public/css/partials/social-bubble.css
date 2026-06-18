@@ -88,6 +88,7 @@
 .social-bubble.open .sb-btn:nth-child(4) { transition-delay: 120ms; }
 .social-bubble.open .sb-btn:nth-child(5) { transition-delay: 160ms; }
 .social-bubble.open .sb-btn:nth-child(6) { transition-delay: 200ms; }
+.social-bubble.open .sb-btn:nth-child(7) { transition-delay: 240ms; }
 
 .sb-btn:hover { transform: translateX(-4px) scale(1.08); box-shadow: 0 6px 20px rgba(0,0,0,0.35); }
 
@@ -96,8 +97,9 @@
 .sb-btn--call    { background: #2e7d32; }
 .sb-btn--google  { background: #fff; }
 .sb-btn--nanarii { background: #fff; }
-.sb-btn--tiktok  { background: #010101; border: 1px solid #333; }
-.sb-btn--share   { background: var(--gold); color: #1a1007; }
+.sb-btn--tiktok    { background: #010101; border: 1px solid #333; }
+.sb-btn--doordash  { background: #ff3008; }
+.sb-btn--share     { background: var(--gold); color: #1a1007; }
 
 /* ── Tooltip label ───────────────────────────── */
 .sb-label {
