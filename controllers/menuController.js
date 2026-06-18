@@ -157,6 +157,9 @@ exports.deleteItem = async (req, res) => {
     if (!item) return res.status(404).json({ success: false, message: 'Item not found' });
 
     if (item.image?.publicId) await deleteFile(item.image.publicId);
+    for (const g of (item.gallery || [])) {
+      if (g.publicId) await deleteFile(g.publicId);
+    }
     await item.deleteOne();
 
     res.json({ success: true, message: 'Item deleted' });
