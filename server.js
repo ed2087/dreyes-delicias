@@ -21,6 +21,17 @@ const { logError }         = require('./utils/errorLogger');
 
 const app = express();
 
+// ── Open/closed helper (Eastern Time, Monroe NC) ─────────────────────────────
+function computeOpen(location) {
+  if (!location) return false;
+  const days = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'];
+  const et   = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }));
+  const dayName = days[et.getDay()];
+  const dayData = location.hours && location.hours[dayName];
+  const scheduledOpen = !!(dayData && dayData.active);
+  return scheduledOpen ? !!location.isOpen : false;
+}
+
 // ── Database ─────────────────────────────────────────────────────────────────
 connectDB().then(() => {
   require('./utils/seedAllies')();
@@ -102,6 +113,7 @@ app.get('/', async (req, res) => {
     featuredDishes,
     services,
     location,
+    locationIsOpen: computeOpen(location),
     allies
   });
 });
@@ -298,7 +310,8 @@ app.get('/location', async (req, res) => {
     pageJS: 'location',
     partialCSS: ['breadcrumbs'],
     partialJS: [],
-    location
+    location,
+    locationIsOpen: computeOpen(location)
   });
 });
 

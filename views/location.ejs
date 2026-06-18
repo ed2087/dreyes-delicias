@@ -17,7 +17,7 @@
     <% var locMapLng = (location && location.lng) ? location.lng : -80.5538; %>
     <div class="location-map-full">
       <iframe src="https://www.google.com/maps?q=<%= locMapLat %>,<%= locMapLng %>&z=16&output=embed" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" title="D'Reyes Delicias Location"></iframe>
-      <% if (location && !location.isOpen) { %>
+      <% if (location && !locationIsOpen) { %>
       <div class="map-closed-overlay">
         <div class="map-closed-badge">
           <span class="map-closed-icon">🔴</span>
