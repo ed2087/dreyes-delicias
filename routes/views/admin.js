@@ -14,6 +14,8 @@ const Location    = require('../../models/Location');
 const Message     = require('../../models/Message');
 const Ally        = require('../../models/Ally');
 
+const IS_PROD = process.env.NODE_ENV === 'production';
+
 // ── Login ─────────────────────────────────────────────────────────────────────
 router.get('/login', (req, res) => {
   if (req.cookies.adminToken) return res.redirect('/admin');
@@ -143,7 +145,7 @@ router.get('/allies', async (req, res) => {
   const allies = await Ally.find().sort({ order: 1 }).catch(() => []);
   res.render('admin/allies', {
     pageCSS: null, pageJS: 'admin/admin-allies', partialCSS: [], partialJS: [],
-    allies
+    allies, isProd: IS_PROD
   });
 });
 
@@ -157,7 +159,7 @@ router.get('/allies/new', (req, res) => {
 router.get('/allies/:id/edit', async (req, res) => {
   const ally = await Ally.findById(req.params.id).catch(() => null);
   if (!ally)       return res.redirect('/admin/allies');
-  if (ally.locked) return res.redirect('/admin/allies');
+  if (ally.locked && IS_PROD) return res.redirect('/admin/allies');
   res.render('admin/ally-form', {
     pageCSS: null, pageJS: 'admin/admin-ally-form', partialCSS: [], partialJS: [],
     ally, isEdit: true

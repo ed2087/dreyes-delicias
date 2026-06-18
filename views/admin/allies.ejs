@@ -40,7 +40,7 @@
               <% allies.forEach(function(ally) { %>
               <tr data-id="<%= ally._id %>" data-locked="<%= ally.locked ? 'true' : 'false' %>">
                 <td class="ally-drag-cell">
-                  <% if (!ally.locked) { %>
+                  <% if (!ally.locked || !isProd) { %>
                   <span class="ally-drag-handle" title="Arrastrar para reordenar">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="5" r="1.5"/><circle cx="15" cy="5" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="19" r="1.5"/><circle cx="15" cy="19" r="1.5"/></svg>
                   </span>
@@ -55,7 +55,7 @@
                 </td>
                 <td>
                   <strong><%= ally.name %></strong>
-                  <% if (ally.locked) { %>
+                  <% if (ally.locked && isProd) { %>
                   <span style="display:inline-block;margin-left:6px;font-size:10px;background:rgba(201,162,39,0.15);color:#c9a227;border:1px solid rgba(201,162,39,0.3);padding:2px 7px;border-radius:99px;font-weight:700;">🔒 LOCKED</span>
                   <% } %>
                   <% if (ally.featured) { %>
@@ -79,7 +79,7 @@
                 </td>
                 <td>
                   <div style="display:flex;gap:8px;align-items:center;">
-                    <% if (!ally.locked) { %>
+                    <% if (!ally.locked || !isProd) { %>
                     <a href="/admin/allies/<%= ally._id %>/edit" class="admin-btn admin-btn-sm" style="text-decoration:none;">Editar</a>
                     <button class="admin-btn admin-btn-sm admin-btn-danger" data-delete="<%= ally._id %>" data-name="<%= ally.name %>">Eliminar</button>
                     <% } else { %>

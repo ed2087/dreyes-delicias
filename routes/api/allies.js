@@ -9,6 +9,8 @@ const { protectAPI } = require('../../middleware/auth');
 const Ally     = require('../../models/Ally');
 const { allyUploader, deleteFile } = require('../../services/cloudinaryService');
 
+const IS_PROD = process.env.NODE_ENV === 'production';
+
 router.get('/', protectAPI, async (req, res) => {
   const allies = await Ally.find().sort({ order: 1 }).catch(() => []);
   res.json({ success: true, allies });
@@ -47,7 +49,7 @@ router.post('/reorder', protectAPI, async (req, res) => {
     const { order } = req.body;
     if (!Array.isArray(order)) return res.status(400).json({ success: false, message: 'Invalid payload' });
     await Promise.all(order.map(item =>
-      Ally.updateOne({ _id: item.id, locked: { $ne: true } }, { $set: { order: item.order } })
+      Ally.updateOne({ _id: item.id, ...(IS_PROD && { locked: { $ne: true } }) }, { $set: { order: item.order } })
     ));
     res.json({ success: true });
   } catch (err) {
@@ -59,7 +61,7 @@ router.put('/:id', protectAPI, allyUploader.single('image'), async (req, res) =>
   try {
     const ally = await Ally.findById(req.params.id);
     if (!ally)       return res.status(404).json({ success: false, message: 'Not found' });
-    if (ally.locked) return res.status(403).json({ success: false, message: 'Este colaborador está bloqueado y no puede modificarse.' });
+    if (ally.locked && IS_PROD) return res.status(403).json({ success: false, message: 'Este colaborador está bloqueado y no puede modificarse.' });
 
     const { name, description, shortDesc, shortDescEn, fullDesc, fullDescEn, category, link, ctaText, active, featured } = req.body;
     if (name        !== undefined) ally.name        = name;
@@ -90,7 +92,7 @@ router.delete('/:id', protectAPI, async (req, res) => {
   try {
     const ally = await Ally.findById(req.params.id);
     if (!ally)       return res.status(404).json({ success: false, message: 'Not found' });
-    if (ally.locked) return res.status(403).json({ success: false, message: 'Este colaborador esta bloqueado y no puede eliminarse.' });
+    if (ally.locked && IS_PROD) return res.status(403).json({ success: false, message: 'Este colaborador esta bloqueado y no puede eliminarse.' });
 
     if (ally.image.publicId) await deleteFile(ally.image.publicId);
     await ally.deleteOne();
