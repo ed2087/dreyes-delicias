@@ -17,18 +17,35 @@
 
 .hero-bg {
   position: absolute;
-  inset: 0;
+  inset: -10%;
   background-image: url('https://res.cloudinary.com/dwlib8nke/image/upload/v1781203534/tacotruck_wbao4x.webp');
   background-size: cover;
   background-position: center 30%;
   opacity: 0;
   transform: scale(1.08);
   transition: opacity 1.2s ease, transform 8s ease;
+  will-change: transform, background-position;
 }
 
 .hero-bg.loaded {
   opacity: 0.45;
   transform: scale(1);
+}
+
+.hero-bg.kenburns {
+  animation: kenBurns 28s ease-in-out infinite;
+}
+
+@keyframes kenBurns {
+  0%   { transform: scale(1.00) translate(0,      0);     }
+  25%  { transform: scale(1.05) translate(-0.8%,  0.4%);  }
+  50%  { transform: scale(1.08) translate( 0.5%, -0.5%);  }
+  75%  { transform: scale(1.04) translate(-0.4%,  0.8%);  }
+  100% { transform: scale(1.00) translate(0,      0);     }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-bg.kenburns { animation: none; }
 }
 
 .hero-overlay {
@@ -62,49 +79,6 @@
   padding: 0 var(--page-px);
   max-width: 700px;
   width: 100%;
-}
-
-.hero-logo-wrap {
-  position: relative;
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  overflow: hidden;
-  margin: 0 auto 28px;
-  animation: scaleIn 1s ease 0.3s both;
-}
-
-/* Glint sweep — white light passing over the logo */
-.hero-logo-wrap::after {
-  content: '';
-  position: absolute;
-  top: -10%;
-  left: -80%;
-  width: 45%;
-  height: 120%;
-  background: linear-gradient(
-    to right,
-    rgba(255,255,255,0)    0%,
-    rgba(255,255,255,0.42) 50%,
-    rgba(255,255,255,0)    100%
-  );
-  transform: skewX(-18deg);
-  animation: logoGlint 5s ease-in-out 1.8s infinite;
-  pointer-events: none;
-}
-
-@keyframes logoGlint {
-  0%   { left: -80%; opacity: 1; }
-  28%  { left: 130%; opacity: 1; }
-  100% { left: 130%; opacity: 0; }
-}
-
-.hero-logo {
-  width: 120px;
-  height: 120px;
-  object-fit: contain;
-  display: block;
-  filter: drop-shadow(0 0 24px rgba(201,162,39,0.55));
 }
 
 .hero-label {
@@ -1096,9 +1070,6 @@
 
 /* ── Desktop overrides ────────────────────────────────────────────────────────── */
 @media (min-width: 768px) {
-  .hero-logo-wrap { width: 150px; height: 150px; }
-  .hero-logo       { width: 150px; height: 150px; }
-
   .services-grid {
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;

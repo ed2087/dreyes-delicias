@@ -3,14 +3,42 @@
    ============================================ */
 
 (function initLanding() {
-  // Hero background fade-in
   const heroBg = document.getElementById('heroBg');
   if (heroBg) {
     const img = new Image();
     img.src = 'https://res.cloudinary.com/dwlib8nke/image/upload/v1781203534/tacotruck_wbao4x.webp';
-    img.onload = () => heroBg.classList.add('loaded');
+    img.onload = () => {
+      heroBg.classList.add('loaded');
+      // Start Ken Burns after the 8s load-in transition finishes
+      setTimeout(() => heroBg.classList.add('kenburns'), 8500);
+    };
     img.onerror = () => {};
   }
+})();
+
+/* ── Hero Parallax ──────────────────────────────────────────────────────────── */
+(function initHeroParallax() {
+  const heroBg = document.getElementById('heroBg');
+  const hero   = document.getElementById('hero');
+  if (!heroBg || !hero) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  let ticking = false;
+
+  function applyParallax() {
+    const scrollY = window.pageYOffset;
+    if (scrollY <= hero.offsetHeight) {
+      heroBg.style.backgroundPositionY = 'calc(30% + ' + Math.round(scrollY * 0.3) + 'px)';
+    }
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', function() {
+    if (!ticking) {
+      requestAnimationFrame(applyParallax);
+      ticking = true;
+    }
+  }, { passive: true });
 })();
 
 /* ── Featured Partner Rotation ─────────────────────────────────────────────── */
