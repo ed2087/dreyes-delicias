@@ -3,70 +3,75 @@
    Purpose: Generate SEO meta objects for every page
    ============================================ */
 
-const SITE_URL  = process.env.SITE_URL  || 'https://dreyesdelicias.com';
+const SITE_URL  = (process.env.SITE_URL || 'https://dreyesdelicias.com').replace(/^http:/, 'https:');
 const SITE_NAME = process.env.SITE_NAME || "D'Reyes Delicias";
 
 const defaults = {
   landing: {
     title_es: "D'Reyes Delicias — Taquizas & Banquetes en Monroe, NC",
     title_en: "D'Reyes Delicias — Taquizas & Banquets in Monroe, NC",
-    description_es: 'Auténtica comida latina. Tacos, burritos, quesadillas y más. Servicio de taquiza y banquete para todo tipo de eventos en Monroe, NC.',
-    description_en: 'Authentic Latin food. Tacos, burritos, quesadillas and more. Taquiza and banquet service for all types of events in Monroe, NC.',
-    keywords: 'taquizas monroe nc, food truck monroe nc, comida latina monroe, banquetes monroe nc, tacos monroe nc',
+    description_es: "Auténtica comida latina en Monroe, NC. Tacos, burritos, quesabirrias, banquetes y taquizas a domicilio para quinceañeras, bodas, graduaciones y todo tipo de eventos en Union County.",
+    description_en: "Authentic Latin food truck in Monroe, NC. Tacos, burritos, quesabirrias, full banquets and taquiza catering for quinceañeras, weddings, graduations and all events in Union County.",
+    keywords: 'taquizas monroe nc, food truck monroe nc, comida latina monroe nc, banquetes monroe nc, tacos monroe nc, catering latino union county nc, taquiza a domicilio monroe, quesabirrias monroe nc, food truck catering nc, quinceañeras monroe nc, bodas catering monroe nc, mexican food monroe nc',
     image: '/images/og-home.jpg',
     type: 'website',
     canonicalPath: '/'
   },
   menu: {
-    title_es: 'Menú',
-    title_en: 'Menu',
-    description_es: 'Conoce nuestro menú completo. Tacos, burritos, quesadillas, hamburguesas y más sabores latinos auténticos.',
-    description_en: 'Explore our full menu. Tacos, burritos, quesadillas, burgers and more authentic Latin flavors.',
+    title_es: "Menú — Tacos, Burritos, Quesabirrias | D'Reyes Delicias",
+    title_en: "Menu — Tacos, Burritos, Quesabirrias | D'Reyes Delicias",
+    description_es: 'Conoce nuestro menú completo. Tacos tradicionales, quesabirrias, burritos, quesadillas, tortas y más sabores latinos auténticos en Monroe, NC.',
+    description_en: 'Explore our full menu. Traditional tacos, quesabirrias, burritos, quesadillas, tortas and more authentic Latin flavors in Monroe, NC.',
+    keywords: 'menu tacos monroe nc, quesabirrias monroe, burritos latinos monroe nc, tortas monroe nc, comida mexicana monroe nc, tacos carne asada monroe, tacos al pastor monroe nc',
     canonicalPath: '/menu'
   },
   services: {
-    title_es: 'Servicios',
-    title_en: 'Services',
-    description_es: 'Taquizas y banquetes para bodas, quinceañeras, eventos corporativos y más.',
-    description_en: 'Taquizas and banquets for weddings, quinceañeras, corporate events and more.',
+    title_es: "Servicios de Catering — Taquizas y Banquetes | D'Reyes Delicias",
+    title_en: "Catering Services — Taquizas & Banquets | D'Reyes Delicias",
+    description_es: 'Taquizas a domicilio y banquetes completos para bodas, quinceañeras, graduaciones y eventos corporativos en Monroe, NC y Union County. Llámanos al (980) 271-4205.',
+    description_en: 'Taquiza catering and full banquets for weddings, quinceañeras, graduations and corporate events in Monroe, NC and Union County. Call (980) 271-4205.',
+    keywords: 'catering taquiza monroe nc, banquetes monroe nc, taquiza a domicilio union county, catering quinceañeras monroe, catering bodas monroe nc, catering corporativo monroe nc, food truck events monroe nc, taquiza graduaciones monroe',
     canonicalPath: '/services'
   },
   gallery: {
-    title_es: 'Galería',
-    title_en: 'Gallery',
-    description_es: 'Fotos de nuestra comida, nuestro food truck y eventos especiales.',
-    description_en: 'Photos of our food, our food truck and special events.',
+    title_es: "Galería de Fotos — Comida y Eventos | D'Reyes Delicias",
+    title_en: "Photo Gallery — Food & Events | D'Reyes Delicias",
+    description_es: 'Fotos de nuestros tacos, burritos, quesabirrias, food truck y eventos especiales en Monroe, NC. Mira la calidad y el sabor de D\'Reyes Delicias.',
+    description_en: 'Photos of our tacos, burritos, quesabirrias, food truck and special events in Monroe, NC. See the quality and flavor of D\'Reyes Delicias.',
+    keywords: 'fotos food truck monroe nc, galería comida latina monroe, tacos fotos monroe nc, eventos catering fotos monroe',
     canonicalPath: '/gallery'
   },
   contact: {
-    title_es: 'Contacto',
-    title_en: 'Contact',
-    description_es: 'Contáctanos para cotizaciones, reservaciones o preguntas.',
-    description_en: 'Contact us for quotes, reservations or questions.',
+    title_es: "Contáctanos — Cotizaciones y Reservaciones | D'Reyes Delicias",
+    title_en: "Contact Us — Quotes & Reservations | D'Reyes Delicias",
+    description_es: 'Contáctanos para cotizaciones de taquizas, banquetes y reservaciones de eventos en Monroe, NC. WhatsApp o llámanos al (980) 271-4205.',
+    description_en: 'Contact us for taquiza quotes, banquet packages and event reservations in Monroe, NC. WhatsApp or call (980) 271-4205.',
+    keywords: 'contacto taquiza monroe nc, cotizacion banquete monroe, reservar food truck monroe nc, telefono dreyes delicias',
     canonicalPath: '/contact'
   },
   location: {
-    title_es: 'Ubicación',
-    title_en: 'Location',
-    description_es: 'Encuéntranos en Monroe, NC. Consulta nuestra ubicación actual y horarios.',
-    description_en: 'Find us in Monroe, NC. Check our current location and hours.',
+    title_es: "Ubicación y Horarios — Monroe, NC | D'Reyes Delicias",
+    title_en: "Location & Hours — Monroe, NC | D'Reyes Delicias",
+    description_es: 'Encuéntranos en Monroe, NC. 437 Morgan Mill Rd. Horarios: miércoles-jueves 4–10pm, viernes-sábado 4–11pm. Comida latina auténtica en Union County.',
+    description_en: 'Find us in Monroe, NC. 437 Morgan Mill Rd. Hours: Wednesday-Thursday 4–10pm, Friday-Saturday 4–11pm. Authentic Latin food in Union County.',
+    keywords: 'ubicacion food truck monroe nc, horarios dreyes delicias, 437 morgan mill rd monroe nc, comida latina union county nc, donde comer tacos monroe nc',
     canonicalPath: '/location'
   },
   negocios: {
-    title_es: 'Negocios que Promovemos',
-    title_en: 'Businesses We Promote',
-    description_es: 'Descubre los negocios locales que D\'Reyes Delicias recomienda y promueve en la comunidad de Monroe, NC.',
-    description_en: 'Discover the local businesses that D\'Reyes Delicias recommends and promotes in the Monroe, NC community.',
-    keywords: 'negocios monroe nc, directorio local monroe, negocios latinos monroe nc',
+    title_es: "Negocios Latinos que Recomendamos | D'Reyes Delicias Monroe NC",
+    title_en: "Latino Businesses We Recommend | D'Reyes Delicias Monroe NC",
+    description_es: "Descubre los mejores negocios latinos que D'Reyes Delicias recomienda en Monroe, NC y Union County. Directorio de la comunidad latina local.",
+    description_en: "Discover the best Latino businesses D'Reyes Delicias recommends in Monroe, NC and Union County. Local Latino community directory.",
+    keywords: 'negocios latinos monroe nc, directorio latino monroe, comunidad latina union county nc, empresas latinas monroe nc, negocios hispanos monroe nc',
     canonicalPath: '/negocios'
   },
   error: {
-    title_es: 'Error',
-    title_en: 'Error',
-    description_es: 'Ha ocurrido un error.',
-    description_en: 'An error occurred.',
+    title_es: 'Página no encontrada',
+    title_en: 'Page not found',
+    description_es: 'La página que buscas no existe.',
+    description_en: 'The page you are looking for does not exist.',
     noIndex: true,
-    canonicalPath: '/error'
+    canonicalPath: '/404'
   }
 };
 

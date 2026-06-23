@@ -4,6 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-25Q6D1ZTFC"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-25Q6D1ZTFC');
+  </script>
+
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://www.googletagmanager.com">
+  <link rel="preconnect" href="https://www.google-analytics.com">
+
   <!-- Primary SEO -->
   <title><%= seo.title %> | <%= seo.siteName %></title>
   <meta name="description" content="<%= seo.description %>">
@@ -13,34 +26,48 @@
   <link rel="canonical" href="<%= seo.canonicalUrl %>">
 
   <!-- Robots -->
-  <meta name="robots" content="<%= seo.noIndex ? 'noindex' : 'index' %>, <%= seo.noFollow ? 'nofollow' : 'follow' %>">
+  <meta name="robots" content="<%= seo.noIndex ? 'noindex, nofollow' : 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1' %>">
+
+  <!-- Geo targeting — Monroe, NC -->
+  <meta name="geo.region" content="US-NC">
+  <meta name="geo.placename" content="Monroe, North Carolina">
+  <meta name="geo.position" content="34.9851;-80.5492">
+  <meta name="ICBM" content="34.9851, -80.5492">
 
   <!-- Open Graph -->
-  <meta property="og:type"        content="<%= seo.type %>">
-  <meta property="og:url"         content="<%= seo.canonicalUrl %>">
-  <meta property="og:title"       content="<%= seo.title %> | <%= seo.siteName %>">
-  <meta property="og:description" content="<%= seo.description %>">
-  <meta property="og:image"       content="<%= seo.imageUrl %>">
-  <meta property="og:site_name"   content="<%= seo.siteName %>">
-  <meta property="og:locale"      content="<%= lang === 'en' ? 'en_US' : 'es_MX' %>">
+  <meta property="og:type"             content="<%= seo.type %>">
+  <meta property="og:url"              content="<%= seo.canonicalUrl %>">
+  <meta property="og:title"            content="<%= seo.title %> | <%= seo.siteName %>">
+  <meta property="og:description"      content="<%= seo.description %>">
+  <meta property="og:image"            content="<%= seo.imageUrl %>">
+  <meta property="og:image:width"      content="1200">
+  <meta property="og:image:height"     content="630">
+  <meta property="og:site_name"        content="<%= seo.siteName %>">
+  <meta property="og:locale"           content="<%= lang === 'en' ? 'en_US' : 'es_MX' %>">
+  <meta property="og:locale:alternate" content="<%= lang === 'en' ? 'es_MX' : 'en_US' %>">
 
   <!-- Twitter -->
   <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:site"        content="@dreyesdelicias">
   <meta name="twitter:title"       content="<%= seo.title %> | <%= seo.siteName %>">
   <meta name="twitter:description" content="<%= seo.description %>">
   <meta name="twitter:image"       content="<%= seo.imageUrl %>">
 
-  <!-- JSON-LD -->
+  <!-- JSON-LD — FoodEstablishment / LocalBusiness -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "FoodEstablishment",
+    "@type": ["FoodEstablishment", "LocalBusiness"],
     "name": "D'Reyes Delicias",
     "description": "<%= seo.description %>",
-    "url": "<%= seo.canonicalUrl %>",
+    "url": "https://dreyesdelicias.com",
     "image": "<%= seo.imageUrl %>",
-    "telephone": "(980) 271-4205",
+    "logo": "https://dreyesdelicias.com/images/logo.png",
+    "telephone": "+19802714205",
     "email": "dreyesdelicias@gmail.com",
+    "priceRange": "$$",
+    "currenciesAccepted": "USD",
+    "paymentAccepted": "Cash, Credit Card, Zelle, CashApp",
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "437 Morgan Mill Rd",
@@ -49,8 +76,43 @@
       "postalCode": "28110",
       "addressCountry": "US"
     },
-    "openingHours": ["We-Th 16:00-22:00", "Fr-Sa 16:00-23:00"],
-    "servesCuisine": "Mexican, Latin",
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 34.9851,
+      "longitude": -80.5492
+    },
+    "hasMap": "https://maps.google.com/?q=437+Morgan+Mill+Rd+Monroe+NC+28110",
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Wednesday", "Thursday"],
+        "opens": "16:00",
+        "closes": "22:00"
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Friday", "Saturday"],
+        "opens": "16:00",
+        "closes": "23:00"
+      }
+    ],
+    "servesCuisine": ["Mexican", "Latin American", "Tex-Mex"],
+    "menu": "https://dreyesdelicias.com/menu",
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Catering Services",
+      "itemListElement": [
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Taquiza a Domicilio" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Banquete Completo" } }
+      ]
+    },
+    "areaServed": [
+      { "@type": "City", "name": "Monroe", "sameAs": "https://en.wikipedia.org/wiki/Monroe,_North_Carolina" },
+      { "@type": "AdministrativeArea", "name": "Union County, NC" },
+      { "@type": "City", "name": "Matthews" },
+      { "@type": "City", "name": "Waxhaw" },
+      { "@type": "City", "name": "Mint Hill" }
+    ],
     "sameAs": [
       "https://www.facebook.com/dreyesdelicias",
       "https://www.instagram.com/dreyesdelicias1",
@@ -70,7 +132,7 @@
         "@type": "ListItem",
         "position": <%= i + 1 %>,
         "name": "<%= crumb.name %>",
-        "item": "<%= process.env.SITE_URL || 'https://dreyesdelicias.com' %><%= crumb.url %>"
+        "item": "https://dreyesdelicias.com<%= crumb.url %>"
       }<%= i < breadcrumbs.length - 1 ? ',' : '' %>
       <% }); %>
     ]

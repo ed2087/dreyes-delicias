@@ -45,10 +45,10 @@ app.use(helmet({
     directives: {
       defaultSrc: ["'self'"],
       styleSrc:   ["'self'", "'unsafe-inline'"],
-      scriptSrc:  ["'self'", "'unsafe-inline'"],
-      imgSrc:     ["'self'", "data:", "blob:", "https:"],
+      scriptSrc:  ["'self'", "'unsafe-inline'", "https://www.googletagmanager.com", "https://www.google-analytics.com"],
+      imgSrc:     ["'self'", "data:", "blob:", "https:", "https://www.googletagmanager.com", "https://www.google-analytics.com"],
       fontSrc:    ["'self'", "data:"],
-      connectSrc: ["'self'"],
+      connectSrc: ["'self'", "https://www.googletagmanager.com", "https://www.google-analytics.com", "https://analytics.google.com", "https://region1.google-analytics.com"],
       frameSrc:   ["'self'", "https://www.google.com", "https://maps.google.com"]
     }
   }
@@ -93,6 +93,12 @@ app.use('/api/location',require('./routes/api/location'));
 app.use('/api/messages',require('./routes/api/messages'));
 app.use('/api/contact', require('./routes/api/contact'));
 app.use('/api/allies',  require('./routes/api/allies'));
+
+// ── QR code redirect (printed on business cards) ─────────────────────────────
+app.get('/qr', (req, res) => res.redirect(301, '/'));
+
+// ── Sitemap + Robots ─────────────────────────────────────────────────────────
+app.use('/', require('./routes/sitemap'));
 
 // ── View Routes — Public ─────────────────────────────────────────────────────
 app.get('/', async (req, res) => {
