@@ -21,6 +21,14 @@
         uniqueCats.push(item.category);
       }
     });
+    var catOrder = ['Tacos','Burritos','Tortas','Quesadillas','Quesabirrias','Quesabirria','Hot Dogs','Burgers','Burger','Sandwich','Platillos','Salchipapas','Sides','Drinks','Bebidas'];
+    uniqueCats.sort(function(a, b) {
+      var ai = catOrder.indexOf(a); var bi = catOrder.indexOf(b);
+      if (ai === -1 && bi === -1) return a.localeCompare(b);
+      if (ai === -1) return 1;
+      if (bi === -1) return -1;
+      return ai - bi;
+    });
   %>
   <% if (uniqueCats.length > 1) { %>
   <div class="category-filter">

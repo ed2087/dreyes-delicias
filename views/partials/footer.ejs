@@ -1,29 +1,87 @@
-﻿<!-- Site footer -->
+<!-- ── Site Footer ──────────────────────────────────────────────────────────── -->
 <footer class="site-footer" role="contentinfo">
-  <div class="site-footer-inner">
-    <img src="/images/logo.PNG" alt="D'Reyes Delicias" width="120" height="120" style="object-fit:contain;">
 
-    <div class="site-footer-links">
-      <a href="/menu"><%= lang === 'es' ? 'Menú' : 'Menu' %></a>
-      <a href="/services"><%= lang === 'es' ? 'Servicios' : 'Services' %></a>
-      <a href="/gallery"><%= lang === 'es' ? 'Galería' : 'Gallery' %></a>
-      <a href="/negocios"><%= t.nav.negocios %></a>
-      <a href="/location"><%= lang === 'es' ? 'Ubicación' : 'Location' %></a>
-      <a href="/contact"><%= lang === 'es' ? 'Contacto' : 'Contact' %></a>
-    </div>
-
-    <div class="site-footer-social">
-      <a href="https://www.facebook.com/dreyesdelicias" target="_blank" rel="noopener noreferrer" aria-label="Facebook">Facebook</a>
-      <a href="https://www.instagram.com/dreyesdelicias1" target="_blank" rel="noopener noreferrer" aria-label="Instagram">Instagram</a>
-      <a href="https://www.tiktok.com/@dreyesdelicias" target="_blank" rel="noopener noreferrer" aria-label="TikTok">TikTok</a>
-      <a href="https://www.doordash.com/store/d%27reyes-delicias-monroe-35869049/80917163/" target="_blank" rel="noopener noreferrer" aria-label="DoorDash">DoorDash</a>
-    </div>
-
-    <p class="site-footer-copy">
-      © <%= new Date().getFullYear() %> D'Reyes Delicias. <%= t.footer.rights %>.
-      <br><%= t.footer.developed %> <a href="https://www.codedevhub.com/" target="_blank" rel="noopener noreferrer">CodeDevHub</a>
-    </p>
+  <!-- Top: centered logo -->
+  <div class="footer-top">
+    <img src="/images/logo.PNG" alt="D'Reyes Delicias" class="footer-logo">
   </div>
+
+  <!-- Columns -->
+  <div class="footer-cols-wrap">
+    <div class="footer-cols">
+
+      <!-- Explorar -->
+      <div class="footer-col">
+        <h4 class="footer-col-title"><%= lang === 'es' ? 'Explorar' : 'Explore' %></h4>
+        <ul class="footer-col-list">
+          <li><a href="/menu"><%= lang === 'es' ? 'Menú' : 'Menu' %></a></li>
+          <li><a href="/services"><%= lang === 'es' ? 'Servicios' : 'Services' %></a></li>
+          <li><a href="/gallery"><%= lang === 'es' ? 'Galería' : 'Gallery' %></a></li>
+          <li><a href="/negocios"><%= t.nav.negocios %></a></li>
+          <li><a href="/location"><%= lang === 'es' ? 'Ubicación' : 'Location' %></a></li>
+          <li><a href="/contact"><%= lang === 'es' ? 'Contacto' : 'Contact' %></a></li>
+        </ul>
+      </div>
+
+      <!-- Pídenos -->
+      <div class="footer-col">
+        <h4 class="footer-col-title"><%= lang === 'es' ? 'Pídenos' : 'Order' %></h4>
+        <ul class="footer-col-list">
+          <li><a href="https://www.doordash.com/store/d%27reyes-delicias-monroe-35869049/80917163/" target="_blank" rel="noopener noreferrer">DoorDash</a></li>
+          <li><a href="#" rel="noopener noreferrer">Uber Eats</a></li>
+          <li><a href="https://wa.me/19802714205?text=<%= encodeURIComponent(lang === 'es' ? 'Hola D\'Reyes Delicias 👑 ¿Podrían darme información sobre taquizas y eventos?' : 'Hi D\'Reyes Delicias 👑 I\'d like info about catering and events!') %>" target="_blank" rel="noopener noreferrer">WhatsApp</a></li>
+          <li><a href="tel:+19802714205"><%= lang === 'es' ? 'Llamar' : 'Call Us' %></a></li>
+          <li><a href="/contact"><%= lang === 'es' ? 'Cotizar evento' : 'Request a quote' %></a></li>
+        </ul>
+      </div>
+
+      <!-- Síguenos -->
+      <div class="footer-col">
+        <h4 class="footer-col-title"><%= lang === 'es' ? 'Síguenos' : 'Follow Us' %></h4>
+        <ul class="footer-col-list">
+          <li><a href="https://www.facebook.com/dreyesdelicias" target="_blank" rel="noopener noreferrer">Facebook</a></li>
+          <li><a href="https://www.instagram.com/dreyesdelicias1" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+          <li><a href="https://www.nanarii.com/negocios/north-carolina/monroe/dreyes-delicias-monroe" target="_blank" rel="noopener noreferrer">Nanarii</a></li>
+          <li><a href="https://www.google.com/maps/search/D'Reyes+Delicias+Monroe+NC/" target="_blank" rel="noopener noreferrer"><%= lang === 'es' ? 'Reseña en Google' : 'Google Review' %></a></li>
+        </ul>
+      </div>
+
+      <!-- Información -->
+      <div class="footer-col">
+        <h4 class="footer-col-title"><%= lang === 'es' ? 'Información' : 'Info' %></h4>
+
+        <p class="footer-info-label"><%= lang === 'es' ? 'Pagos aceptados' : 'Payments accepted' %></p>
+        <ul class="footer-col-list footer-payments">
+          <li><span class="footer-pay-icon">💵</span> <%= lang === 'es' ? 'Efectivo' : 'Cash' %></li>
+          <li><span class="footer-pay-icon">💙</span> Zelle</li>
+          <li><span class="footer-pay-icon">🟩</span> Cash App</li>
+        </ul>
+
+        <p class="footer-info-label" style="margin-top:20px;"><%= lang === 'es' ? 'Idiomas' : 'Languages' %></p>
+        <ul class="footer-col-list footer-langs">
+          <li><a href="/set-lang/es">Español &#x1F1F2;&#x1F1FD;</a></li>
+          <li><a href="/set-lang/en">English &#x1F1FA;&#x1F1F8;</a></li>
+        </ul>
+      </div>
+
+      <!-- Eventos -->
+      <div class="footer-col footer-col--events">
+        <h4 class="footer-col-title"><%= lang === 'es' ? 'Eventos' : 'Events' %></h4>
+        <p class="footer-events-text"><%= lang === 'es' ? 'Quinceañeras, bodas, graduaciones, corporativos y todo tipo de eventos especiales.' : 'Quinceañeras, weddings, graduations, corporate events & more.' %></p>
+        <a href="/services" class="footer-events-cta"><%= lang === 'es' ? 'Ver servicios →' : 'See services →' %></a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="footer-bottom">
+    <div class="footer-bottom-inner">
+      <p>© <%= new Date().getFullYear() %> D'Reyes Delicias. <%= t.footer.rights %>.</p>
+      <p><%= t.footer.developed %> <a href="https://www.codedevhub.com/" target="_blank" rel="noopener noreferrer">CodeDevHub</a></p>
+    </div>
+  </div>
+
 </footer>
 
 <%- include('social-bubble') %>

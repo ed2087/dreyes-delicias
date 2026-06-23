@@ -45,17 +45,16 @@
    */
   function getTransform(offset) {
     const isMobile = window.innerWidth < 768;
-    const baseX  = isMobile ? 62 : 70;
-    const scaleStep = 0.18;
+    const baseX    = isMobile ? 68 : 66;
+    const scaleStep = isMobile ? 0.32 : 0.35;
 
     if (offset === 0) return 'translateX(0) rotateY(0deg) scale(1)';
 
     const absOffset = Math.abs(offset);
-    const dir = offset > 0 ? 1 : -1;
+    const dir  = offset > 0 ? 1 : -1;
     const xPct = dir * baseX * absOffset;
-    const rotY = dir * -32 * Math.min(absOffset, 2);
-    const scale = Math.max(0.4, 1 - scaleStep * absOffset);
-    const opacity = absOffset > 2 ? 0 : 1 - absOffset * 0.18;
+    const rotY = dir * -38 * Math.min(absOffset, 2);
+    const scale = Math.max(0.35, 1 - scaleStep * absOffset);
 
     return `translateX(${xPct}%) rotateY(${rotY}deg) scale(${scale})`;
   }

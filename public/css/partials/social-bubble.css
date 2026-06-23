@@ -88,7 +88,6 @@
 .social-bubble.open .sb-btn:nth-child(4) { transition-delay: 120ms; }
 .social-bubble.open .sb-btn:nth-child(5) { transition-delay: 160ms; }
 .social-bubble.open .sb-btn:nth-child(6) { transition-delay: 200ms; }
-.social-bubble.open .sb-btn:nth-child(7) { transition-delay: 240ms; }
 
 .sb-btn:hover { transform: translateX(-4px) scale(1.08); box-shadow: 0 6px 20px rgba(0,0,0,0.35); }
 

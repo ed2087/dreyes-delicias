@@ -1207,15 +1207,15 @@
   display: inline-block;
   margin-top: 2px;
   font-size: 14px;
-  color: var(--gold);
+  color: var(--text-primary);
   text-decoration: underline;
   text-underline-offset: 3px;
-  text-decoration-color: rgba(212,175,55,0.4);
+  text-decoration-color: rgba(255,255,255,0.25);
   transition: text-decoration-color 0.2s;
 }
 
 .landing-addr-link:hover {
-  text-decoration-color: var(--gold);
+  text-decoration-color: rgba(255,255,255,0.7);
 }
 
 .landing-hours-list {
@@ -1252,7 +1252,7 @@
 }
 
 .lhl-row--closed .lhl-time {
-  color: #e05252;
+  color: var(--text-primary);
   font-weight: 600;
 }
 

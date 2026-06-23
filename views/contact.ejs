@@ -97,51 +97,6 @@
       </form>
     </div>
 
-    <!-- Hours -->
-    <% if (location && location.hours) {
-       var cDays = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
-       var activeCDays = cDays.filter(function(k) { return !location.hours[k] || location.hours[k].active; });
-    %>
-    <div class="contact-hours-block">
-      <div class="contact-hours-head">
-        <span class="contact-hours-icon">🕐</span>
-        <span class="contact-hours-title"><%= lang === 'es' ? 'Horario' : 'Hours' %></span>
-        <% if (location.isOpen) { %><span class="contact-open-badge"><%= lang === 'es' ? 'Abierto ahora' : 'Open now' %></span><% } %>
-      </div>
-      <div class="contact-hours-grid">
-        <% cDays.forEach(function(dayKey) {
-          var dayData = location.hours[dayKey];
-          if (!dayData || !dayData.active) return;
-        %>
-        <div class="contact-hours-row">
-          <span class="chr-day"><%= t.location.days[dayKey] %></span>
-          <span class="chr-time"><%= dayData.open %> – <%= dayData.close %></span>
-        </div>
-        <% }) %>
-      </div>
-      <% var cNote = lang === 'es' ? location.note_es : location.note_en; %>
-      <% if (cNote) { %><p class="contact-hours-note"><%= cNote %></p><% } %>
-    </div>
-    <% } %>
-
-    <!-- Social CTAs -->
-    <div class="contact-social">
-      <p class="contact-social-title"><%= lang === 'es' ? 'Síguenos' : 'Follow us' %></p>
-      <div class="social-links-row">
-        <a href="https://www.facebook.com/dreyesdelicias" target="_blank" rel="noopener noreferrer" class="social-link-btn">
-          <span>f</span> Facebook
-        </a>
-        <a href="https://www.instagram.com/dreyesdelicias1" target="_blank" rel="noopener noreferrer" class="social-link-btn">
-          <span>📷</span> Instagram
-        </a>
-        <a href="https://www.tiktok.com/@dreyesdelicias" target="_blank" rel="noopener noreferrer" class="social-link-btn">
-          <span>♪</span> TikTok
-        </a>
-        <a href="https://wa.me/19802714205?text=<%= encodeURIComponent(lang === 'es' ? 'Hola D\'Reyes Delicias 👑 Me gustaría obtener más información.' : 'Hi D\'Reyes Delicias 👑 I would like to get more information.') %>" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp">
-          WhatsApp
-        </a>
-      </div>
-    </div>
 
   </div>
 </main>

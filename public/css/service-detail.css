@@ -214,7 +214,7 @@
 .sd-body .desc-para {
   font-size: 15px;
   line-height: 1.85;
-  color: var(--text-secondary);
+  color: rgba(255,255,255,0.88);
   margin-bottom: 4px;
 }
 
@@ -227,10 +227,10 @@
 .sd-body .desc-list li {
   font-size: 15px;
   line-height: 1.75;
-  color: var(--text-secondary);
+  color: rgba(255,255,255,0.88);
   padding: 7px 0 7px 22px;
   position: relative;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
 }
 
 .sd-body .desc-list li:last-child { border-bottom: none; }
@@ -304,10 +304,10 @@
 .sd-menu-block .desc-list li {
   font-size: 15px;
   line-height: 1.75;
-  color: var(--text-secondary);
+  color: rgba(255,255,255,0.88);
   padding: 7px 0 7px 22px;
   position: relative;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
 }
 
 .sd-menu-block .desc-list li:last-child { border-bottom: none; }
@@ -357,7 +357,7 @@
 .sd-closing .desc-para {
   font-size: 14px;
   line-height: 1.75;
-  color: var(--text-secondary);
+  color: rgba(255,255,255,0.88);
   margin-bottom: 0;
 }
 

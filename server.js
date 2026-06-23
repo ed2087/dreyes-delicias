@@ -35,6 +35,7 @@ function computeOpen(location) {
 // ── Database ─────────────────────────────────────────────────────────────────
 connectDB().then(() => {
   require('./utils/seedAllies')();
+  require('./utils/seedServices')();
 });
 
 // ── Security ─────────────────────────────────────────────────────────────────
