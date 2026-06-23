@@ -28,6 +28,74 @@
     </div>
   </section>
 
+  <!-- ── Featured Menu ───────────────────────────────────────────────────────── -->
+  <section class="featured-menu-section section" id="menu-preview">
+    <div class="container">
+      <div class="section-heading reveal">
+        <span class="section-label"><%= t.nav.menu %></span>
+        <h2><%= t.sections.menu %></h2>
+      </div>
+    </div>
+
+    <div class="mcs-wrapper" id="mcsWrapper">
+      <button class="mcs-arrow mcs-arrow--prev" id="mcsArrowPrev" aria-label="Anterior" disabled>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15,18 9,12 15,6"/></svg>
+      </button>
+
+      <div class="menu-cards-scroll" id="menuCardsScroll">
+        <% if (typeof featuredDishes !== 'undefined' && featuredDishes && featuredDishes.length > 0) { %>
+          <% featuredDishes.forEach(function(item) { %>
+          <a href="/menu/<%= item.slug %>" class="menu-card-preview">
+            <div class="mcp-img">
+              <% if (item.image && item.image.url) { %>
+              <img src="<%= item.image.url %>" alt="<%= item['name_' + lang] %>" loading="lazy">
+              <% } %>
+              <span class="mcp-category"><%= t.menu.categories[item.category] || item.category %></span>
+              <% if (item.spiceLevel && item.spiceLevel > 0) { %>
+              <div class="mcp-spice" aria-label="Picante <%= item.spiceLevel %>/3">
+                <% for (var d = 1; d <= 3; d++) { %><span class="mcp-dot<%= d <= item.spiceLevel ? '' : ' mcp-dot-off' %>"></span><% } %>
+              </div>
+              <% } %>
+              <div class="mcp-body">
+                <div class="mcp-name"><%= item['name_' + lang] %></div>
+                <div class="mcp-price">$<%= item.price.toFixed(2) %></div>
+              </div>
+              <div class="mcp-arrow">&#8594;</div>
+            </div>
+          </a>
+          <% }); %>
+        <% } else { %>
+          <% var placeholders = ['Tacos al Pastor', 'Burrito de Carne', 'Quesadilla Especial', 'Enchiladas Verdes', 'Sopes de Tinga']; %>
+          <% placeholders.forEach(function(name) { %>
+          <div class="menu-card-preview">
+            <div class="mcp-img" style="background:#1a1007;aspect-ratio:3/4;">
+              <div class="mcp-body">
+                <div class="mcp-name"><%= name %></div>
+                <div class="mcp-price">—</div>
+              </div>
+            </div>
+          </div>
+          <% }); %>
+        <% } %>
+      </div>
+
+      <button class="mcs-arrow mcs-arrow--next" id="mcsArrowNext" aria-label="Siguiente">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9,18 15,12 9,6"/></svg>
+      </button>
+    </div>
+
+    <div class="mcs-footer">
+      <div class="mcs-progress-wrap">
+        <div class="mcs-progress-bar" id="mcsProgressBar"></div>
+      </div>
+      <p class="mcs-swipe-hint">← Desliza para ver más →</p>
+    </div>
+
+    <div class="container" style="margin-top:28px;text-align:center;">
+      <a href="/menu" class="btn btn-primary"><%= t.sections.menu_cta %></a>
+    </div>
+  </section>
+
   <!-- ── Services Strip ──────────────────────────────────────────────────────── -->
   <section class="services-strip section" id="services">
     <div class="container">
@@ -104,74 +172,6 @@
 
     <div class="gallery-view-all">
       <a href="/gallery" class="btn btn-secondary"><%= t.sections.gallery_cta %></a>
-    </div>
-  </section>
-
-  <!-- ── Featured Menu ───────────────────────────────────────────────────────── -->
-  <section class="featured-menu-section section" id="menu-preview">
-    <div class="container">
-      <div class="section-heading reveal">
-        <span class="section-label"><%= t.nav.menu %></span>
-        <h2><%= t.sections.menu %></h2>
-      </div>
-    </div>
-
-    <div class="mcs-wrapper" id="mcsWrapper">
-      <button class="mcs-arrow mcs-arrow--prev" id="mcsArrowPrev" aria-label="Anterior" disabled>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15,18 9,12 15,6"/></svg>
-      </button>
-
-      <div class="menu-cards-scroll" id="menuCardsScroll">
-        <% if (typeof featuredDishes !== 'undefined' && featuredDishes && featuredDishes.length > 0) { %>
-          <% featuredDishes.forEach(function(item) { %>
-          <a href="/menu/<%= item.slug %>" class="menu-card-preview">
-            <div class="mcp-img">
-              <% if (item.image && item.image.url) { %>
-              <img src="<%= item.image.url %>" alt="<%= item['name_' + lang] %>" loading="lazy">
-              <% } %>
-              <span class="mcp-category"><%= t.menu.categories[item.category] || item.category %></span>
-              <% if (item.spiceLevel && item.spiceLevel > 0) { %>
-              <div class="mcp-spice" aria-label="Picante <%= item.spiceLevel %>/3">
-                <% for (var d = 1; d <= 3; d++) { %><span class="mcp-dot<%= d <= item.spiceLevel ? '' : ' mcp-dot-off' %>"></span><% } %>
-              </div>
-              <% } %>
-              <div class="mcp-body">
-                <div class="mcp-name"><%= item['name_' + lang] %></div>
-                <div class="mcp-price">$<%= item.price.toFixed(2) %></div>
-              </div>
-              <div class="mcp-arrow">&#8594;</div>
-            </div>
-          </a>
-          <% }); %>
-        <% } else { %>
-          <% var placeholders = ['Tacos al Pastor', 'Burrito de Carne', 'Quesadilla Especial', 'Enchiladas Verdes', 'Sopes de Tinga']; %>
-          <% placeholders.forEach(function(name) { %>
-          <div class="menu-card-preview">
-            <div class="mcp-img" style="background:#1a1007;aspect-ratio:3/4;">
-              <div class="mcp-body">
-                <div class="mcp-name"><%= name %></div>
-                <div class="mcp-price">—</div>
-              </div>
-            </div>
-          </div>
-          <% }); %>
-        <% } %>
-      </div>
-
-      <button class="mcs-arrow mcs-arrow--next" id="mcsArrowNext" aria-label="Siguiente">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9,18 15,12 9,6"/></svg>
-      </button>
-    </div>
-
-    <div class="mcs-footer">
-      <div class="mcs-progress-wrap">
-        <div class="mcs-progress-bar" id="mcsProgressBar"></div>
-      </div>
-      <p class="mcs-swipe-hint">← Desliza para ver más →</p>
-    </div>
-
-    <div class="container" style="margin-top:28px;text-align:center;">
-      <a href="/menu" class="btn btn-primary"><%= t.sections.menu_cta %></a>
     </div>
   </section>
 

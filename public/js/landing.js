@@ -122,17 +122,50 @@
 
   if (prevBtn) {
     prevBtn.addEventListener('click', function() {
+      stopAuto();
       track.scrollTo({ left: track.scrollLeft - cardStep(), behavior: 'smooth' });
+      setTimeout(startAuto, 4000);
     });
   }
   if (nextBtn) {
     nextBtn.addEventListener('click', function() {
+      stopAuto();
       track.scrollTo({ left: track.scrollLeft + cardStep(), behavior: 'smooth' });
+      setTimeout(startAuto, 4000);
     });
   }
 
   track.addEventListener('scroll', updateUI, { passive: true });
   window.addEventListener('resize', updateUI);
+
+  /* Autoplay ─────────────────────────────────────────────────────────────────── */
+  var autoTimer = null;
+
+  function autoNext() {
+    var max  = track.scrollWidth - track.clientWidth;
+    var atEnd = max <= 0 || track.scrollLeft >= max - 2;
+    if (atEnd) {
+      track.scrollTo({ left: 0, behavior: 'smooth' });
+    } else {
+      track.scrollTo({ left: track.scrollLeft + cardStep(), behavior: 'smooth' });
+    }
+  }
+
+  function startAuto() {
+    stopAuto();
+    autoTimer = setInterval(autoNext, 3500);
+  }
+
+  function stopAuto() {
+    clearInterval(autoTimer);
+  }
+
+  wrapper.addEventListener('mouseenter', stopAuto);
+  wrapper.addEventListener('mouseleave', startAuto);
+  track.addEventListener('touchstart',  stopAuto, { passive: true });
+  track.addEventListener('touchend',    function() { setTimeout(startAuto, 1500); }, { passive: true });
+
+  startAuto();
 
   /* Mouse drag ──────────────────────────────────────────────────────────────── */
   var dragStartX  = 0;

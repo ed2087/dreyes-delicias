@@ -171,10 +171,18 @@
 
 /* ── Services Preview ─────────────────────────────────────────────────────────── */
 .services-strip {
-  background: var(--bg-secondary);
+  background: var(--cream);
   padding: 64px 0;
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
+  border-top: 1px solid var(--cream-dark);
+  border-bottom: 1px solid var(--cream-dark);
+}
+
+.services-strip .section-heading h2 {
+  color: var(--text-dark);
+}
+
+.services-strip .section-label {
+  color: var(--gold-dark);
 }
 
 .services-grid {
@@ -283,20 +291,20 @@
 
 /* ── Featured Menu ────────────────────────────────────────────────────────────── */
 .featured-menu-section {
-  background: var(--cream);
+  background: var(--bg-secondary);
   padding: 72px 0;
 }
 
 .featured-menu-section .section-heading h2 {
-  color: var(--text-dark);
+  color: var(--text-primary);
 }
 
 .featured-menu-section .section-label {
-  color: var(--gold-dark);
+  color: var(--gold);
 }
 
 .featured-menu-section .section-heading p {
-  color: var(--text-dark-2);
+  color: var(--text-secondary);
 }
 
 .menu-cards-scroll {
@@ -474,7 +482,7 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  z-index: 10;
+  z-index: 860;
   width: 48px;
   height: 48px;
   border-radius: 50%;
@@ -510,7 +518,7 @@
 
 .mcs-progress-wrap {
   height: 3px;
-  background: rgba(0,0,0,0.08);
+  background: rgba(255,255,255,0.1);
   border-radius: 99px;
   overflow: hidden;
   margin-bottom: 10px;
@@ -526,7 +534,7 @@
 
 .mcs-swipe-hint {
   text-align: center;
-  color: var(--text-dark-2);
+  color: var(--text-secondary);
   font-size: 11px;
   letter-spacing: 0.1em;
   opacity: 0.5;
