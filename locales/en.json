@@ -24,13 +24,13 @@
     "location": "Find Us",
     "contact": "Contact Us",
     "allies": "Partners",
-    "negocios": "Businesses We Promote",
-    "negocios_sub": "Supporting the local community",
+    "negocios": "Businesses we trust",
+    "negocios_sub": "Only businesses we know personally appear here. Support your community.",
     "negocios_cta": "View all businesses"
   },
   "negocios": {
-    "title": "Businesses We Promote",
-    "subtitle": "Discover the local businesses we recommend",
+    "title": "Businesses we trust",
+    "subtitle": "Local businesses we personally know and proudly recommend",
     "promote_cta": "Want your business featured here?",
     "promote_link": "Contact Us",
     "back": "← View all",

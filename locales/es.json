@@ -24,13 +24,13 @@
     "location": "Encuéntranos",
     "contact": "Contáctanos",
     "allies": "Colaboradores",
-    "negocios": "Negocios que Promovemos",
-    "negocios_sub": "Apoyamos a la comunidad local",
+    "negocios": "Negocios en los que confiamos",
+    "negocios_sub": "Solo aparecen aquí los negocios que conocemos y respaldamos. Apoya lo tuyo.",
     "negocios_cta": "Ver todos los negocios"
   },
   "negocios": {
-    "title": "Negocios que Promovemos",
-    "subtitle": "Descubre los negocios locales que recomendamos",
+    "title": "Negocios en los que confiamos",
+    "subtitle": "Negocios locales que conocemos personalmente y recomendamos con orgullo",
     "promote_cta": "¿Quieres que tu negocio aparezca aquí?",
     "promote_link": "Contáctanos",
     "back": "← Ver todos",
