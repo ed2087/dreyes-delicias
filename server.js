@@ -56,6 +56,14 @@ app.use(helmet({
 
 app.use(mongoSanitize());
 
+// ── www redirect (non-www → www, production only) ─────────────────────────────
+app.use((req, res, next) => {
+  if (process.env.NODE_ENV === 'production' && req.headers.host === 'dreyesdelicias.com') {
+    return res.redirect(301, 'https://www.dreyesdelicias.com' + req.url);
+  }
+  next();
+});
+
 // ── Parsing + Static ──────────────────────────────────────────────────────────
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
