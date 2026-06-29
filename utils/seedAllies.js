@@ -10,11 +10,11 @@ const Ally = require('../models/Ally');
 const LOCKED = [
   {
     name:        'CodeDevHub',
-    description: 'Tu negocio existe. Que Google lo sepa. Hacemos páginas rápidas bonitas y posicionadas en Google. Sin contratos largos. Sin tecnicismos.',
-    shortDesc:   'Tu negocio existe. Que Google lo sepa. Hacemos páginas rápidas bonitas y posicionadas en Google. Sin contratos largos. Sin tecnicismos.',
-    shortDescEn: 'Your business exists. Make sure Google knows it. We build fast clean websites that show up on Google and bring in real customers. No contracts. No tech talk.',
-    fullDesc:    'CodeDevHub es el equipo detrás de este sitio. Construyen sitios web apps web herramientas con IA y plataformas completas para negocios que quieren resultados reales. Cada proyecto se construye desde cero para funcionar exactamente como tu negocio lo necesita. Sin plantillas. Sin WordPress. Solo código hecho para ti. Calificación de 5.0 estrellas en Google.',
-    fullDescEn:  'CodeDevHub is the team behind this very site. They build custom websites web apps AI tools CMS platforms and dashboards for businesses that want real results. Every project is built from scratch to fit your business exactly. No templates. No WordPress. Just code made for you. Rated 5.0 stars on Google.',
+    description: 'No solo hacemos páginas bonitas. Hacemos herramientas que trabajan para tu negocio mientras tú duermes y lo hacen crecer de verdad.',
+    shortDesc:   'No solo hacemos páginas bonitas. Hacemos herramientas que trabajan para tu negocio mientras tú duermes y lo hacen crecer de verdad.',
+    shortDescEn: 'We don\'t just build pretty websites. We build tools that work for your business while you sleep and make it grow for real.',
+    fullDesc:    'No hacemos páginas que solo se ven bien. Hacemos herramientas digitales que trabajan para tu negocio las 24 horas. Tu sitio web tiene que traer clientes responder preguntas y mostrarle al mundo que tu negocio existe. Eso es lo que construimos. Sitios web apps herramientas con IA y plataformas que generan valor real. Sin plantillas. Sin WordPress. Todo hecho desde cero para tu negocio. Calificación de 5.0 estrellas en Google.',
+    fullDescEn:  'We don\'t build pretty websites that just sit there. We build digital tools that work for your business around the clock. Your website should bring in customers answer questions and tell the world you exist. That is what we build. Custom websites web apps AI tools and platforms that create real value. No templates. No WordPress. Everything built from scratch for your business. Rated 5.0 stars on Google.',
     link:        'https://www.codedevhub.com/',
     ctaText:     'Empecemos',
     category:    'Negocios',
