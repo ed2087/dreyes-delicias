@@ -4,7 +4,11 @@
 
 <main class="error-page">
   <div class="error-content">
-    <div class="error-code"><%= statusCode || 404 %></div>
+    <% if (statusCode === 404) { %>
+    <img src="/images/404.png" alt="404" class="error-img">
+    <% } else { %>
+    <div class="error-code"><%= statusCode %></div>
+    <% } %>
     <h1 class="error-title">
       <%= statusCode === 404 ? t.error['404_title'] : t.error['500_title'] %>
     </h1>

@@ -16,6 +16,14 @@
   max-width: 480px;
 }
 
+.error-img {
+  width: clamp(200px, 55vw, 300px);
+  height: auto;
+  border-radius: 32px;
+  margin-bottom: 28px;
+  box-shadow: 0 0 48px rgba(201, 162, 39, 0.3), 0 16px 48px rgba(0, 0, 0, 0.5);
+}
+
 .error-code {
   font-size: clamp(80px, 20vw, 140px);
   font-weight: 900;
