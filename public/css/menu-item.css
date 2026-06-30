@@ -353,43 +353,42 @@
   margin-right: 4px;
 }
 
-/* Allergens */
+/* Allergens — footnote style */
 .mi-allergens {
-  background: rgba(239, 68, 68, 0.06);
-  border: 1px solid rgba(239, 68, 68, 0.2);
-  border-radius: 12px;
-  padding: 14px 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  padding-top: 14px;
+  margin-top: 4px;
 }
 
 .mi-allergens-title {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  font-weight: 700;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: #ef4444;
-  margin-bottom: 10px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 8px;
 }
 
 .mi-allergen-chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 5px;
 }
 
 .mi-allergen-chip {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.25);
-  color: #fca5a5;
-  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.65);
+  padding: 3px 10px;
   border-radius: 999px;
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 11px;
+  font-weight: 500;
   white-space: nowrap;
 }
 
@@ -409,12 +408,24 @@
   border-radius: 50%;
   background: #22c55e;
   flex-shrink: 0;
-  box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+  animation: dot-breathe 2.4s ease-in-out infinite;
+}
+
+@keyframes dot-breathe {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 6px rgba(34, 197, 94, 0.4);
+  }
+  50% {
+    transform: scale(1.35);
+    box-shadow: 0 0 14px rgba(34, 197, 94, 0.85);
+  }
 }
 
 .availability-dot.unavailable {
   background: var(--text-secondary);
   box-shadow: none;
+  animation: none;
 }
 
 /* CTAs */
