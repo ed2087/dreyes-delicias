@@ -154,8 +154,8 @@ app.get('/menu/:slug', async (req, res) => {
 
   if (!item) return res.status(404).render('error', {
     statusCode: 404,
-    seo: generateSEO('error', res.locals.lang),
-    pageCSS: null, pageJS: null, partialCSS: [], partialJS: []
+    seo: generateSEO('error', res.locals.lang || 'es'),
+    pageCSS: 'error', pageJS: null, partialCSS: [], partialJS: []
   });
 
   const lang = res.locals.lang;
@@ -207,8 +207,8 @@ app.get('/services/:slug', async (req, res) => {
 
   if (!service) return res.status(404).render('error', {
     statusCode: 404,
-    seo: generateSEO('error', res.locals.lang),
-    pageCSS: null, pageJS: null, partialCSS: [], partialJS: []
+    seo: generateSEO('error', res.locals.lang || 'es'),
+    pageCSS: 'error', pageJS: null, partialCSS: [], partialJS: []
   });
 
   const lang = res.locals.lang;
@@ -256,8 +256,9 @@ app.get('/negocios/:slug', async (req, res) => {
   const Ally = require('./models/Ally');
   const negocio = await Ally.findOne({ slug: req.params.slug, active: true }).catch(() => null);
   if (!negocio) return res.status(404).render('error', {
-    statusCode: 404, seo: generateSEO('error', res.locals.lang),
-    pageCSS: null, pageJS: null, partialCSS: [], partialJS: []
+    statusCode: 404,
+    seo: generateSEO('error', res.locals.lang || 'es'),
+    pageCSS: 'error', pageJS: null, partialCSS: [], partialJS: []
   });
   const lang = res.locals.lang;
   const others = await Ally.find({ _id: { $ne: negocio._id }, active: true }).limit(3).sort({ order: 1 }).catch(() => []);
@@ -364,7 +365,6 @@ app.use(async (err, req, res, next) => {
 
   res.status(statusCode).render('error', {
     statusCode,
-    message,
     seo: generateSEO('error', res.locals.lang || 'es'),
     pageCSS: 'error', pageJS: null, partialCSS: [], partialJS: []
   });
